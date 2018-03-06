@@ -1,27 +1,32 @@
 <template>
   <div id="app">
-    <HelloWorld/>
+    <todo-list></todo-list>
   </div>
 </template>
-
 <script>
-import HelloWorld from './components/HelloWorld'
+import TodoList from './components/TodoList'
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+    name: 'App',
+    components: {
+        TodoList
+    }
 }
-</script>
 
+</script>
 <style>
+html{ font-family: "Helvetica Neue",Arial,Helvetica,sans-serif; font-size: 16px;}
+*{ margin: 0; padding: 0; box-sizing: border-box; }
+:before, :after{ box-sizing: border-box; }
+ul,ol{ list-style: none; }
+a{ color: #237D93; }
+.clearfix:after{ content: ''; display: block; clear: both; };
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
+
 </style>
