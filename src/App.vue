@@ -19,8 +19,9 @@ html{ font-family: "Helvetica Neue",Arial,Helvetica,sans-serif; font-size: 16px;
 *{ margin: 0; padding: 0; box-sizing: border-box; }
 :before, :after{ box-sizing: border-box; }
 ul,ol{ list-style: none; }
-a{ color: #237D93; }
 .clearfix:after{ content: ''; display: block; clear: both; };
+.float-left{float: left;}
+.float-right{float: right;}
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'freddicons';
+    src: url(../fonts/freddicons-20px.eot);
+    src: url(../fonts/freddicons-20px.eot?#iefix) format('embedded-opentype'),
+        url(../fonts/freddicons-20px.woff) format('woff'),
+        url(../fonts/freddicons-20px.woff2) format('woff2'),
+        url(../fonts/freddicons-20px.ttf) format('truetype')
+}
+
