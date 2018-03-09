@@ -19,10 +19,10 @@
             </div>
           </div>
           <input v-model.lazy="login.password" v-bind:type="hidePassword ? 'password' : 'text'" name="login-password" id="login-password" class="page-sign-input input-focus">
-          <button type="submit" class="btn-login block-tag" v-bind:class="login.submitClass" @click="loginSubmit">{{ login.btnContent }}</button>
+          <button type="submit" class="btn-login block-tag" v-bind:class="login.submitClass" @click="btnSubmit('login')">{{ login.btnContent }}</button>
           <div class="field-password-footer">
             <label class="label-checkbox-remember">
-              <input type="checkbox" class="checkbox-remember" v-bind:class="checkboxRememberClass" @click="toggleCheckboxBg" @focusin="focusinCheckboxRemember" @focusout="focusoutCheckboxRemember" @mouseover="mouseoverCheckboxRemember" @mouseout="mouseoutCheckboxRemember" > Keep me logged in
+              <input type="checkbox" class="checkbox-remember" v-bind:class="checkboxRememberClass" @click="rememberLogin($event)" @focusin="rememberLogin($event)" @focusout="rememberLogin($event)" @mouseover="rememberLogin($event)" @mouseout="rememberLogin($event)" > Keep me logged in
             </label>
             <span class="span-underline">forgot your password?</span>
           </div>
@@ -34,13 +34,13 @@
         <p class="signtype-tip">Already have a TodoList account?<span class="span-underline" @click="toggleSignType">Log in here</span></p>
         <div class="field-username relative">
           <label class="label-name block-tag" for="signup-username" v-bind:class="{'label-signup-error': isCheck.username.error}">Username</label>
-          <input name="signup-username" id="signup-username" type="text" placeholder="Pick a username" class="page-sign-input input-focus " v-model.trim="signup.username.content" v-bind:class="{'is-autocheck-successful': isCheck.username.successful, 'is-autocheck-errored': isCheck.username.error, 'is-autocheck-loading': isCheck.username.loading}">
-          <span class="signup-error-message" v-show="isCheck.username.error">{{isCheck.username.errorMessage}}</span>
+          <input name="signup-username" id="signup-username" type="text" placeholder="Pick a username" class="page-sign-input input-focus " v-model="signup.username.content" v-bind:class="{'is-autocheck-successful': isCheck.username.successful, 'is-autocheck-errored': isCheck.username.error, 'is-autocheck-loading': isCheck.username.loading}" @focusout="blankCheck('username')" @focusin="isCheck.username.errorType === 'blankError' && resetSignupError('username')">
+          <span class="signup-error-message" v-show="isCheck.username.error">{{isCheck.username.errorMessages[isCheck.username.errorType]}}</span>
         </div>
         <div class="field-email relative">
           <label class="label-name block-tag" for="signup-email" v-bind:class="{'label-signup-error': isCheck.email.error}">Email</label>
-          <input name="signup-email" id="signup-email" type="text" placeholder="you@example.com" class="page-sign-input input-focus" v-model.trim="signup.email.content" v-bind:class="{'is-autocheck-successful': isCheck.email.successful, 'is-autocheck-errored': isCheck.email.error, 'is-autocheck-loading': isCheck.username.loading}">
-          <span class="signup-error-message" v-show="isCheck.email.error">Email is invalid or already taken</span>
+          <input name="signup-email" id="signup-email" type="text" placeholder="you@example.com" class="page-sign-input input-focus" v-model.trim="signup.email.content" v-bind:class="{'is-autocheck-successful': isCheck.email.successful, 'is-autocheck-errored': isCheck.email.error, 'is-autocheck-loading': isCheck.username.loading}" @focusout="blankCheck('email')" @focusin="isCheck.email.errorType === 'blankError' && resetSignupError('email')">
+          <span class="signup-error-message" v-show="isCheck.email.error">{{isCheck.email.errorMessages[isCheck.email.errorType]}}</span>
         </div>
         <div class="field-password relative">
           <div class="clearfix">
@@ -50,11 +50,11 @@
               <label for="signup-show-password" title="Show Password" class="password-icon relative cursor-pointer" v-bind:class="hidePassword ? 'show-password-icon' : 'hide-password-icon'">{{ hidePassword ? 'show' : 'hide'}}</label>
             </div>
           </div>
-          <input name="signup-password" id="signup-password" placeholder="Create a password" class="page-sign-input input-focus" v-model="signup.password.content" v-bind:type="hidePassword ? 'password' : 'text'" v-bind:class="{'is-autocheck-successful': isCheck.password.successful, 'is-autocheck-errored': isCheck.password.error, 'is-autocheck-loading': isCheck.password.loading}" >
+          <input name="signup-password" id="signup-password" placeholder="Create a password" class="page-sign-input input-focus" v-model="signup.password.content" v-bind:type="hidePassword ? 'password' : 'text'" v-bind:class="{'is-autocheck-successful': isCheck.password.successful, 'is-autocheck-errored': isCheck.password.error, 'is-autocheck-loading': isCheck.password.loading}" @focusout="blankCheck('password')" @focusin="isCheck.password.errorType === 'blankError' && resetSignupError('password')">
           <p class="signup-tip">Use at least one letter, one numeral, and seven characters.</p>
-          <span class="signup-error-message password-error-message" v-show="isCheck.password.error">Password is too short (minimum is 7 characters) and needs at least one number</span>
+          <span class="signup-error-message password-error-message" v-show="isCheck.password.error">{{isCheck.password.errorMessages[isCheck.password.errorType]}}</span>
         </div>
-        <button type="submit" class="btn-signup block-tag" v-bind:class="signup.submitClass" @click="signupSubmit">{{ signup.btnContent }}</button>
+        <button type="submit" class="btn-signup block-tag" v-bind:class="signup.submitClass" @click="btnSubmit('signup')">{{ signup.btnContent }}</button>
       </div>
     </section>
 
@@ -87,7 +87,7 @@ export default {
           timer: null
         },
         email: {
-          contern: '',
+          content: '',
           timer: null
         },
         submitClass: '',
@@ -98,21 +98,36 @@ export default {
           successful: false,
           error: false,
           loading: false,
-          errorType:{
+          errorMessages:{
             existError: 'Username is already taken',
-            syntaxError: 'Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen'
+            syntaxError: 'Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen',
+            blankError: 'Username cannot be blank'
           },
-          errorMessage: 'Username is already taken'
+          errorType: ''
         },
         email: {
           successful: false,
-          error: true,
-          loading: false
+          error: false,
+          loading: false,
+          errorMessages:{
+            existError: 'Email is invalid or already taken',
+            syntaxError: 'Email is invalid or already taken',
+            blankError: 'Email cannot be blank'
+          },
+          errorType: ''
         },
         password: {
-          successful: true,
+          successful: false,
           error: false,
-          loading: false
+          loading: false,
+          errorMessages:{
+            shortError: 'Password is too short (minimum is 7 characters)',
+            needLowercaseError: 'Password needs at least one lowercase letter',
+            needNumberError: 'Password needs at least one number',
+            needNumLowerError: 'Password needs at least one lowercase letter and needs at least one number',
+            blankError: 'Password cannot be blank'
+          },
+          errorType: ''
         }
       },
       checked: false,
@@ -120,36 +135,21 @@ export default {
     }
   },
   watch: {
+    //监听注册页面用户名输入框的input 事件
     'signup.username.content': function(){
-      this.resetSignupError('username')
-      var usernameCheck = this.isCheck.username
-      var username = this.signup.username
-      this.lazyLoad(username, function(){
-        usernameCheck.loading = true
-        var isSyntaxError = !(/^[a-zA-Z0-9_]{3,16}$/.test(username.content))
-        if(isSyntaxError){
-          usernameCheck.loading = false
-          usernameCheck.error = true
-          usernameCheck.errorMessage = usernameCheck.errorType.syntaxError
-        }else{
-          usernameCheck.loading = false
-          usernameCheck.successful = true
-        }
-      }, 500)
+      this.innerMethods().listenInput.call(this, 'username')
     },
+    //监听注册页面邮件输入框的input 事件
     'signup.email.content': function(){
-      this.lazyLoad(this.signup.email, function(){
-        console.log(2)
-      }, 500)
+      this.innerMethods().listenInput.call(this, 'email')
     },
+    //监听注册页面密码输入框的input 事件
     'signup.password.content': function(){
-      this.lazyLoad(this.signup.password, function(){
-        console.log(3)
-      }, 500)
+      this.innerMethods().listenInput.call(this, 'password')
     }
   },
   methods:{
-    toggleSignType: function(){
+    toggleSignType (){
       switch (this.loginOrSignup){
         case 'signup':
           this.loginOrSignup =  'login'
@@ -163,49 +163,128 @@ export default {
       }
       this.hidePassword = true
     },
-    close: function(){
+    close (){
       this.isClosed = true
     },
-    toggleCheckboxBg: function(){
-      this.checked = !this.checked
-      if(!this.checked){
-        this.focusinCheckboxRemember()
-      }else if(this.checked){
-        if(this.checkboxRememberClass === 'checkbox-remember-focused') this.checkboxRememberClass = 'checkbox-remember-checked-focused'
+    rememberLogin ($event){ //记住登录复选框的7种状态之间的切换
+      var type = $event.type
+      var classObject = {
+        focus: 'checkbox-remember-focused',
+        checked: 'checkbox-remember-checked',
+        hover: 'checkbox-remember-hover',
+        initial: 'checkbox-remember-initial',
+        checkedHover: 'checkbox-remember-checked-hover',
+        checkedFocus: 'checkbox-remember-checked-focused',
+        checkedHoverFocus: 'checkbox-remember-checked-hover-focused'
+      }
+      if (type === 'focusin'){
+        if(!this.checked) this.checkboxRememberClass = classObject.focus
+      }else if (type === 'focusout'){
+        this.checkboxRememberClass = this.checked ? classObject.checked : classObject.initial
+      }else if (type === 'mouseover'){
+        if (this.checkboxRememberClass === classObject.focus) {return}
+        if (this.checkboxRememberClass === classObject.checkedFocus){return this.checkboxRememberClass = classObject.checkedHoverFocus}
+        this.checkboxRememberClass = this.checked ? classObject.checkedHover : classObject.hover
+      }else if (type === 'mouseout'){
+        if (this.checkboxRememberClass === classObject.focus) {return}
+        if (this.checkboxRememberClass === classObject.checkedHoverFocus){return this.checkboxRememberClass = classObject.checkedFocus}
+        this.checkboxRememberClass = this.checked ? classObject.checked : classObject.initial
+      }else if (type === 'click'){
+        this.checked = !this.checked
+        this.checkboxRememberClass = this.checked ? classObject.checkedFocus : classObject.focus
       }
     },
-    focusinCheckboxRemember: function(){
-      if(!this.checked) this.checkboxRememberClass = 'checkbox-remember-focused'
-    },
-    focusoutCheckboxRemember: function(){
-      this.checkboxRememberClass = this.checked ? 'checkbox-remember-checked' : 'checkbox-remember-initial'
-    },
-    mouseoverCheckboxRemember: function(){
-      this.checkboxRememberClass = this.checked ? 'checkbox-remember-checked-hover' : 'checkbox-remember-hover'
-    },
-    mouseoutCheckboxRemember: function(){
-      this.checkboxRememberClass = this.checked ? 'checkbox-remember-checked' : 'checkbox-remember-initial'
-    },
-    loginSubmit: function(){
-      this.login.submitClass = 'btn-loading'
-      this.login.btnContent = 'Please Wait ...'
-    },
-    signupSubmit: function(){
-      this.signup.submitClass = 'btn-loading'
-      this.signup.btnContent = 'Please Wait ...'
-    },
-    lazyLoad: function(inputObject, callback, delay){
-      if (inputObject.timer){
-        window.clearTimeout(inputObject.timer)
+    btnSubmit: function(submitType){
+      if (submitType === 'signup'){
+        window.setTimeout(()=>{ //因为点击事件先触发，而验证用户输入需要时间，所以要延迟500ms 等验证结果
+          if(!this.isCheck.username.successful){
+            this.isCheck.username.errorType ? alert('用户名填写错误') : alert('用户名不能为空')
+          }else if(!this.isCheck.email.successful){
+            this.isCheck.email.errorType ? alert('邮箱地址填写错误') : alert('邮箱地址不能为空')
+          }else if(!this.isCheck.password.successful){
+            this.isCheck.password.errorType ? alert('密码填写错误') : alert('密码不能为空')
+          }
+        }, 500)
+        if (!this.isCheck.username.successful || !this.isCheck.email.successful || !this.isCheck.password.successful){return}
       }
-      inputObject.timer = window.setTimeout(function(){
-        callback()
-      }, delay)
+      this[submitType].submitClass = 'btn-loading'
+      this[submitType].btnContent = 'Please Wait ...'
     },
-    resetSignupError: function (inputName){
+    resetSignupError: function (inputName){ //重置错误信息
       this.isCheck[inputName].successful = ''
       this.isCheck[inputName].error = ''
       this.isCheck[inputName].loading = ''
+      this.isCheck[inputName].errorType = ''
+    },
+    innerMethods (){ //是被其他函数使用的函数，不是直接与DOM 中的事件绑定的
+      return {
+        lazyLoad: function(inputObject, callback, delay){
+          if (inputObject.timer){
+            window.clearTimeout(inputObject.timer)
+          }
+          inputObject.timer = window.setTimeout(function(){
+            callback()
+          }, delay)
+        },
+        isSyntaxError: function(checkName, inputContent, inputName){
+          var isSyntaxError
+          var errorType = 'syntaxError'
+          if (inputName === 'username'){
+            isSyntaxError = !(/^[a-zA-Z0-9_]{0,16}$/.test(inputContent))
+          }else if(inputName === 'email'){
+            isSyntaxError = !(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-z0-9_-]+)+$/.test(inputContent))
+          }else if(inputName === 'password'){
+            if(inputContent.length < 7){
+              errorType = 'shortError'
+              isSyntaxError = true
+            }else if(!(/^(?![a-zA-Z\W]+$).{7,}$/.test(inputContent))){
+              errorType = 'needNumberError'
+              isSyntaxError = true
+            }else if(!(/^(?![\dA-Z_\W]+$).{7,}$/).test(inputContent)){
+              errorType = 'needLowercaseError'
+              isSyntaxError = true
+            }else if(!/^(?!\W+$).{7,}$/.test(inputContent)){
+              errorType = 'needNumLowerError'
+              isSyntaxError = true
+            }else if(!(/^(?![A-Z_]+$).{7,}$/).test(inputContent)){
+              errorType = 'needNumLowerError'
+              isSyntaxError = true
+            }
+            // isSyntaxError = !(/^(?!\d+$).{7,}$/.test(inputContent))
+          }
+          if (isSyntaxError){
+            checkName.loading = false
+            checkName.error = true
+            checkName.errorType = errorType
+          }
+          return isSyntaxError
+        },
+        isExistError: function(){},
+        listenInput: function(inputName){
+          this.resetSignupError(inputName)
+          var self = this
+          var checkNameObj = this.isCheck[inputName]
+          var inputNameObj = this.signup[inputName]
+          this.innerMethods().lazyLoad(inputNameObj, function(){
+            if(!inputNameObj.content.trim()){return} //删除空格到开始地方不会马上提示错误 而是在失去焦点的时候提示
+              checkNameObj.loading = true
+            if(self.innerMethods().isSyntaxError.call(self,checkNameObj, inputNameObj.content, inputName)){ //是否语法错误
+              return
+            }else{
+              checkNameObj.loading = false
+              checkNameObj.successful = true
+            }
+          }, 500)
+        }
+      }
+    },
+    blankCheck (inputName){ //确认是否为空格, 如果是空格，触发空格错误
+      if(!this.signup[inputName].content.trim()){
+        var checkName = this.isCheck[inputName]
+        checkName.loading = false
+        checkName.error = true
+        checkName.errorType = 'blankError'
+      }
     }
   },
   components: {
@@ -247,6 +326,7 @@ export default {
 .checkbox-remember-focused{background-position: 0 -72px;}
 .checkbox-remember-checked-focused{background-position: 0 -96px;}
 .checkbox-remember-checked-hover{background-position: 0 -120px;}
+.checkbox-remember-checked-hover-focused{background-position: 0 -120px;}
 .field-password-footer .span-underline{margin:0; height: 18px;}
 .login-incorrect{padding: 15px 20px; margin-bottom: 20px; font-size: 13px; color: #86181d; border-radius: 5px; border:1px solid rgba(27,31,35,0.15); background-color: #ffdce0;}
 .octicon{vertical-align: text-bottom; fill: currentcolor; opacity: 0.6;}
