@@ -5,7 +5,7 @@
       <div class="login sign-type" v-if="loginOrSignup === 'login'">
         <h3>log in</h3>
         <p class="signtype-tip">Need a TodoList account?<span class="span-underline" @click="toggleSignType">Create an account</span></p>
-        <p class="login-incorrect clearfix" v-show="!isClosed">Incorrect username or password. <span class="float-right" @click="close"><svg aria-hidden="true" class="octicon octicon-x" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48z"></path></svg></span></p>
+        <p class="login-incorrect clearfix" v-show="login.loginError">Incorrect username or password. <span class="float-right" @click="close"><svg aria-hidden="true" class="octicon octicon-x" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48z"></path></svg></span></p>
         <div class="field-username">
           <label class="block-tag label-name" for="login-username">username</label>
           <input type="text" name="login-username" id="login-username" class="page-sign-input input-focus" v-model.lazy.trim="login.username">
@@ -18,7 +18,7 @@
               <label for="login-show-password" title="Show Password" class="password-icon relative cursor-pointer" v-bind:class="hidePassword ? 'show-password-icon' : 'hide-password-icon'">{{ hidePassword ? 'show' : 'hide'}}</label>
             </div>
           </div>
-          <input v-model.lazy="login.password" v-bind:type="hidePassword ? 'password' : 'text'" name="login-password" id="login-password" class="page-sign-input input-focus">
+          <input name="login-password" id="login-password" class="page-sign-input input-focus" v-model.lazy="login.password" v-bind:type="hidePassword ? 'password' : 'text'" >
           <button type="submit" class="btn-login block-tag" v-bind:class="login.submitClass" @click="btnSubmit('login')">{{ login.btnContent }}</button>
           <div class="field-password-footer">
             <label class="label-checkbox-remember">
@@ -33,26 +33,26 @@
         <h3>sign up</h3>
         <p class="signtype-tip">Already have a TodoList account?<span class="span-underline" @click="toggleSignType">Log in here</span></p>
         <div class="field-username relative">
-          <label class="label-name block-tag" for="signup-username" v-bind:class="{'label-signup-error': isCheck.username.error}">Username</label>
-          <input name="signup-username" id="signup-username" type="text" placeholder="Pick a username" class="page-sign-input input-focus " v-model="signup.username.content" v-bind:class="{'is-autocheck-successful': isCheck.username.successful, 'is-autocheck-errored': isCheck.username.error, 'is-autocheck-loading': isCheck.username.loading}" @focusout="blankCheck('username')" @focusin="isCheck.username.errorType === 'blankError' && resetSignupError('username')">
-          <span class="signup-error-message" v-show="isCheck.username.error">{{isCheck.username.errorMessages[isCheck.username.errorType]}}</span>
+          <label class="label-name block-tag" for="signup-username" v-bind:class="{'label-signup-error': signup.username.error}">Username</label>
+          <input name="signup-username" id="signup-username" type="text" placeholder="Pick a username" class="page-sign-input input-focus " v-model="signup.username.content" v-bind:class="{'is-autocheck-successful': signup.username.successful, 'is-autocheck-errored': signup.username.error, 'is-autocheck-loading': signup.username.loading}" @focusout="blankCheck('username')" @focusin="signup.username.errorType === 'blankError' && resetSignupError('username')">
+          <span class="signup-error-message" v-show="signup.username.error">{{signup.username.errorMessages[signup.username.errorType]}}</span>
         </div>
         <div class="field-email relative">
-          <label class="label-name block-tag" for="signup-email" v-bind:class="{'label-signup-error': isCheck.email.error}">Email</label>
-          <input name="signup-email" id="signup-email" type="text" placeholder="you@example.com" class="page-sign-input input-focus" v-model.trim="signup.email.content" v-bind:class="{'is-autocheck-successful': isCheck.email.successful, 'is-autocheck-errored': isCheck.email.error, 'is-autocheck-loading': isCheck.username.loading}" @focusout="blankCheck('email')" @focusin="isCheck.email.errorType === 'blankError' && resetSignupError('email')">
-          <span class="signup-error-message" v-show="isCheck.email.error">{{isCheck.email.errorMessages[isCheck.email.errorType]}}</span>
+          <label class="label-name block-tag" for="signup-email" v-bind:class="{'label-signup-error': signup.email.error}">Email</label>
+          <input name="signup-email" id="signup-email" type="text" placeholder="you@example.com" class="page-sign-input input-focus" v-model.trim="signup.email.content" v-bind:class="{'is-autocheck-successful': signup.email.successful, 'is-autocheck-errored': signup.email.error, 'is-autocheck-loading': signup.username.loading}" @focusout="blankCheck('email')" @focusin="signup.email.errorType === 'blankError' && resetSignupError('email')">
+          <span class="signup-error-message" v-show="signup.email.error">{{signup.email.errorMessages[signup.email.errorType]}}</span>
         </div>
         <div class="field-password relative">
           <div class="clearfix">
-            <label class="label-name float-left inline-block-tag" for="signup-password" v-bind:class="{'label-signup-error': isCheck.password.error}">password</label>
+            <label class="label-name float-left inline-block-tag" for="signup-password" v-bind:class="{'label-signup-error': signup.password.error}">password</label>
             <div class="float-right">
               <input type="checkbox" class="hide show-password" name="signup-show-password" id="signup-show-password" v-model="hidePassword">
               <label for="signup-show-password" title="Show Password" class="password-icon relative cursor-pointer" v-bind:class="hidePassword ? 'show-password-icon' : 'hide-password-icon'">{{ hidePassword ? 'show' : 'hide'}}</label>
             </div>
           </div>
-          <input name="signup-password" id="signup-password" placeholder="Create a password" class="page-sign-input input-focus" v-model="signup.password.content" v-bind:type="hidePassword ? 'password' : 'text'" v-bind:class="{'is-autocheck-successful': isCheck.password.successful, 'is-autocheck-errored': isCheck.password.error, 'is-autocheck-loading': isCheck.password.loading}" @focusout="blankCheck('password')" @focusin="isCheck.password.errorType === 'blankError' && resetSignupError('password')">
+          <input name="signup-password" id="signup-password" placeholder="Create a password" class="page-sign-input input-focus" v-model="signup.password.content" v-bind:type="hidePassword ? 'password' : 'text'" v-bind:class="{'is-autocheck-successful': signup.password.successful, 'is-autocheck-errored': signup.password.error, 'is-autocheck-loading': signup.password.loading}" @focusout="blankCheck('password')" @focusin="signup.password.errorType === 'blankError' && resetSignupError('password')">
           <p class="signup-tip">Use at least one letter, one numeral, and seven characters.</p>
-          <span class="signup-error-message password-error-message" v-show="isCheck.password.error">{{isCheck.password.errorMessages[isCheck.password.errorType]}}</span>
+          <span class="signup-error-message password-error-message" v-show="signup.password.error">{{signup.password.errorMessages[signup.password.errorType]}}</span>
         </div>
         <button type="submit" class="btn-signup block-tag" v-bind:class="signup.submitClass" @click="btnSubmit('signup')">{{ signup.btnContent }}</button>
       </div>
@@ -62,39 +62,45 @@
   </div>
 </template>
 <script>
-  import HomePage from './HomePage'
-  import TodoPage from './TodoPage'
+import HomePage from './HomePage'
+import TodoPage from './TodoPage'
+import AV from 'leancloud-storage'
+
+const appId = 'C5ARew2cYBVtyWVuTE6qvB3d-gzGzoHsz';
+const appKey = 'o4cIMdW77Jou2pmkQGQRHOn5';
+AV.init({ appId, appKey });
+
+// var query = new AV.Query('UserName');
+// query.equalTo('username', 'jimi');
+// query.find().then((results) => {console.log(results)}).catch((error)=>{console.log(error)})
+
+var UserName = AV.Object.extend('UsernameAndEmail');
+var username = new UserName();
+username.set('username', 'jimii');
+username.set('email', '163@qq.com');
+username.save().then(function(testObject) {
+  alert('successful')
+}, function(error) {
+  console.dir(error)
+});
+
 export default {
   name: 'TodoList',
   data() {
     return {
-      loginOrSignup: 'signup',
-      isClosed: '',
+      loginOrSignup: 'login',
       hidePassword: true,
       login: {
         username: '',
         password: '',
         submitClass: '',
-        btnContent: 'Log In'
+        btnContent: 'Log In',
+        loginError: false,
       },
       signup: {
         username: {
           content: '',
-          timer: null
-        },
-        password: {
-          content: '',
-          timer: null
-        },
-        email: {
-          content: '',
-          timer: null
-        },
-        submitClass: '',
-        btnContent: 'Sign up for TodoList'
-      },
-      isCheck: {
-        username: {
+          timer: null,
           successful: false,
           error: false,
           loading: false,
@@ -105,18 +111,9 @@ export default {
           },
           errorType: ''
         },
-        email: {
-          successful: false,
-          error: false,
-          loading: false,
-          errorMessages:{
-            existError: 'Email is invalid or already taken',
-            syntaxError: 'Email is invalid or already taken',
-            blankError: 'Email cannot be blank'
-          },
-          errorType: ''
-        },
         password: {
+          content: '',
+          timer: null,
           successful: false,
           error: false,
           loading: false,
@@ -128,7 +125,22 @@ export default {
             blankError: 'Password cannot be blank'
           },
           errorType: ''
-        }
+        },
+        email: {
+          content: '',
+          timer: null,
+          successful: false,
+          error: false,
+          loading: false,
+          errorMessages:{
+            existError: 'Email is already taken',
+            syntaxError: 'Email is invalid',
+            blankError: 'Email cannot be blank'
+          },
+          errorType: ''
+        },
+        submitClass: '',
+        btnContent: 'Sign up for TodoList'
       },
       checked: false,
       checkboxRememberClass: 'checkbox-remember-initial'
@@ -149,7 +161,7 @@ export default {
     }
   },
   methods:{
-    toggleSignType (){
+    toggleSignType () {
       switch (this.loginOrSignup){
         case 'signup':
           this.loginOrSignup =  'login'
@@ -163,10 +175,10 @@ export default {
       }
       this.hidePassword = true
     },
-    close (){
-      this.isClosed = true
+    close () {
+      this.login.loginError = false
     },
-    rememberLogin ($event){ //记住登录复选框的7种状态之间的切换
+    rememberLogin ($event) { //记住登录复选框的7种状态之间的切换
       var type = $event.type
       var classObject = {
         focus: 'checkbox-remember-focused',
@@ -194,29 +206,49 @@ export default {
         this.checkboxRememberClass = this.checked ? classObject.checkedFocus : classObject.focus
       }
     },
-    btnSubmit: function(submitType){
-      if (submitType === 'signup'){
+    btnSubmit: function (submitType) {
+      if (submitType === 'signup') {
         window.setTimeout(()=>{ //因为点击事件先触发，而验证用户输入需要时间，所以要延迟500ms 等验证结果
-          if(!this.isCheck.username.successful){
-            this.isCheck.username.errorType ? alert('用户名填写错误') : alert('用户名不能为空')
-          }else if(!this.isCheck.email.successful){
-            this.isCheck.email.errorType ? alert('邮箱地址填写错误') : alert('邮箱地址不能为空')
-          }else if(!this.isCheck.password.successful){
-            this.isCheck.password.errorType ? alert('密码填写错误') : alert('密码不能为空')
+          if(!this.signup.username.successful){
+            this.signup.username.errorType ? alert('用户名填写错误') : alert('用户名不能为空')
+          }else if(!this.signup.email.successful){
+            this.signup.email.errorType ? alert('邮箱地址填写错误') : alert('邮箱地址不能为空')
+          }else if(!this.signup.password.successful){
+            this.signup.password.errorType ? alert('密码填写错误') : alert('密码不能为空')
           }
         }, 500)
-        if (!this.isCheck.username.successful || !this.isCheck.email.successful || !this.isCheck.password.successful){return}
+        if (!this.signup.username.successful || !this.signup.email.successful || !this.signup.password.successful){return}
+
+        var user = new AV.User();
+        user.setUsername(this.signup.username.content);
+        user.setPassword(this.signup.password.content);
+        user.setEmail(this.signup.email.content);
+        user.signUp().then((loginedUser) => {
+          console.log(loginedUser);
+          alert('注册成功')
+          this[submitType].submitClass = ''
+          this[submitType].btnContent = 'successful'
+        }, (error) => {
+          console.dir(error.code)
+          this[submitType].submitClass = ''
+          this[submitType].btnContent = 'Try Again'
+        });
+      }else if (submitType === 'login') {
+        if (!this.login.username || this.login.loginError === '') {
+          this.login.loginError = true
+          return
+        }
       }
       this[submitType].submitClass = 'btn-loading'
       this[submitType].btnContent = 'Please Wait ...'
     },
     resetSignupError: function (inputName){ //重置错误信息
-      this.isCheck[inputName].successful = ''
-      this.isCheck[inputName].error = ''
-      this.isCheck[inputName].loading = ''
-      this.isCheck[inputName].errorType = ''
+      this.signup[inputName].successful = ''
+      this.signup[inputName].error = ''
+      this.signup[inputName].loading = ''
+      this.signup[inputName].errorType = ''
     },
-    innerMethods (){ //是被其他函数使用的函数，不是直接与DOM 中的事件绑定的
+    innerMethods () { //是被其他函数使用的函数，不是直接与DOM 中的事件绑定的
       return {
         lazyLoad: function(inputObject, callback, delay){
           if (inputObject.timer){
@@ -232,7 +264,7 @@ export default {
           if (inputName === 'username'){
             isSyntaxError = !(/^[a-zA-Z0-9_]{0,16}$/.test(inputContent))
           }else if(inputName === 'email'){
-            isSyntaxError = !(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-z0-9_-]+)+$/.test(inputContent))
+            isSyntaxError = !(/^[\w]+[\w-.]*@[\w-]+(\.[\w-]+)+$/.test(inputContent))
           }else if(inputName === 'password'){
             if(inputContent.length < 7){
               errorType = 'shortError'
@@ -243,12 +275,12 @@ export default {
             }else if(!(/^(?![\dA-Z_\W]+$).{7,}$/).test(inputContent)){
               errorType = 'needLowercaseError'
               isSyntaxError = true
-            }else if(!/^(?!\W+$).{7,}$/.test(inputContent)){
-              errorType = 'needNumLowerError'
-              isSyntaxError = true
-            }else if(!(/^(?![A-Z_]+$).{7,}$/).test(inputContent)){
-              errorType = 'needNumLowerError'
-              isSyntaxError = true
+            // }else if(!/^(?!\W+$).{7,}$/.test(inputContent)){
+            //   errorType = 'needNumLowerError'
+            //   isSyntaxError = true
+            // }else if(!(/^(?![A-Z_]+$).{7,}$/).test(inputContent)){
+            //   errorType = 'needNumLowerError'
+            //   isSyntaxError = true
             }
             // isSyntaxError = !(/^(?!\d+$).{7,}$/.test(inputContent))
           }
@@ -263,7 +295,7 @@ export default {
         listenInput: function(inputName){
           this.resetSignupError(inputName)
           var self = this
-          var checkNameObj = this.isCheck[inputName]
+          var checkNameObj = this.signup[inputName]
           var inputNameObj = this.signup[inputName]
           this.innerMethods().lazyLoad(inputNameObj, function(){
             if(!inputNameObj.content.trim()){return} //删除空格到开始地方不会马上提示错误 而是在失去焦点的时候提示
@@ -280,7 +312,7 @@ export default {
     },
     blankCheck (inputName){ //确认是否为空格, 如果是空格，触发空格错误
       if(!this.signup[inputName].content.trim()){
-        var checkName = this.isCheck[inputName]
+        var checkName = this.signup[inputName]
         checkName.loading = false
         checkName.error = true
         checkName.errorType = 'blankError'
@@ -335,7 +367,7 @@ export default {
 .signup-tip{margin-top: 5px; margin-bottom: 30px; font-size: 12px; color: #6a737d; margin-left: 5px;}
 .is-autocheck-successful{padding-right: 30px; background:url('../assets/images/success.png') no-repeat right 8px center; background-size: 16px 16px; }
 .is-autocheck-loading{padding-right: 30px; background-image: url('../assets/images/check-loading.gif'); background-size: 16px 16px; background-position: right 8px center; background-repeat: no-repeat;}
-.is-autocheck-errored{padding-right: 30px; background:url('../assets/images/error.png') no-repeat right 8px center; background-size: 16px 16px; }
+.is-autocheck-errored{padding-right: 30px; border-color: #E75B41; background:url('../assets/images/error.png') no-repeat right 8px center; background-size: 16px 16px; }
 .signup-error-message{position: absolute; z-index: 1; top: 88px; max-width: 400px; padding: 6px 8px; font-size: 13px; color: #86181d; border: 1px solid; border-radius: 3px; background-color: #ffdce0; border-color: #cea0a5;}
 .signup-error-message:before{position: absolute; width: 0; height: 0; bottom: 100%; left: 10px; pointer-events: none; content: " "; border: 6px solid transparent; margin-left: -1px; border-bottom-color: #cea0a5;}
 .signup-error-message:after{position: absolute; width: 0; height: 0; bottom: 100%; left: 10px; pointer-events: none; content: " "; border: 5px solid transparent; border-bottom-color: #ffdce0;}
