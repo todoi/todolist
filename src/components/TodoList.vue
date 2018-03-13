@@ -1,14 +1,14 @@
 <template>
   <div class="pages">
-    <home-page></home-page>
-    <section id="sign-page">
-      <div class="login sign-type" v-if="loginOrSignup === 'login'">
+    <home-page v-if="showPage === 'homePage'"></home-page>
+    <section id="sign-page" v-if="showPage === 'login' || showPage === 'signup'">
+      <div class="login sign-type" v-if="showPage === 'login'">
         <h3>log in</h3>
         <p class="signtype-tip">Need a TodoList account?<span class="span-underline" @click="toggleSignType">Create an account</span></p>
-        <p class="login-incorrect clearfix" v-show="login.loginError">Incorrect username or password. <span class="float-right" @click="close"><svg aria-hidden="true" class="octicon octicon-x" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48z"></path></svg></span></p>
+        <p class="login-incorrect clearfix" v-show="login.loginError">{{login.errorMessage}}<span class="btn-close-error" @click="close"><svg aria-hidden="true" class="octicon octicon-x" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48z"></path></svg></span></p>
         <div class="field-username">
           <label class="block-tag label-name" for="login-username">username</label>
-          <input type="text" name="login-username" id="login-username" class="page-sign-input input-focus" v-model.lazy.trim="login.username">
+          <input type="text" name="login-username" id="login-username" class="page-sign-input input-focus" v-model.lazy.trim="login.username" @focusin="()=>{this.login.loginError = false}">
         </div>
         <div class="field-password">
           <div class="clearfix">
@@ -18,7 +18,7 @@
               <label for="login-show-password" title="Show Password" class="password-icon relative cursor-pointer" v-bind:class="hidePassword ? 'show-password-icon' : 'hide-password-icon'">{{ hidePassword ? 'show' : 'hide'}}</label>
             </div>
           </div>
-          <input name="login-password" id="login-password" class="page-sign-input input-focus" v-model.lazy="login.password" v-bind:type="hidePassword ? 'password' : 'text'" >
+          <input name="login-password" id="login-password" class="page-sign-input input-focus" v-model.lazy="login.password" v-bind:type="hidePassword ? 'password' : 'text'" @keypress.enter="btnSubmit('login')" @focusin="()=>{this.login.loginError = false}">
           <button type="submit" class="btn-login block-tag" v-bind:class="login.submitClass" @click="btnSubmit('login')">{{ login.btnContent }}</button>
           <div class="field-password-footer">
             <label class="label-checkbox-remember">
@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <div class="signup sign-type" v-if="loginOrSignup === 'signup'">
+      <div class="signup sign-type" v-if="showPage === 'signup'">
         <h3>sign up</h3>
         <p class="signtype-tip">Already have a TodoList account?<span class="span-underline" @click="toggleSignType">Log in here</span></p>
         <div class="field-username relative">
@@ -39,7 +39,7 @@
         </div>
         <div class="field-email relative">
           <label class="label-name block-tag" for="signup-email" v-bind:class="{'label-signup-error': signup.email.error}">Email</label>
-          <input name="signup-email" id="signup-email" type="text" placeholder="you@example.com" class="page-sign-input input-focus" v-model.trim="signup.email.content" v-bind:class="{'is-autocheck-successful': signup.email.successful, 'is-autocheck-errored': signup.email.error, 'is-autocheck-loading': signup.username.loading}" @focusout="blankCheck('email')" @focusin="signup.email.errorType === 'blankError' && resetSignupError('email')">
+          <input name="signup-email" id="signup-email" type="text" placeholder="you@example.com" class="page-sign-input input-focus" v-model.trim="signup.email.content" v-bind:class="{'is-autocheck-successful': signup.email.successful, 'is-autocheck-errored': signup.email.error, 'is-autocheck-loading': signup.email.loading}" @focusout="blankCheck('email')" @focusin="signup.email.errorType === 'blankError' && resetSignupError('email')">
           <span class="signup-error-message" v-show="signup.email.error">{{signup.email.errorMessages[signup.email.errorType]}}</span>
         </div>
         <div class="field-password relative">
@@ -50,7 +50,7 @@
               <label for="signup-show-password" title="Show Password" class="password-icon relative cursor-pointer" v-bind:class="hidePassword ? 'show-password-icon' : 'hide-password-icon'">{{ hidePassword ? 'show' : 'hide'}}</label>
             </div>
           </div>
-          <input name="signup-password" id="signup-password" placeholder="Create a password" class="page-sign-input input-focus" v-model="signup.password.content" v-bind:type="hidePassword ? 'password' : 'text'" v-bind:class="{'is-autocheck-successful': signup.password.successful, 'is-autocheck-errored': signup.password.error, 'is-autocheck-loading': signup.password.loading}" @focusout="blankCheck('password')" @focusin="signup.password.errorType === 'blankError' && resetSignupError('password')">
+          <input name="signup-password" id="signup-password" placeholder="Create a password" class="page-sign-input input-focus" v-model="signup.password.content" v-bind:type="hidePassword ? 'password' : 'text'" v-bind:class="{'is-autocheck-successful': signup.password.successful, 'is-autocheck-errored': signup.password.error, 'is-autocheck-loading': signup.password.loading}" @focusout="blankCheck('password')" @focusin="signup.password.errorType === 'blankError' && resetSignupError('password')" @keypress.enter="btnSumbit('signup')">
           <p class="signup-tip">Use at least one letter, one numeral, and seven characters.</p>
           <span class="signup-error-message password-error-message" v-show="signup.password.error">{{signup.password.errorMessages[signup.password.errorType]}}</span>
         </div>
@@ -58,7 +58,7 @@
       </div>
     </section>
 
-    <todo-page></todo-page>
+    <todo-page v-if="showPage === 'todolist'"></todo-page>
   </div>
 </template>
 <script>
@@ -66,29 +66,19 @@ import HomePage from './HomePage'
 import TodoPage from './TodoPage'
 import AV from 'leancloud-storage'
 
-const appId = 'C5ARew2cYBVtyWVuTE6qvB3d-gzGzoHsz';
-const appKey = 'o4cIMdW77Jou2pmkQGQRHOn5';
-AV.init({ appId, appKey });
+function initAV(){
+  const appId = 'C5ARew2cYBVtyWVuTE6qvB3d-gzGzoHsz';
+  const appKey = 'o4cIMdW77Jou2pmkQGQRHOn5';
+  AV.init({ appId, appKey });
+}
+initAV()
 
-// var query = new AV.Query('UserName');
-// query.equalTo('username', 'jimi');
-// query.find().then((results) => {console.log(results)}).catch((error)=>{console.log(error)})
-
-var UserName = AV.Object.extend('UsernameAndEmail');
-var username = new UserName();
-username.set('username', 'jimii');
-username.set('email', '163@qq.com');
-username.save().then(function(testObject) {
-  alert('successful')
-}, function(error) {
-  console.dir(error)
-});
 
 export default {
   name: 'TodoList',
   data() {
     return {
-      loginOrSignup: 'login',
+      showPage: 'homePage',
       hidePassword: true,
       login: {
         username: '',
@@ -96,6 +86,7 @@ export default {
         submitClass: '',
         btnContent: 'Log In',
         loginError: false,
+        errorMessage: ''
       },
       signup: {
         username: {
@@ -162,15 +153,15 @@ export default {
   },
   methods:{
     toggleSignType () {
-      switch (this.loginOrSignup){
+      switch (this.showPage){
         case 'signup':
-          this.loginOrSignup =  'login'
+          this.showPage =  'login'
           break
         case 'login':
-          this.loginOrSignup = 'signup'
+          this.showPage = 'signup'
           break
         default:
-          this.loginOrSignup = 'signup'
+          this.showPage = 'signup'
           break
       }
       this.hidePassword = true
@@ -215,32 +206,17 @@ export default {
             this.signup.email.errorType ? alert('邮箱地址填写错误') : alert('邮箱地址不能为空')
           }else if(!this.signup.password.successful){
             this.signup.password.errorType ? alert('密码填写错误') : alert('密码不能为空')
+          }else{
+            this.innerMethods().signup.call(this,submitType)
           }
         }, 500)
-        if (!this.signup.username.successful || !this.signup.email.successful || !this.signup.password.successful){return}
-
-        var user = new AV.User();
-        user.setUsername(this.signup.username.content);
-        user.setPassword(this.signup.password.content);
-        user.setEmail(this.signup.email.content);
-        user.signUp().then((loginedUser) => {
-          console.log(loginedUser);
-          alert('注册成功')
-          this[submitType].submitClass = ''
-          this[submitType].btnContent = 'successful'
-        }, (error) => {
-          console.dir(error.code)
-          this[submitType].submitClass = ''
-          this[submitType].btnContent = 'Try Again'
-        });
       }else if (submitType === 'login') {
         if (!this.login.username || this.login.loginError === '') {
           this.login.loginError = true
           return
         }
+        this.innerMethods().login.call(this, submitType)
       }
-      this[submitType].submitClass = 'btn-loading'
-      this[submitType].btnContent = 'Please Wait ...'
     },
     resetSignupError: function (inputName){ //重置错误信息
       this.signup[inputName].successful = ''
@@ -258,7 +234,7 @@ export default {
             callback()
           }, delay)
         },
-        isSyntaxError: function(checkName, inputContent, inputName){
+        isSyntaxError: function(checkName, inputContent, inputName){ //判断是否存在语法错误
           var isSyntaxError
           var errorType = 'syntaxError'
           if (inputName === 'username'){
@@ -275,14 +251,7 @@ export default {
             }else if(!(/^(?![\dA-Z_\W]+$).{7,}$/).test(inputContent)){
               errorType = 'needLowercaseError'
               isSyntaxError = true
-            // }else if(!/^(?!\W+$).{7,}$/.test(inputContent)){
-            //   errorType = 'needNumLowerError'
-            //   isSyntaxError = true
-            // }else if(!(/^(?![A-Z_]+$).{7,}$/).test(inputContent)){
-            //   errorType = 'needNumLowerError'
-            //   isSyntaxError = true
             }
-            // isSyntaxError = !(/^(?!\d+$).{7,}$/.test(inputContent))
           }
           if (isSyntaxError){
             checkName.loading = false
@@ -291,22 +260,86 @@ export default {
           }
           return isSyntaxError
         },
-        isExistError: function(){},
-        listenInput: function(inputName){
+        isExistError: function (checkName, inputContent, inputName) {
+          var query = new AV.Query('UsernameAndEmail');
+          query.equalTo(inputName, inputContent);
+          query.find().then((results) => {
+            if(results.length){
+              checkName.loading = false
+              checkName.error = true
+              checkName.errorType = 'existError'
+            }else{
+              checkName.loading = false
+              checkName.successful = true
+            }
+          }).catch((error) => {console.log(error)})
+        },
+        listenInput: function(inputName){ //监听input 事件函数
           this.resetSignupError(inputName)
           var self = this
           var checkNameObj = this.signup[inputName]
           var inputNameObj = this.signup[inputName]
           this.innerMethods().lazyLoad(inputNameObj, function(){
             if(!inputNameObj.content.trim()){return} //删除空格到开始地方不会马上提示错误 而是在失去焦点的时候提示
-              checkNameObj.loading = true
-            if(self.innerMethods().isSyntaxError.call(self,checkNameObj, inputNameObj.content, inputName)){ //是否语法错误
+            checkNameObj.loading = true
+            if(self.innerMethods().isSyntaxError.call(self, checkNameObj, inputNameObj.content, inputName)){ //是否语法错误
               return
+            }
+            if(inputName === 'username' || inputName === 'email'){ //判断输入的用户名和邮箱是否已经被使用过了
+              self.innerMethods().isExistError.call(self, checkNameObj, inputNameObj.content, inputName)
             }else{
               checkNameObj.loading = false
               checkNameObj.successful = true
             }
           }, 500)
+        },
+        changeSubmitBtnWait: function(submitType){ //改变按钮为等待状态
+          this[submitType].submitClass = 'btn-loading'
+          this[submitType].btnContent = 'Please Wait ...'
+        },
+        pushNewUser: function(attributes){
+          var UserName = AV.Object.extend('UsernameAndEmail');
+          var username = new UserName();
+          username.set('username', attributes.username);
+          username.set('email', attributes.email);
+          username.save().then(function(results) {
+            // console.log(results)
+          }, function(error) {
+            console.dir(error)
+          });
+        },
+        signup: function (submitType){ //向服务器发起注册请求
+          this.innerMethods().changeSubmitBtnWait(submitType)
+          var user = new AV.User();
+          user.setUsername(this.signup.username.content);
+          user.setPassword(this.signup.password.content);
+          user.setEmail(this.signup.email.content);
+          user.signUp().then((loginedUser) => {
+            // console.log(loginedUser);
+            alert('注册成功')
+            this[submitType].submitClass = ''
+            this[submitType].btnContent = 'successful'
+            this.innerMethods().pushNewUser(loginedUser.attributes)
+          }, (error) => {
+            console.dir(error.code)
+            this[submitType].submitClass = ''
+            this[submitType].btnContent = 'Try Again'
+          });
+        },
+        login: function(submitType){
+          this.innerMethods().changeSubmitBtnWait(submitType)
+          AV.User.logIn(this.login.username, this.login.password).then((loginedUser) => {
+            this[submitType].submitClass = ''
+            this[submitType].btnContent = 'successful'
+            this.showPage = 'todolist'
+            console.log(loginedUser);
+          }, (error) => {
+            this[submitType].errorMessage = error.code === 219 ? error.rawMessage : 'Incorrect username or password.'
+            this[submitType].btnContent = 'Try Again'
+            this[submitType].submitClass = ''
+            this.login.loginError = true
+            console.dir(error)
+          });
         }
       }
     },
@@ -360,7 +393,8 @@ export default {
 .checkbox-remember-checked-hover{background-position: 0 -120px;}
 .checkbox-remember-checked-hover-focused{background-position: 0 -120px;}
 .field-password-footer .span-underline{margin:0; height: 18px;}
-.login-incorrect{padding: 15px 20px; margin-bottom: 20px; font-size: 13px; color: #86181d; border-radius: 5px; border:1px solid rgba(27,31,35,0.15); background-color: #ffdce0;}
+.login-incorrect{position: relative; padding: 15px 20px; margin-bottom: 20px; font-size: 13px; color: #86181d; border-radius: 5px; border:1px solid rgba(27,31,35,0.15); background-color: #ffdce0;}
+.btn-close-error{position: absolute; top: 50%; margin-top: -8px; right: 8px;}
 .octicon{vertical-align: text-bottom; fill: currentcolor; opacity: 0.6;}
 
 #signup-password{margin-bottom: 0;}
