@@ -1,6 +1,6 @@
 <template>
   <div class="pages">
-    <home-page v-if="showPage === 'homePage'"></home-page>
+    <home-page v-if="showPage === 'homePage'" v-on:change-page="changePage"></home-page>
     <section id="sign-page" v-if="showPage === 'login' || showPage === 'signup'">
       <div class="login sign-type" v-if="showPage === 'login'">
         <h3>log in</h3>
@@ -8,7 +8,7 @@
         <p class="login-incorrect clearfix" v-show="login.loginError">{{login.errorMessage}}<span class="btn-close-error" @click="close"><svg aria-hidden="true" class="octicon octicon-x" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48z"></path></svg></span></p>
         <div class="field-username">
           <label class="block-tag label-name" for="login-username">username</label>
-          <input type="text" name="login-username" id="login-username" class="page-sign-input input-focus" v-model.lazy.trim="login.username" @focusin="()=>{this.login.loginError = false}">
+          <input type="text" name="login-username" id="login-username" class="page-sign-input input-focus" v-model.trim="login.username" @focusin="()=>{this.login.loginError = false}">
         </div>
         <div class="field-password">
           <div class="clearfix">
@@ -18,7 +18,7 @@
               <label for="login-show-password" title="Show Password" class="password-icon relative cursor-pointer" v-bind:class="hidePassword ? 'show-password-icon' : 'hide-password-icon'">{{ hidePassword ? 'show' : 'hide'}}</label>
             </div>
           </div>
-          <input name="login-password" id="login-password" class="page-sign-input input-focus" v-model.lazy="login.password" v-bind:type="hidePassword ? 'password' : 'text'" @keypress.enter="btnSubmit('login')" @focusin="()=>{this.login.loginError = false}">
+          <input name="login-password" id="login-password" class="page-sign-input input-focus" v-model="login.password" v-bind:type="hidePassword ? 'password' : 'text'" @keypress.enter="btnSubmit('login')" @focusin="()=>{this.login.loginError = false}">
           <button type="submit" class="btn-login block-tag" v-bind:class="login.submitClass" @click="btnSubmit('login')">{{ login.btnContent }}</button>
           <div class="field-password-footer">
             <label class="label-checkbox-remember">
@@ -50,7 +50,7 @@
               <label for="signup-show-password" title="Show Password" class="password-icon relative cursor-pointer" v-bind:class="hidePassword ? 'show-password-icon' : 'hide-password-icon'">{{ hidePassword ? 'show' : 'hide'}}</label>
             </div>
           </div>
-          <input name="signup-password" id="signup-password" placeholder="Create a password" class="page-sign-input input-focus" v-model="signup.password.content" v-bind:type="hidePassword ? 'password' : 'text'" v-bind:class="{'is-autocheck-successful': signup.password.successful, 'is-autocheck-errored': signup.password.error, 'is-autocheck-loading': signup.password.loading}" @focusout="blankCheck('password')" @focusin="signup.password.errorType === 'blankError' && resetSignupError('password')" @keypress.enter="btnSumbit('signup')">
+          <input name="signup-password" id="signup-password" placeholder="Create a password" class="page-sign-input input-focus" v-model="signup.password.content" v-bind:type="hidePassword ? 'password' : 'text'" v-bind:class="{'is-autocheck-successful': signup.password.successful, 'is-autocheck-errored': signup.password.error, 'is-autocheck-loading': signup.password.loading}" @focusout="blankCheck('password')" @focusin="signup.password.errorType === 'blankError' && resetSignupError('password')" @keypress.enter="btnSubmit('signup')">
           <p class="signup-tip">Use at least one letter, one numeral, and seven characters.</p>
           <span class="signup-error-message password-error-message" v-show="signup.password.error">{{signup.password.errorMessages[signup.password.errorType]}}</span>
         </div>
@@ -328,11 +328,13 @@ export default {
         },
         login: function(submitType){
           this.innerMethods().changeSubmitBtnWait(submitType)
+          console.log('username', this.login.username)
+          console.log('password', this.login.password)
           AV.User.logIn(this.login.username, this.login.password).then((loginedUser) => {
             this[submitType].submitClass = ''
             this[submitType].btnContent = 'successful'
             this.showPage = 'todolist'
-            console.log(loginedUser);
+            console.log(AV.User.current());
           }, (error) => {
             this[submitType].errorMessage = error.code === 219 ? error.rawMessage : 'Incorrect username or password.'
             this[submitType].btnContent = 'Try Again'
@@ -350,10 +352,17 @@ export default {
         checkName.error = true
         checkName.errorType = 'blankError'
       }
+    },
+    changePage: function (pageName){
+      this.showPage = pageName
     }
   },
   components: {
     HomePage, TodoPage
+  },
+  created: function () {
+  },
+  events: {
   }
 }
 </script>

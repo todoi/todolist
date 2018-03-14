@@ -1,5 +1,7 @@
 <template>
-  <section id="todo-page"></section>
+  <section id="todo-page">
+
+  </section>
 </template>
 
 <script>
