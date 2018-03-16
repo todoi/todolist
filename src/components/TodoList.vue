@@ -78,7 +78,7 @@ export default {
   name: 'TodoList',
   data() {
     return {
-      showPage: 'homePage',
+      showPage: 'todolist',
       hidePassword: true,
       login: {
         username: '',

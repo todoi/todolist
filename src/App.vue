@@ -22,6 +22,7 @@ ul,ol{ list-style: none; }
 .clearfix:after{ content: ''; display: block; clear: both; };
 .float-left{float: left;}
 .float-right{float: right;}
+.hidden{display: none;}
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

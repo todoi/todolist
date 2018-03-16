@@ -4,6 +4,45 @@
     src: url(../fonts/freddicons-20px.eot?#iefix) format('embedded-opentype'),
         url(../fonts/freddicons-20px.woff) format('woff'),
         url(../fonts/freddicons-20px.woff2) format('woff2'),
-        url(../fonts/freddicons-20px.ttf) format('truetype')
+        url(../fonts/freddicons-20px.ttf) format('truetype');
 }
+
+@font-face {
+  font-family: Shine;
+  src: url(../fonts/Shine.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: Above;
+  src: url(../fonts/ABOVE.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: Trench;
+  src: url(../fonts/trench100free.ttf) format('truetype'),
+      url(../fonts/trench100free.otf) format('opentype')
+}
+
+@font-face {
+  font-family: Billy;
+  src: url("../fonts/Billy.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: Hemera;
+  src: url("../fonts/Hemera.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: Wicked;
+  src: url("../fonts/Wicked.otf") format('opentype');
+}
+
+@font-face {
+  font-family: Shi;
+  src: url("../fonts/shi.ttf") format('truetype');
+}
+
+
+
 
