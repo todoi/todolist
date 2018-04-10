@@ -19,10 +19,12 @@ html{ font-family: "Helvetica Neue",Arial,Helvetica,sans-serif; font-size: 16px;
 *{ margin: 0; padding: 0; box-sizing: border-box; }
 :before, :after{ box-sizing: border-box; }
 ul,ol{ list-style: none; }
+a{text-decoration: none; color: inherit; cursor: pointer;}
 .clearfix:after{ content: ''; display: block; clear: both; };
 .float-left{float: left;}
 .float-right{float: right;}
-.hidden{display: none;}
+.hidden{display: none !important; outline: 0; box-shadow: none;}
+.disabled{pointer-events: none;}
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
