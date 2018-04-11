@@ -25,6 +25,14 @@ a{text-decoration: none; color: inherit; cursor: pointer;}
 .float-right{float: right;}
 .hidden{display: none !important; outline: 0; box-shadow: none;}
 .disabled{pointer-events: none;}
+.chromeless{border: none; box-shadow: none; background: none; border-radius: 0; padding: 0; line-height: 20px;}
+.chromeless:focus{outline: 0;}
+.transparent{opacity: 0 !important; pointer-events: none;}
+.invisible{visibility: hidden;}
+*::-webkit-scrollbar{width: 6px;}
+*::-webkit-scrollbar-corner{background: transparent;}
+*::-webkit-scrollbar-button:start:decrement, *::-webkit-scrollbar-button:end:increment{height: 0; background-color: transparent;}
+*::-webkit-scrollbar-thumb:vertical{border-radius: 6px; background-color: rgba(0, 0, 0, 0.2);}
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

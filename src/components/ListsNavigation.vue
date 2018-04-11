@@ -194,7 +194,6 @@ export default {
 <style scoped>
 *{box-sizing: content-box;}
 #lists-nav :focus{outline: none;}
-.chromeless{border: none; box-shadow: none; background: none; border-radius: 0; padding: 0; line-height: 20px;}
 
 #lists-nav{width: 280px; background: #f7f7f7; z-index: 3; overflow: hidden; transition: width 100ms ease; user-select: none;}
 #lists-nav.collapsed{width: 42px; flex-basis: 42px;}
@@ -203,7 +202,6 @@ export default {
 }
 
 .lists-inner{display: flex;position: relative; flex-direction: column; height: 100vh;}
-.chromeless:focus{outline: 0;}
 .search-toolbar{height: 45px; background: #0c7fad; display: flex;}
 .list-toggle{width: 20px; height: 20px; fill: #fff; padding: 13px 11px 12px 11px; flex-shrink:0; box-sizing: content-box;}
 .search-input-wrapper{flex:1;}
