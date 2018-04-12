@@ -255,12 +255,4 @@ li.animate-up{transition: height 300ms;}
 .sidebar-actions-icon{height:20px; padding: 0 10px;}
 .sidebar-actions-label{flex: 1; text-align: left;}
 
-@keyframes rotate{
-  0%{
-    transform: rotate(0deg)
-  }
-  100%{
-    transform: rotate(360deg)
-  }
-}
 </style>

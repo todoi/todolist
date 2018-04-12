@@ -19,7 +19,7 @@ html{ font-family: "Helvetica Neue",Arial,Helvetica,sans-serif; font-size: 16px;
 *{ margin: 0; padding: 0; box-sizing: border-box; }
 :before, :after{ box-sizing: border-box; }
 ul,ol{ list-style: none; }
-a{text-decoration: none; color: inherit; cursor: pointer;}
+a{text-decoration: none; color: inherit; cursor: pointer; outline: none;}
 .clearfix:after{ content: ''; display: block; clear: both; };
 .float-left{float: left;}
 .float-right{float: right;}
@@ -33,6 +33,7 @@ a{text-decoration: none; color: inherit; cursor: pointer;}
 *::-webkit-scrollbar-corner{background: transparent;}
 *::-webkit-scrollbar-button:start:decrement, *::-webkit-scrollbar-button:end:increment{height: 0; background-color: transparent;}
 *::-webkit-scrollbar-thumb:vertical{border-radius: 6px; background-color: rgba(0, 0, 0, 0.2);}
+div[tabindex]{outline: none;}
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -41,4 +42,12 @@ a{text-decoration: none; color: inherit; cursor: pointer;}
   color: #2c3e50;
 }
 
+@keyframes rotate{
+  0%{
+    transform: rotate(0deg)
+  }
+  100%{
+    transform: rotate(360deg)
+  }
+}
 </style>

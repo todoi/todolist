@@ -147,7 +147,7 @@
           <a class="group-header" href="/#/lists/inbox">inbox</a>
         </h2>
         <ol class="tasks">
-          <li tabindex="0" class="taskItem" draggable="true">
+          <li tabindex="0" class="taskItem selected" draggable="true">
             <div class="taskItem-body">
               <a class="taskItem-checkboxWrapper checkbox" tabindex="-1">
                 <span title="标记为已完成">
@@ -287,6 +287,7 @@ export default {
 .heading a{padding: 3px 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 400; line-height: 16px; border-radius: 3px; background: rgba(14, 145, 197, 0.75);}
 .taskItem{height: 47px;}
 .taskItem-body{height: 46px; display: flex; position: relative; align-items: center; padding: 0 4px; border-radius: 3px; background: #fff;}
+.taskItem.selected .taskItem-body{background: #e1f2fe;}
 .taskItem-checkboxWrapper{padding: 0 8px; height: 20px;}
 .checkbox .task-check{stroke: rgba(0, 0, 0, 0.35);}
 .checkbox .task-checked{fill: rgba(0, 0, 0, 0.35);}
