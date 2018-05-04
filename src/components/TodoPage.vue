@@ -1,9 +1,9 @@
 <template>
   <section id="todo-page">
     <div class="todo-page-inner">
-      <lists-navigation></lists-navigation>
-      <task class="tasks"></task>
-      <task-detail></task-detail>
+      <lists-navigation :username="username"></lists-navigation>
+      <task class="tasks" :username="username"></task>
+      <task-detail :username="username"></task-detail>
     </div>
   </section>
 </template>
@@ -15,6 +15,7 @@ import Task from './Task'
 export default {
   name: 'TodoPage',
   components: {ListsNavigation, TaskDetail, Task},
+  props:['username'],
   data (){
     return {
     }

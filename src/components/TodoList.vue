@@ -56,7 +56,7 @@
         <button type="submit" class="btn-signup block-tag" v-bind:class="signup.submitClass" @click="btnSubmit('signup')">{{ signup.btnContent }}</button>
       </div>
     </section>
-    <todo-page v-if="showPage === 'todolist'"></todo-page>
+    <todo-page v-if="showPage === 'todolist'" :username="login.username"></todo-page>
   </div>
 </template>
 <script>
@@ -79,7 +79,7 @@ export default {
       showPage: 'todolist',
       hidePassword: true,
       login: {
-        username: '',
+        username: 'todoi',
         password: '',
         submitClass: '',
         btnContent: 'Log In',

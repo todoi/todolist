@@ -29,6 +29,7 @@ a{text-decoration: none; color: inherit; cursor: pointer; outline: none;}
 .chromeless:focus{outline: 0;}
 .transparent{opacity: 0 !important; pointer-events: none;}
 .invisible{visibility: hidden;}
+*:focus{outline: none;}
 *::-webkit-scrollbar{width: 6px;}
 *::-webkit-scrollbar-corner{background: transparent;}
 *::-webkit-scrollbar-button:start:decrement, *::-webkit-scrollbar-button:end:increment{height: 0; background-color: transparent;}
