@@ -51,4 +51,12 @@ div[tabindex]{outline: none;}
     transform: rotate(360deg)
   }
 }
+
+/* 日期组件的样式 */ 
+.date-picker-input{background: transparent; border: 0; display:none;}
+.date-picker-icon{display: block; width: 20px; height: 20px;}
+.date-picker-calendar{right:0;}
+.date-picker-wrapper{position: absolute; color: #000; user-select: none;}
+.vdp-datepicker__clear-button{position: absolute; top: -7px; right: -6px; color: #423e3e; width: 12px; height: 12px; line-height: 12px; text-align: center; border-radius: 50%; background: #fbfaf9;}
+
 </style>
