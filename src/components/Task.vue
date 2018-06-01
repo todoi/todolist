@@ -1,217 +1,225 @@
 <template>
   <div id="tasks">
-    <div class="list-toolbar">
-      <h1 class="title">工作</h1>
-      <div class="action-bar expanded" @mouseleave="hideActionBar">
-        <div class="action-bar-top" :style="`height: ${actionBarTopHeight}`">
-          <ul class="action-bar-top-sort" :class="actionBarTopActive === 'sort' && 'active'">
-            <!-- 排序列表 -->
-            <li tabindex="0" v-for="item in actionBarTopSort" :class="item.sortFn === 'sortByDeadline' ? deadlineSortClass : item.liClassName" @click="sortFn(item.sortFn)">
-              <a :class="item.aClassName">
-                <svg :class="item.svgClassName" v-html="item.svgHTML" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg>
-                <span>{{ item.text }}</span>
-              </a>
-            </li>
-          </ul>
 
-          <ul class="action-bar-top-more" :class="actionBarTopActive === 'more' && 'active'">
-            <!-- 更多列表 -->
-            <li tabindex="0" v-for="item in actionBarTopMore" :class="item.liClassName">
-              <a :class="item.aClassName">
-                <svg :class="item.svgClassName" v-html="item.svgHTML" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg>
-                <span v-if="typeof item.text === 'string'">{{ item.text }}</span>
-                <template v-if="typeof item.text === 'object'">
-                  <span v-for="text in item.text" :class="[text.className.commonClassName, text.className.turnOn]">{{ text.content }}</span>
-                </template>
-              </a>
-            </li>
-            <!-- 
-            <li tabindex="0">
-              <a class="action-bar-top-paste-item">
-                <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g id="Page-1" stroke="none" stroke-width="1" fill-rule="evenodd" sketch:type="MSPage"> <g id="paste" sketch:type="MSArtboardGroup"> <path d="M15.5,2 L4.5,2 C3.121,2 2,3.121 2,4.5 L2,15.5 C2,16.879 3.121,18 4.5,18 L15.5,18 C16.879,18 18,16.879 18,15.5 L18,4.5 C18,3.121 16.879,2 15.5,2 L15.5,2 Z M17,15.5 C17,16.327 16.327,17 15.5,17 L4.5,17 C3.673,17 3,16.327 3,15.5 L3,4.5 C3,3.673 3.673,3 4.5,3 L15.5,3 C16.327,3 17,3.673 17,4.5 L17,15.5 L17,15.5 Z M11.353,8.646 C11.158,8.451 10.842,8.451 10.646,8.646 L6.5,12.793 L6.5,10 C6.5,9.724 6.276,9.5 6,9.5 C5.724,9.5 5.5,9.724 5.5,10 L5.5,14 C5.5,14.065 5.513,14.13 5.538,14.191 C5.589,14.313 5.687,14.411 5.809,14.462 C5.87,14.487 5.935,14.5 6,14.5 L10,14.5 C10.276,14.5 10.5,14.276 10.5,14 C10.5,13.724 10.276,13.5 10,13.5 L7.207,13.5 L11.353,9.353 C11.549,9.158 11.549,8.842 11.353,8.646" id="Paste" sketch:type="MSShapeGroup"></path> </g> </g> </svg>
-                <span>粘贴 <i class="token_0">0</i> 个任务</span>
-              </a>
-            </li>
-            -->
-          </ul>
+    <div class="tasks-main">
+      <div class="list-toolbar">
+        <h1 class="title">工作</h1>
+        <div class="action-bar expanded" @mouseleave="hideActionBar">
+          <div class="action-bar-top" :style="`height: ${actionBarTopHeight}`">
+            <ul class="action-bar-top-sort" :class="actionBarTopActive === 'sort' && 'active'">
+              <!-- 排序列表 -->
+              <li tabindex="0" v-for="item in actionBarTopSort" :class="item.sortFn === 'sortByDeadline' ? deadlineSortClass : item.liClassName" @click="sortFn(item.sortFn)">
+                <a :class="item.aClassName">
+                  <svg :class="item.svgClassName" v-html="item.svgHTML" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg>
+                  <span>{{ item.text }}</span>
+                </a>
+              </li>
+            </ul>
+
+            <ul class="action-bar-top-more" :class="actionBarTopActive === 'more' && 'active'">
+              <!-- 更多列表 -->
+              <li tabindex="0" v-for="item in actionBarTopMore" :class="item.liClassName">
+                <a :class="item.aClassName">
+                  <svg :class="item.svgClassName" v-html="item.svgHTML" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg>
+                  <span v-if="typeof item.text === 'string'">{{ item.text }}</span>
+                  <template v-if="typeof item.text === 'object'">
+                    <span v-for="text in item.text" :class="[text.className.commonClassName, text.className.turnOn]">{{ text.content }}</span>
+                  </template>
+                </a>
+              </li>
+              <!-- 
+              <li tabindex="0">
+                <a class="action-bar-top-paste-item">
+                  <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g id="Page-1" stroke="none" stroke-width="1" fill-rule="evenodd" sketch:type="MSPage"> <g id="paste" sketch:type="MSArtboardGroup"> <path d="M15.5,2 L4.5,2 C3.121,2 2,3.121 2,4.5 L2,15.5 C2,16.879 3.121,18 4.5,18 L15.5,18 C16.879,18 18,16.879 18,15.5 L18,4.5 C18,3.121 16.879,2 15.5,2 L15.5,2 Z M17,15.5 C17,16.327 16.327,17 15.5,17 L4.5,17 C3.673,17 3,16.327 3,15.5 L3,4.5 C3,3.673 3.673,3 4.5,3 L15.5,3 C16.327,3 17,3.673 17,4.5 L17,15.5 L17,15.5 Z M11.353,8.646 C11.158,8.451 10.842,8.451 10.646,8.646 L6.5,12.793 L6.5,10 C6.5,9.724 6.276,9.5 6,9.5 C5.724,9.5 5.5,9.724 5.5,10 L5.5,14 C5.5,14.065 5.513,14.13 5.538,14.191 C5.589,14.313 5.687,14.411 5.809,14.462 C5.87,14.487 5.935,14.5 6,14.5 L10,14.5 C10.276,14.5 10.5,14.276 10.5,14 C10.5,13.724 10.276,13.5 10,13.5 L7.207,13.5 L11.353,9.353 C11.549,9.158 11.549,8.842 11.353,8.646" id="Paste" sketch:type="MSShapeGroup"></path> </g> </g> </svg>
+                  <span>粘贴 <i class="token_0">0</i> 个任务</span>
+                </a>
+              </li>
+              -->
+            </ul>
+          </div>
+
+          <div class="action-bar-bottom">
+            <a class="tab share first-tab" @click="showActionBarTop('share')" :class="{active: actionBarBottomActive.share}">
+              <svg class="share rtl-flip" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-disabled="false"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="share"> <path d="M11.5025,12 C13.7825,12 15.5025,8.84 15.5025,6 C15.5025,3.8 13.7025,2 11.5025,2 C9.3025,2 7.5025,3.8 7.5025,6 C7.5025,8.5 9.0225,12 11.5025,12 L11.5025,12 Z M11.5025,3 C13.1625,3 14.5025,4.34 14.5025,6 C14.5025,8.26 13.1225,11 11.5025,11 C9.8425,11 8.5025,8.26 8.5025,6 C8.5025,4.34 9.8425,3 11.5025,3 L11.5025,3 Z M4.5025,10 L6.0025,10 C6.2825,10 6.5025,9.78 6.5025,9.5 C6.5025,9.22 6.2825,9 6.0025,9 L4.5025,9 L4.5025,7.5 C4.5025,7.22 4.2825,7 4.0025,7 C3.7225,7 3.5025,7.22 3.5025,7.5 L3.5025,9 L2.0025,9 C1.7225,9 1.5025,9.22 1.5025,9.5 C1.5025,9.78 1.7225,10 2.0025,10 L3.5025,10 L3.5025,11.5 C3.5025,11.78 3.7225,12 4.0025,12 C4.2825,12 4.5025,11.78 4.5025,11.5 L4.5025,10 Z M18.2625,14.88 C18.0625,14 17.4025,13.28 16.5225,13.04 L14.2225,12.36 C14.0825,12.32 13.9625,12.26 13.8625,12.14 C13.6625,11.96 13.3425,11.96 13.1625,12.16 C12.9625,12.34 12.9625,12.66 13.1625,12.86 C13.3825,13.08 13.6425,13.24 13.9425,13.32 L16.2425,14 C16.7625,14.14 17.1625,14.58 17.2825,15.1 L17.4425,15.8 C16.9025,16.16 15.2025,17 11.5025,17 C7.7825,17 6.1025,16.14 5.5625,15.8 L5.7225,15.04 C5.8425,14.5 6.2625,14.06 6.8025,13.92 L9.0425,13.32 C9.3425,13.24 9.6225,13.08 9.8625,12.86 C10.0425,12.66 10.0425,12.34 9.8625,12.14 C9.6625,11.96 9.3425,11.96 9.1425,12.14 C9.0425,12.24 8.9225,12.32 8.7825,12.36 L6.5425,12.96 C5.6425,13.2 4.9625,13.92 4.7425,14.82 L4.5225,15.9 C4.4825,16.06 4.5225,16.24 4.6425,16.36 C4.7225,16.42 6.3625,18 11.5025,18 C16.6425,18 18.2825,16.42 18.3625,16.36 C18.4825,16.24 18.5225,16.06 18.4825,15.9 L18.2625,14.88 Z" id="W"></path> </g> </g> </svg>
+              <span class="tab-text">共享</span>
+            </a>
+            <a class="tab sort-az" @click="showActionBarTop('sort')" :class="{active: actionBarBottomActive.sort,}">
+              <svg class="sort-az" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-disabled="false"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="sort-az"> <path d="M14.2,2.3 C14.12,2.12 13.94,2 13.76,2 L13.26,2 C13.06,2 12.88,2.12 12.8,2.3 L10.04,8.3 C9.94,8.54 10.04,8.84 10.3,8.96 C10.54,9.08 10.84,8.96 10.96,8.7 L11.74,7 L15.26,7 L16.04,8.7 C16.14,8.9 16.32,9 16.5,9 C16.58,9 16.64,8.98 16.7,8.96 C16.96,8.84 17.06,8.54 16.96,8.3 L14.2,2.3 Z M5.64,3.02 C5.56,3 5.48,3 5.4,3 C5.3,3.02 5.22,3.08 5.14,3.16 L3.14,5.14 C2.96,5.34 2.96,5.66 3.14,5.86 C3.34,6.04 3.66,6.04 3.86,5.86 L5,4.7 L5,8.5 C5,8.78 5.22,9 5.5,9 C5.78,9 6,8.78 6,8.5 L6,4.7 L7.14,5.86 C7.24,5.96 7.38,6 7.5,6 C7.62,6 7.76,5.96 7.86,5.86 C8.04,5.66 8.04,5.34 7.86,5.14 C5.68,2.98 5.8,3.08 5.64,3.02 L5.64,3.02 Z M14.8,6 L12.2,6 L13.5,3.16 L14.8,6 Z M6,15.3 L6,11.5 C6,11.22 5.78,11 5.5,11 C5.22,11 5,11.22 5,11.5 L5,15.3 L3.86,14.14 C3.66,13.96 3.34,13.96 3.14,14.14 C2.96,14.34 2.96,14.66 3.14,14.86 C5.28,17 5.2,16.96 5.4,17 C5.56,17.02 5.74,16.98 5.86,16.84 L7.86,14.86 C8.04,14.66 8.04,14.34 7.86,14.14 C7.66,13.96 7.34,13.96 7.14,14.14 L6,15.3 Z M15.94,11.26 C15.86,11.1 15.68,11 15.5,11 L11.5,11 C11.22,11 11,11.22 11,11.5 C11,11.78 11.22,12 11.5,12 L14.56,12 L11.08,17.22 C10.98,17.38 10.98,17.58 11.06,17.74 C11.14,17.9 11.32,18 11.5,18 L15.5,18 C15.78,18 16,17.78 16,17.5 C16,17.22 15.78,17 15.5,17 L12.44,17 L15.92,11.78 C16.02,11.62 16.02,11.42 15.94,11.26 L15.94,11.26 Z" id="sort"></path> </g> </g> </svg>
+              <span class="tab-text">排序</span>
+            </a>
+
+            <!-- 更多这个功能被砍掉了 -->
+            <a class="tab last-tab hidden" @click="showActionBarTop('more')" :class="{active: actionBarBottomActive.more}">
+              <svg class="folder-option" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g id="Layer 1"> <path d="M3.5,11c0.828,0 1.5,-0.672 1.5,-1.5c0,-0.828 -0.672,-1.5 -1.5,-1.5c-0.828,0 -1.5,0.672 -1.5,1.5c0,0.828 0.672,1.5 1.5,1.5Z"></path> <path d="M9.5,11c0.828,0 1.5,-0.672 1.5,-1.5c0,-0.828 -0.672,-1.5 -1.5,-1.5c-0.828,0 -1.5,0.672 -1.5,1.5c0,0.828 0.672,1.5 1.5,1.5Z"></path> <path d="M15.5,11c0.828,0 1.5,-0.672 1.5,-1.5c0,-0.828 -0.672,-1.5 -1.5,-1.5c-0.828,0 -1.5,0.672 -1.5,1.5c0,0.828 0.672,1.5 1.5,1.5Z"></path> </g> </svg>
+              <span class="tab-text">更多</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="tasks-scroll">
+        <div class="addTask" :class="{focus: addTaskData.focusAddTask}" @focusin="focusAddTaskData" @focusout="blurAddTaskData" tabindex="1" >
+          <!-- invisible transparent -->
+          <div class="addTask-meta" :class="{'invisible transparent': hiddenAllAddTaskMeta}">
+            <a class="addTask-meta-star float-right" title="星标任务" :class="{hidden: addTaskData.hiddenAddTaskMeta.star, starred: addTaskData.starred}" @click="toggleNewTaskStarred">
+              <svg class="starred" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g id="Web-svgs" stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="starred"> <g id="Rectangle-3-+-A" transform="translate(1.000000, 0.000000)"> <path d="M3.74,18 C3.64,18 3.54,17.96 3.46,17.9 C3.28,17.76 3.2,17.54 3.28,17.34 L5.16,11.5 L0.2,7.9 C0.04,7.78 -0.04,7.56 0.02,7.34 C0.1,7.14 0.28,7 0.5,7 L6.64,7 L8.52,1.16 C8.66,0.76 9.34,0.76 9.48,1.16 L11.38,7 L17.5,7 C17.72,7 17.9,7.14 17.98,7.34 C18.04,7.56 17.96,7.78 17.8,7.9 L12.84,11.5 L14.72,17.34 C14.8,17.54 14.72,17.76 14.54,17.9 C14.38,18.02 14.14,18.02 13.96,17.9 L9,14.3 L4.04,17.9 C3.96,17.96 3.84,18 3.74,18 L3.74,18 Z M9,13.18 C9.1,13.18 9.2,13.2 9.3,13.28 L13.3,16.18 L11.78,11.46 C11.7,11.26 11.78,11.04 11.96,10.92 L15.96,8 L11,8 C10.8,8 10.6,7.86 10.54,7.66 L9,2.94 L7.46,7.66 C7.4,7.86 7.22,8 7,8 L2.04,8 L6.04,10.92 C6.22,11.04 6.3,11.26 6.22,11.46 L4.7,16.18 L8.7,13.28 C8.8,13.2 8.9,13.18 9,13.18 L9,13.18 Z" id="C"></path> <path d="M3.74,18 C3.64,18 3.54,17.96 3.46,17.9 C3.28,17.76 3.2,17.54 3.28,17.34 L5.16,11.5 L0.2,7.9 C0.04,7.78 -0.04,7.56 0.02,7.34 C0.1,7.14 0.28,7 0.5,7 L6.64,7 L8.52,1.16 C8.66,0.76 9.34,0.76 9.48,1.16 L11.38,7 L17.5,7 C17.72,7 17.9,7.14 17.98,7.34 C18.04,7.56 17.96,7.78 17.8,7.9 L12.84,11.5 L14.72,17.34 C14.8,17.54 14.72,17.76 14.54,17.9 C14.38,18.02 14.14,18.02 13.96,17.9 L9,14.3 L4.04,17.9 C3.96,17.96 3.84,18 3.74,18 L3.74,18 Z" id="D" opacity="0.06"> </path> </g> </g> </g> </svg>
+            </a>
+            <a class="addTask-meta-assign float-right" :class="{hidden: addTaskData.hiddenAddTaskMeta.assign}" title="分配给">
+              <svg class="assigned" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g> <g id="Rectangle-3-+-A" transform="translate(1.000000, 2.000000)"> <path d="M10,10 C12.28,10 14,6.84 14,4 C14,1.8 12.2,0 10,0 C7.8,0 6,1.8 6,4 C6,6.5 7.52,10 10,10 L10,10 Z M4.94,7.74 C4.98,7.66 5,7.58 5,7.5 C5,7.42 4.98,7.34 4.94,7.26 C4.92,7.22 4.9,7.18 4.86,7.14 L2.86,5.14 C2.66,4.96 2.34,4.96 2.14,5.14 C1.96,5.34 1.96,5.66 2.14,5.86 L3.3,7 L0.5,7 C0.22,7 0,7.22 0,7.5 C0,7.78 0.22,8 0.5,8 L3.3,8 L2.14,9.14 C1.96,9.34 1.96,9.66 2.14,9.86 C2.24,9.96 2.38,10 2.5,10 C2.62,10 2.76,9.96 2.86,9.86 L4.86,7.86 C4.9,7.82 4.92,7.78 4.94,7.74 L4.94,7.74 Z M16.76,12.88 C16.56,12 15.9,11.28 15.02,11.04 L12.72,10.36 C12.58,10.32 12.46,10.26 12.36,10.14 C12.16,9.96 11.84,9.96 11.66,10.16 C11.46,10.34 8.54,10.34 8.36,10.14 C8.16,9.96 7.84,9.96 7.64,10.14 C7.54,10.24 7.42,10.32 7.28,10.36 L5.04,10.96 C4.14,11.2 3.46,11.92 3.24,12.82 L3.02,13.9 C2.98,14.06 3.02,14.24 3.14,14.36 C3.22,14.42 4.86,16 10,16 C15.14,16 16.78,14.42 16.86,14.36 C16.98,14.24 17.02,14.06 16.98,13.9 L16.76,12.88 Z" fill-opacity="0.06"></path> <path d="M10,10 C12.28,10 14,6.84 14,4 C14,1.8 12.2,0 10,0 C7.8,0 6,1.8 6,4 C6,6.5 7.52,10 10,10 L10,10 Z M10,1 C11.66,1 13,2.34 13,4 C13,6.26 11.62,9 10,9 C8.34,9 7,6.26 7,4 C7,2.34 8.34,1 10,1 L10,1 Z M4.94,7.74 C4.98,7.66 5,7.58 5,7.5 C5,7.42 4.98,7.34 4.94,7.26 C4.92,7.22 4.9,7.18 4.86,7.14 L2.86,5.14 C2.66,4.96 2.34,4.96 2.14,5.14 C1.96,5.34 1.96,5.66 2.14,5.86 L3.3,7 L0.5,7 C0.22,7 0,7.22 0,7.5 C0,7.78 0.22,8 0.5,8 L3.3,8 L2.14,9.14 C1.96,9.34 1.96,9.66 2.14,9.86 C2.24,9.96 2.38,10 2.5,10 C2.62,10 2.76,9.96 2.86,9.86 L4.86,7.86 C4.9,7.82 4.92,7.78 4.94,7.74 L4.94,7.74 Z M16.76,12.88 C16.56,12 15.9,11.28 15.02,11.04 L12.72,10.36 C12.58,10.32 12.46,10.26 12.36,10.14 C12.16,9.96 11.84,9.96 11.66,10.16 C11.46,10.34 11.46,10.66 11.66,10.86 C11.88,11.08 12.14,11.24 12.44,11.32 L14.74,12 C15.26,12.14 15.66,12.58 15.78,13.1 L15.94,13.8 C15.4,14.16 13.7,15 10,15 C6.3,15 4.6,14.14 4.06,13.8 L4.22,13.04 C4.34,12.5 4.76,12.06 5.3,11.92 L7.54,11.32 C7.84,11.24 8.12,11.08 8.36,10.86 C8.54,10.66 8.54,10.34 8.36,10.14 C8.16,9.96 7.84,9.96 7.64,10.14 C7.54,10.24 7.42,10.32 7.28,10.36 L5.04,10.96 C4.14,11.2 3.46,11.92 3.24,12.82 L3.02,13.9 C2.98,14.06 3.02,14.24 3.14,14.36 C3.22,14.42 4.86,16 10,16 C15.14,16 16.78,14.42 16.86,14.36 C16.98,14.24 17.02,14.06 16.98,13.9 L16.76,12.88 Z"> </path> </g> </g> </g> </svg>
+              <span class="icon input-assign-frame"></span>
+              <span class="icon input-assign-delete"></span>
+            </a>
+            <a class="addTask-meta-date float-right dated" :class="{hidden: addTaskData.hiddenAddTaskMeta.date}" title="设置到期日">
+              <span class="addTask-meta-date-label">{{ datePickerDate }}</span>
+              <!-- 
+                :input-class 输入框的类名，被我隐藏了
+                :wrapper-class 最外面的div 的类名
+                :calendar-class 日历的类名
+                :calendar-button-icon 日历小按钮的类名 被我覆盖在 svg.today 上
+                :calendar-button-icon-content="''"  日历小按钮的内容 设置为空
+                :calendar-button="true"  
+                :clear-button="true" 出现清空按钮
+                :highlighted="datePickerState.highlighted 让日期高亮
+              -->
+              <date-picker 
+                v-model="datePickerState.date" 
+                :input-class="'date-picker-input'" 
+                :wrapper-class="'date-picker-wrapper'"
+                :calendar-class="'date-picker-calendar'" 
+                :calendar-button-icon="'date-picker-icon'" 
+                :calendar-button-icon-content="''" 
+                :calendar-button="true" 
+                :clear-button="true"
+                :highlighted="datePickerState.highlighted"></date-picker>
+              <!-- <span class="icon input-assign-delete">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" t="1527738984570" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" p-id="7043" width="200" height="200"><path d="M512 451.6608L403.3536 343.0144a42.606933 42.606933 0 0 0-60.305067 0.034133 42.666667 42.666667 0 0 0-0.034133 60.305067L451.6608 512 343.0144 620.6464a42.606933 42.606933 0 0 0 0.034133 60.305067 42.666667 42.666667 0 0 0 60.305067 0.034133L512 572.3392l108.6464 108.6464a42.606933 42.606933 0 0 0 60.305067-0.034133 42.666667 42.666667 0 0 0 0.034133-60.305067L572.3392 512l108.6464-108.6464a42.606933 42.606933 0 0 0-0.034133-60.305067 42.666667 42.666667 0 0 0-60.305067-0.034133L512 451.6608zM512 1024C229.666133 1024 0 794.333867 0 512S229.666133 0 512 0s512 229.666133 512 512-229.666133 512-512 512z m0-938.666667c-235.264 0-426.666667 191.402667-426.666667 426.666667s191.402667 426.666667 426.666667 426.666667 426.666667-191.402667 426.666667-426.666667-191.402667-426.666667-426.666667-426.666667z" fill="#ffffff" p-id="7044"/></svg>
+              </span> -->
+              <svg class="today" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="today"> <path d="M2.5,7 C2.22,7 2,6.78 2,6.5 L2,3.5 C2,2.68 2.68,2 3.5,2 L16.5,2 C17.32,2 18,2.68 18,3.5 L18,6.5 C18,6.78 17.78,7 17.5,7 L2.5,7 Z M3,6 L17,6 L17,3.5 C17,3.22 16.78,3 16.5,3 L3.5,3 C3.22,3 3,3.22 3,3.5 L3,6 Z M3.5,18 C2.68,18 2,17.32 2,16.5 L2,8.5 C2,8.22 2.22,8 2.5,8 C2.78,8 3,8.22 3,8.5 L3,16.5 C3,16.78 3.22,17 3.5,17 L16.5,17 C16.78,17 17,16.78 17,16.5 L17,8.5 C17,8.22 17.22,8 17.5,8 C17.78,8 18,8.22 18,8.5 L18,16.5 C18,17.32 17.32,18 16.5,18 L3.5,18 Z" id="E"></path> </g> </g> </svg>
+            </a>
+          </div>
+          <a class="plus-wrapper" :class="{hidden: addTaskData.focusAddTask}">
+            <svg class="plus-small" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve"> <g> <path d="M10,10l0,6.5c-0.003,0.053 -0.008,0.103 -0.024,0.155c-0.038,0.116 -0.12,0.217 -0.226,0.278c-0.047,0.027 -0.094,0.042 -0.146,0.056c-0.052,0.008 -0.051,0.008 -0.104,0.011c-0.053,-0.003 -0.103,-0.008 -0.155,-0.024c-0.15,-0.05 -0.271,-0.171 -0.321,-0.321c-0.016,-0.052 -0.021,-0.102 -0.024,-0.155l0,-6.5l-6.5,0c-0.046,-0.002 -0.058,-0.001 -0.104,-0.011c-0.103,-0.022 -0.197,-0.076 -0.268,-0.154c-0.169,-0.188 -0.169,-0.482 0,-0.67c0.035,-0.038 0.077,-0.072 0.122,-0.098c0.078,-0.045 0.161,-0.062 0.25,-0.067l6.5,0l0,-6.5c0.005,-0.089 0.022,-0.172 0.067,-0.25c0.126,-0.219 0.406,-0.31 0.636,-0.207c0.048,0.022 0.093,0.05 0.132,0.085c0.078,0.071 0.132,0.165 0.154,0.268c0.01,0.046 0.009,0.058 0.011,0.104l0,6.5l6.5,0c0.046,0.002 0.058,0.001 0.104,0.011c0.103,0.022 0.197,0.076 0.268,0.154c0.169,0.188 0.169,0.482 0,0.67c-0.035,0.038 -0.077,0.072 -0.122,0.098c-0.078,0.045 -0.161,0.062 -0.25,0.067l-6.5,0Z"></path> </g> </svg>
+          </a>
+          <input type="text" class="addTask-input chromeless" placeholder="添加任务..." @keypress.enter="addTask" v-model="newTask.title">
+          <a class="speech-wrapper" :class="{hidden: !addTaskData.focusAddTask}">
+            <svg class="speech" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="speech"> <path d="M10,13 C11.92,13 13.5,11.42 13.5,9.5 L13.5,5.5 C13.5,3.58 11.92,2 10,2 C8.08,2 6.5,3.58 6.5,5.5 L6.5,9.5 C6.5,11.42 8.08,13 10,13 L10,13 Z M7.5,5.5 C7.5,4.12 8.62,3 10,3 C11.38,3 12.5,4.12 12.5,5.5 L12.5,9.5 C12.5,10.88 11.38,12 10,12 C8.62,12 7.5,10.88 7.5,9.5 L7.5,5.5 Z M15.5,8.5 C15.5,8.22 15.28,8 15,8 C14.72,8 14.5,8.22 14.5,8.5 L14.5,9.5 C14.5,11.98 12.48,14 10,14 C7.52,14 5.5,11.98 5.5,9.5 L5.5,8.5 C5.5,8.22 5.28,8 5,8 C4.72,8 4.5,8.22 4.5,8.5 L4.5,9.5 C4.5,12.36 6.7,14.72 9.5,14.98 L9.5,17 L6,17 C5.72,17 5.5,17.22 5.5,17.5 C5.5,17.78 5.72,18 6,18 L14,18 C14.28,18 14.5,17.78 14.5,17.5 C14.5,17.22 14.28,17 14,17 L10.5,17 L10.5,14.98 C13.3,14.72 15.5,12.36 15.5,9.5 L15.5,8.5 Z" id="O"></path> </g> </g> </svg>
+          </a>
         </div>
 
-        <div class="action-bar-bottom">
-          <a class="tab share first-tab" @click="showActionBarTop('share')" :class="{active: actionBarBottomActive.share}">
-            <svg class="share rtl-flip" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-disabled="false"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="share"> <path d="M11.5025,12 C13.7825,12 15.5025,8.84 15.5025,6 C15.5025,3.8 13.7025,2 11.5025,2 C9.3025,2 7.5025,3.8 7.5025,6 C7.5025,8.5 9.0225,12 11.5025,12 L11.5025,12 Z M11.5025,3 C13.1625,3 14.5025,4.34 14.5025,6 C14.5025,8.26 13.1225,11 11.5025,11 C9.8425,11 8.5025,8.26 8.5025,6 C8.5025,4.34 9.8425,3 11.5025,3 L11.5025,3 Z M4.5025,10 L6.0025,10 C6.2825,10 6.5025,9.78 6.5025,9.5 C6.5025,9.22 6.2825,9 6.0025,9 L4.5025,9 L4.5025,7.5 C4.5025,7.22 4.2825,7 4.0025,7 C3.7225,7 3.5025,7.22 3.5025,7.5 L3.5025,9 L2.0025,9 C1.7225,9 1.5025,9.22 1.5025,9.5 C1.5025,9.78 1.7225,10 2.0025,10 L3.5025,10 L3.5025,11.5 C3.5025,11.78 3.7225,12 4.0025,12 C4.2825,12 4.5025,11.78 4.5025,11.5 L4.5025,10 Z M18.2625,14.88 C18.0625,14 17.4025,13.28 16.5225,13.04 L14.2225,12.36 C14.0825,12.32 13.9625,12.26 13.8625,12.14 C13.6625,11.96 13.3425,11.96 13.1625,12.16 C12.9625,12.34 12.9625,12.66 13.1625,12.86 C13.3825,13.08 13.6425,13.24 13.9425,13.32 L16.2425,14 C16.7625,14.14 17.1625,14.58 17.2825,15.1 L17.4425,15.8 C16.9025,16.16 15.2025,17 11.5025,17 C7.7825,17 6.1025,16.14 5.5625,15.8 L5.7225,15.04 C5.8425,14.5 6.2625,14.06 6.8025,13.92 L9.0425,13.32 C9.3425,13.24 9.6225,13.08 9.8625,12.86 C10.0425,12.66 10.0425,12.34 9.8625,12.14 C9.6625,11.96 9.3425,11.96 9.1425,12.14 C9.0425,12.24 8.9225,12.32 8.7825,12.36 L6.5425,12.96 C5.6425,13.2 4.9625,13.92 4.7425,14.82 L4.5225,15.9 C4.4825,16.06 4.5225,16.24 4.6425,16.36 C4.7225,16.42 6.3625,18 11.5025,18 C16.6425,18 18.2825,16.42 18.3625,16.36 C18.4825,16.24 18.5225,16.06 18.4825,15.9 L18.2625,14.88 Z" id="W"></path> </g> </g> </svg>
-            <span class="tab-text">共享</span>
-          </a>
-          <a class="tab sort-az" @click="showActionBarTop('sort')" :class="{active: actionBarBottomActive.sort,}">
-            <svg class="sort-az" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-disabled="false"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="sort-az"> <path d="M14.2,2.3 C14.12,2.12 13.94,2 13.76,2 L13.26,2 C13.06,2 12.88,2.12 12.8,2.3 L10.04,8.3 C9.94,8.54 10.04,8.84 10.3,8.96 C10.54,9.08 10.84,8.96 10.96,8.7 L11.74,7 L15.26,7 L16.04,8.7 C16.14,8.9 16.32,9 16.5,9 C16.58,9 16.64,8.98 16.7,8.96 C16.96,8.84 17.06,8.54 16.96,8.3 L14.2,2.3 Z M5.64,3.02 C5.56,3 5.48,3 5.4,3 C5.3,3.02 5.22,3.08 5.14,3.16 L3.14,5.14 C2.96,5.34 2.96,5.66 3.14,5.86 C3.34,6.04 3.66,6.04 3.86,5.86 L5,4.7 L5,8.5 C5,8.78 5.22,9 5.5,9 C5.78,9 6,8.78 6,8.5 L6,4.7 L7.14,5.86 C7.24,5.96 7.38,6 7.5,6 C7.62,6 7.76,5.96 7.86,5.86 C8.04,5.66 8.04,5.34 7.86,5.14 C5.68,2.98 5.8,3.08 5.64,3.02 L5.64,3.02 Z M14.8,6 L12.2,6 L13.5,3.16 L14.8,6 Z M6,15.3 L6,11.5 C6,11.22 5.78,11 5.5,11 C5.22,11 5,11.22 5,11.5 L5,15.3 L3.86,14.14 C3.66,13.96 3.34,13.96 3.14,14.14 C2.96,14.34 2.96,14.66 3.14,14.86 C5.28,17 5.2,16.96 5.4,17 C5.56,17.02 5.74,16.98 5.86,16.84 L7.86,14.86 C8.04,14.66 8.04,14.34 7.86,14.14 C7.66,13.96 7.34,13.96 7.14,14.14 L6,15.3 Z M15.94,11.26 C15.86,11.1 15.68,11 15.5,11 L11.5,11 C11.22,11 11,11.22 11,11.5 C11,11.78 11.22,12 11.5,12 L14.56,12 L11.08,17.22 C10.98,17.38 10.98,17.58 11.06,17.74 C11.14,17.9 11.32,18 11.5,18 L15.5,18 C15.78,18 16,17.78 16,17.5 C16,17.22 15.78,17 15.5,17 L12.44,17 L15.92,11.78 C16.02,11.62 16.02,11.42 15.94,11.26 L15.94,11.26 Z" id="sort"></path> </g> </g> </svg>
-            <span class="tab-text">排序</span>
-          </a>
-
-          <!-- 更多这个功能被砍掉了 -->
-          <a class="tab last-tab hidden" @click="showActionBarTop('more')" :class="{active: actionBarBottomActive.more}">
-            <svg class="folder-option" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g id="Layer 1"> <path d="M3.5,11c0.828,0 1.5,-0.672 1.5,-1.5c0,-0.828 -0.672,-1.5 -1.5,-1.5c-0.828,0 -1.5,0.672 -1.5,1.5c0,0.828 0.672,1.5 1.5,1.5Z"></path> <path d="M9.5,11c0.828,0 1.5,-0.672 1.5,-1.5c0,-0.828 -0.672,-1.5 -1.5,-1.5c-0.828,0 -1.5,0.672 -1.5,1.5c0,0.828 0.672,1.5 1.5,1.5Z"></path> <path d="M15.5,11c0.828,0 1.5,-0.672 1.5,-1.5c0,-0.828 -0.672,-1.5 -1.5,-1.5c-0.828,0 -1.5,0.672 -1.5,1.5c0,0.828 0.672,1.5 1.5,1.5Z"></path> </g> </svg>
-            <span class="tab-text">更多</span>
-          </a>
+        <div class="task-list starred">
+          <h2 class="heading normal">
+            <a class="group-header" href="/#/lists/inbox">inbox</a>
+          </h2>
+          <ol class="tasks">
+            <li tabindex="0" class="taskItem" draggable="true" v-for="(item, index) in taskItems" :class="{selected: item.selected}" @click="selectTaskItem($event, index)">
+              <div class="taskItem-body">
+                <a class="taskItem-checkboxWrapper checkbox" tabindex="-1" @click.stop="toggleTaskCheck(index)">
+                  <span title="标记为已完成">
+                    <svg class="task-check" :class="{hidden: item.taskChecked}" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M17.5,4.5c0,-0.53 -0.211,-1.039 -0.586,-1.414c-0.375,-0.375 -0.884,-0.586 -1.414,-0.586c-2.871,0 -8.129,0 -11,0c-0.53,0 -1.039,0.211 -1.414,0.586c-0.375,0.375 -0.586,0.884 -0.586,1.414c0,2.871 0,8.129 0,11c0,0.53 0.211,1.039 0.586,1.414c0.375,0.375 0.884,0.586 1.414,0.586c2.871,0 8.129,0 11,0c0.53,0 1.039,-0.211 1.414,-0.586c0.375,-0.375 0.586,-0.884 0.586,-1.414c0,-2.871 0,-8.129 0,-11Z" style="fill:none;stroke-width:1px"></path> </g> </svg>
+                  </span>  
+                  <span title="标记为未完成">
+                    <svg class="task-checked" :class="{hidden: !item.taskChecked}" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M9.5,14c-0.132,0 -0.259,-0.052 -0.354,-0.146c-1.485,-1.486 -3.134,-2.808 -4.904,-3.932c-0.232,-0.148 -0.302,-0.457 -0.153,-0.691c0.147,-0.231 0.456,-0.299 0.69,-0.153c1.652,1.049 3.202,2.266 4.618,3.621c2.964,-4.9 5.989,-8.792 9.749,-12.553c0.196,-0.195 0.512,-0.195 0.708,0c0.195,0.196 0.195,0.512 0,0.708c-3.838,3.837 -6.899,7.817 -9.924,12.902c-0.079,0.133 -0.215,0.221 -0.368,0.24c-0.021,0.003 -0.041,0.004 -0.062,0.004"></path> <path d="M15.5,18l-11,0c-1.379,0 -2.5,-1.121 -2.5,-2.5l0,-11c0,-1.379 1.121,-2.5 2.5,-2.5l10,0c0.276,0 0.5,0.224 0.5,0.5c0,0.276 -0.224,0.5 -0.5,0.5l-10,0c-0.827,0 -1.5,0.673 -1.5,1.5l0,11c0,0.827 0.673,1.5 1.5,1.5l11,0c0.827,0 1.5,-0.673 1.5,-1.5l0,-9.5c0,-0.276 0.224,-0.5 0.5,-0.5c0.276,0 0.5,0.224 0.5,0.5l0,9.5c0,1.379 -1.121,2.5 -2.5,2.5"></path> </g> </svg>
+                  </span>
+                </a>
+                <div class="taskItem-titleWrapper" tabindex="-1">
+                  <span class="taskItem-titleWrapper-title">{{ item.title }}</span>
+                </div>
+                <span class="conversations-wrapper" :class="{hidden: item.hiddenConversation}" title="此任务已有评论" tabindex="-1">
+                  <svg class="conversations-small rtl-flip" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g class="outlined"> <path d="M6.26,15 C5.98,15 5.68,14.96 5.38,14.9 C5.18,14.84 5.04,14.68 5,14.48 C4.98,14.26 5.08,14.06 5.26,13.96 C5.78,13.68 6.02,13.3 6,12.8 C6,12.48 5.84,12.16 5.64,11.76 C5.36,11.18 5,10.48 5,9.5 C5,7.02 7.24,5 10,5 C12.76,5 15,7.02 15,9.5 C15,11.98 12.76,14 10,14 C9.58,14 9.16,13.96 8.76,13.86 C8.38,14.28 7.56,15 6.26,15 L6.26,15 Z M10,6 C7.8,6 6,7.56 6,9.5 C6,10.24 6.28,10.78 6.54,11.32 C6.78,11.8 7,12.26 7,12.78 C7,13.22 6.9,13.62 6.7,13.96 C7.64,13.78 8.12,13.06 8.14,13.02 C8.26,12.84 8.5,12.76 8.7,12.82 C9.14,12.94 9.56,13 10,13 C12.2,13 14,11.42 14,9.5 C14,7.56 12.2,6 10,6 L10,6 Z"></path> </g> <g class="filled"> <path d="M6.26,15 C5.98,15 5.68,14.96 5.38,14.9 C5.18,14.84 5.04,14.68 5,14.48 C4.98,14.28 5.08,14.08 5.26,13.98 C5.78,13.68 6.02,13.32 6,12.8 C6,12.5 5.84,12.16 5.64,11.78 C5.36,11.2 5,10.48 5,9.5 C5,7.02 7.24,5 10,5 C12.76,5 15,7.02 15,9.5 C15,11.98 12.76,14 10,14 C9.58,14 9.16,13.96 8.76,13.88 C8.38,14.28 7.56,15 6.26,15 L6.26,15 Z" opacity="0"></path> </g> </svg>
+                </span>
+                <span class="attachment-wrapper" :class="{hidden: item.hiddenAttachment}" title="此任务带有附件" tabindex="-1">
+                  <svg class="attachment" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="attachment"> <path d="M13.4075,5.2925 C13.0275,4.9125 12.3675,4.9125 11.9875,5.2925 L10.3075,6.9925 L8.7475,6.9925 C7.8075,6.9925 6.9475,7.3525 6.2675,8.0125 L5.1475,9.1325 C5.0675,9.2325 5.0075,9.3525 5.0075,9.4925 C5.0075,9.6125 5.0675,9.7525 5.1475,9.8325 L7.3075,11.9925 L5.1475,14.1325 C4.9675,14.3325 4.9675,14.6525 5.1475,14.8525 C5.2475,14.9525 5.3875,14.9925 5.5075,14.9925 C5.6475,14.9925 5.7675,14.9525 5.8675,14.8525 L8.0075,12.6925 L10.1675,14.8525 C10.2475,14.9525 10.3875,14.9925 10.5075,14.9925 C10.6475,14.9925 10.7675,14.9525 10.8675,14.8525 L11.9875,13.7325 C12.6475,13.0725 13.0075,12.1925 13.0075,11.2525 L13.0075,9.6925 L14.7075,8.0125 C15.0875,7.6125 15.0875,6.9725 14.7075,6.5925 L13.4075,5.2925 Z M13.9875,7.2925 L12.1675,9.1325 C12.0675,9.2325 12.0075,9.3525 12.0075,9.4925 L12.0075,11.2525 C12.0075,11.9125 11.7475,12.5525 11.2875,13.0125 L10.5075,13.7925 L6.2075,9.4925 L6.9875,8.7125 C7.4475,8.2525 8.0875,7.9925 8.7475,7.9925 L10.5075,7.9925 C10.6475,7.9925 10.7675,7.9325 10.8675,7.8325 L12.7075,6.0125 L13.9875,7.2925 Z" id="Q"></path> </g> </g> </svg>
+                </span>
+                <!-- 过期为红色，没过期为蓝色，没有倒计时就隐藏元素 -->
+                <!-- 时间格式为2018/5/3 -->
+                <span class="taskItem-deadline" tabindex="-1" aria-hidden="true" :class="item.deadline ? (new Date().getTime() > item.deadline && 'overdue')  : 'hidden' ">{{ new Date(item.deadline).toLocaleString().split(' ')[0] }}</span>
+                <span class="recurrence-wrapper" :class="{hidden: item.hiddenRecurrence}" title="Recurring to-do" tabindex="-1">
+                  <svg class="recurrence" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="recurrence"> <path d="M17.5193115,10 C17.2393115,10 16.9993115,10.2 16.9793115,10.46 C16.7393115,14.12 13.6793115,17 10.0193115,17 C6.15931146,17 3.01931146,13.86 3.01931146,10 C3.01931146,6.14 6.15931146,3 10.0193115,3 C13.3393115,3 15.2593115,5.48 16.3993115,6.98 C16.4193115,6.98 16.4193115,7 16.4193115,7 L12.9793115,7 C12.7193115,7 12.4793115,7.22 12.4793115,7.5 C12.4793115,7.78 12.7193115,8 12.9793115,8 C17.8393115,8 17.5593115,8.02 17.6793115,7.96 C17.8593115,7.88 17.9793115,7.7 17.9793115,7.5 L17.9793115,2.5 C17.9793115,2.22 17.7593115,2 17.4793115,2 C17.2193115,2 16.9793115,2.22 16.9793115,2.5 L16.9793115,6.08 C15.7793115,4.52 13.6193115,2 10.0193115,2 C5.59931146,2 2.01931146,5.58 2.01931146,10 C2.01931146,14.42 5.59931146,18 10.0193115,18 C14.1993115,18 17.6993115,14.72 17.9793115,10.54 C17.9993115,10.26 17.7993115,10.02 17.5193115,10 L17.5193115,10 Z M9.47931146,5 C9.21931146,5 8.97931146,5.22 8.97931146,5.5 L8.97931146,10.5 C8.97931146,10.78 9.21931146,11 9.47931146,11 L13.4793115,11 C13.7593115,11 13.9793115,10.78 13.9793115,10.5 C13.9793115,10.22 13.7593115,10 13.4793115,10 L9.97931146,10 L9.97931146,5.5 C9.97931146,5.22 9.75931146,5 9.47931146,5 L9.47931146,5 Z" id="f"></path> </g> </g> </svg>
+                </span>
+                <a class="taskItem-star" tabindex="-1" @click.stop="toggleTaskStarred(index)">
+                  <span class="star-wrapper" :class="{hidden: item.taskStarred}" title="标记为星标">
+                    <svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve"> <g> <path d="M3.74,18 C3.64,18 3.54,17.96 3.46,17.9 C3.28,17.76 3.2,17.54 3.28,17.34 L5.16,11.5 L0.2,7.9 C0.04,7.78 -0.04,7.56 0.02,7.34 C0.1,7.14 0.28,7 0.5,7 L6.64,7 L8.52,1.16 C8.66,0.76 9.34,0.76 9.48,1.16 L11.38,7 L17.5,7 C17.72,7 17.9,7.14 17.98,7.34 C18.04,7.56 17.96,7.78 17.8,7.9 L12.84,11.5 L14.72,17.34 C14.8,17.54 14.72,17.76 14.54,17.9 C14.38,18.02 14.14,18.02 13.96,17.9 L9,14.3 L4.04,17.9 C3.96,17.96 3.84,18 3.74,18 L3.74,18 Z M9,13.18 C9.1,13.18 9.2,13.2 9.3,13.28 L13.3,16.18 L11.78,11.46 C11.7,11.26 11.78,11.04 11.96,10.92 L15.96,8 L11,8 C10.8,8 10.6,7.86 10.54,7.66 L9,2.94 L7.46,7.66 C7.4,7.86 7.22,8 7,8 L2.04,8 L6.04,10.92 C6.22,11.04 6.3,11.26 6.22,11.46 L4.7,16.18 L8.7,13.28 C8.8,13.2 8.9,13.18 9,13.18 L9,13.18 Z"></path> </g> </svg>
+                  </span>
+                  <span class="starred-wrapper" :class="{hidden: !item.taskStarred}" title="移除星标">
+                    <svg width="22px" height="44px" viewBox="0 0 22 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M0,0l0,40.5c0,0.28 0.22,0.42 0.48,0.32l10.04,-3.64c0.28,-0.1 0.7,-0.1 0.96,0l10.04,3.64c0.28,0.1 0.48,-0.04 0.48,-0.32l0,-40.5l-22,0ZM14.46,24.08l1.68,5.26c0.08,0.18 0,0.38 -0.16,0.5c-0.14,0.1 -0.36,0.1 -0.52,0l-4.46,-3.24l-4.46,3.24c-0.08,0.06 -0.18,0.1 -0.28,0.1c-0.08,0 -0.18,-0.04 -0.24,-0.1c-0.16,-0.12 -0.24,-0.32 -0.16,-0.5l1.68,-5.26l-4.46,-3.24c-0.14,-0.12 -0.22,-0.32 -0.16,-0.52c0.08,-0.18 0.24,-0.32 0.44,-0.32l5.52,0l1.68,-5.24c0.14,-0.36 0.74,-0.36 0.88,0l1.7,5.24l5.5,0c0.2,0 0.36,0.14 0.44,0.32c0.06,0.2 -0.02,0.4 -0.16,0.52l-4.46,3.24Z"></path> </g> </svg>
+                  </span>
+                </a>
+                <div class="taskItem-progress">
+                  <span class="taskItem-progress-bar"></span>
+                </div>
+              </div>
+            </li>
+          </ol>
+          <h2 tabindex="0" class="heading normal" :class="{hidden: !doneTaskItems.length}">
+            <a href="/#/lists/342865566" class="group-header" @click="toggleDoneTaskItems">显示已完成任务</a>
+          </h2>
+          <ol class="tasks" :class="{hidden: this.isShowDoneItems}">
+            <li tabindex="0" class="taskItem done" draggable="true" v-for="(item, index) in doneTaskItems" :class="{selected: item.selected}" @click="selectTaskItem($event, index, true)">
+              <div class="taskItem-body">
+                <a class="taskItem-checkboxWrapper checkbox checked" tabindex="-1" @click.stop="toggleTaskCheck(index, true)">
+                  <span title="标记为已完成">
+                    <svg class="task-check" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M17.5,4.5c0,-0.53 -0.211,-1.039 -0.586,-1.414c-0.375,-0.375 -0.884,-0.586 -1.414,-0.586c-2.871,0 -8.129,0 -11,0c-0.53,0 -1.039,0.211 -1.414,0.586c-0.375,0.375 -0.586,0.884 -0.586,1.414c0,2.871 0,8.129 0,11c0,0.53 0.211,1.039 0.586,1.414c0.375,0.375 0.884,0.586 1.414,0.586c2.871,0 8.129,0 11,0c0.53,0 1.039,-0.211 1.414,-0.586c0.375,-0.375 0.586,-0.884 0.586,-1.414c0,-2.871 0,-8.129 0,-11Z" style="fill:none;stroke-width:1px"></path> </g> </svg>
+                  </span>  
+                  <span title="标记为未完成">
+                    <svg class="task-checked" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M9.5,14c-0.132,0 -0.259,-0.052 -0.354,-0.146c-1.485,-1.486 -3.134,-2.808 -4.904,-3.932c-0.232,-0.148 -0.302,-0.457 -0.153,-0.691c0.147,-0.231 0.456,-0.299 0.69,-0.153c1.652,1.049 3.202,2.266 4.618,3.621c2.964,-4.9 5.989,-8.792 9.749,-12.553c0.196,-0.195 0.512,-0.195 0.708,0c0.195,0.196 0.195,0.512 0,0.708c-3.838,3.837 -6.899,7.817 -9.924,12.902c-0.079,0.133 -0.215,0.221 -0.368,0.24c-0.021,0.003 -0.041,0.004 -0.062,0.004"></path> <path d="M15.5,18l-11,0c-1.379,0 -2.5,-1.121 -2.5,-2.5l0,-11c0,-1.379 1.121,-2.5 2.5,-2.5l10,0c0.276,0 0.5,0.224 0.5,0.5c0,0.276 -0.224,0.5 -0.5,0.5l-10,0c-0.827,0 -1.5,0.673 -1.5,1.5l0,11c0,0.827 0.673,1.5 1.5,1.5l11,0c0.827,0 1.5,-0.673 1.5,-1.5l0,-9.5c0,-0.276 0.224,-0.5 0.5,-0.5c0.276,0 0.5,0.224 0.5,0.5l0,9.5c0,1.379 -1.121,2.5 -2.5,2.5"></path> </g> </svg>
+                  </span>
+                </a>
+                <div class="taskItem-titleWrapper" tabindex="-1">
+                  <span class="taskItem-titleWrapper-title">{{ item.title }}</span>
+                  <div class="taskItem-titleMeta-info">{{item.deltaTime}} 由 {{username}}</div>
+                </div>
+                <span class="conversations-wrapper" :class="{hidden: item.hiddenConversation}" title="此任务已有评论" tabindex="-1">
+                  <svg class="conversations-small rtl-flip" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g class="outlined"> <path d="M6.26,15 C5.98,15 5.68,14.96 5.38,14.9 C5.18,14.84 5.04,14.68 5,14.48 C4.98,14.26 5.08,14.06 5.26,13.96 C5.78,13.68 6.02,13.3 6,12.8 C6,12.48 5.84,12.16 5.64,11.76 C5.36,11.18 5,10.48 5,9.5 C5,7.02 7.24,5 10,5 C12.76,5 15,7.02 15,9.5 C15,11.98 12.76,14 10,14 C9.58,14 9.16,13.96 8.76,13.86 C8.38,14.28 7.56,15 6.26,15 L6.26,15 Z M10,6 C7.8,6 6,7.56 6,9.5 C6,10.24 6.28,10.78 6.54,11.32 C6.78,11.8 7,12.26 7,12.78 C7,13.22 6.9,13.62 6.7,13.96 C7.64,13.78 8.12,13.06 8.14,13.02 C8.26,12.84 8.5,12.76 8.7,12.82 C9.14,12.94 9.56,13 10,13 C12.2,13 14,11.42 14,9.5 C14,7.56 12.2,6 10,6 L10,6 Z"></path> </g> <g class="filled"> <path d="M6.26,15 C5.98,15 5.68,14.96 5.38,14.9 C5.18,14.84 5.04,14.68 5,14.48 C4.98,14.28 5.08,14.08 5.26,13.98 C5.78,13.68 6.02,13.32 6,12.8 C6,12.5 5.84,12.16 5.64,11.78 C5.36,11.2 5,10.48 5,9.5 C5,7.02 7.24,5 10,5 C12.76,5 15,7.02 15,9.5 C15,11.98 12.76,14 10,14 C9.58,14 9.16,13.96 8.76,13.88 C8.38,14.28 7.56,15 6.26,15 L6.26,15 Z" opacity="0"></path> </g> </svg>
+                </span>
+                <span class="attachment-wrapper" :class="{hidden: item.hiddenAttachment}" title="此任务带有附件" tabindex="-1">
+                  <svg class="attachment" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="attachment"> <path d="M13.4075,5.2925 C13.0275,4.9125 12.3675,4.9125 11.9875,5.2925 L10.3075,6.9925 L8.7475,6.9925 C7.8075,6.9925 6.9475,7.3525 6.2675,8.0125 L5.1475,9.1325 C5.0675,9.2325 5.0075,9.3525 5.0075,9.4925 C5.0075,9.6125 5.0675,9.7525 5.1475,9.8325 L7.3075,11.9925 L5.1475,14.1325 C4.9675,14.3325 4.9675,14.6525 5.1475,14.8525 C5.2475,14.9525 5.3875,14.9925 5.5075,14.9925 C5.6475,14.9925 5.7675,14.9525 5.8675,14.8525 L8.0075,12.6925 L10.1675,14.8525 C10.2475,14.9525 10.3875,14.9925 10.5075,14.9925 C10.6475,14.9925 10.7675,14.9525 10.8675,14.8525 L11.9875,13.7325 C12.6475,13.0725 13.0075,12.1925 13.0075,11.2525 L13.0075,9.6925 L14.7075,8.0125 C15.0875,7.6125 15.0875,6.9725 14.7075,6.5925 L13.4075,5.2925 Z M13.9875,7.2925 L12.1675,9.1325 C12.0675,9.2325 12.0075,9.3525 12.0075,9.4925 L12.0075,11.2525 C12.0075,11.9125 11.7475,12.5525 11.2875,13.0125 L10.5075,13.7925 L6.2075,9.4925 L6.9875,8.7125 C7.4475,8.2525 8.0875,7.9925 8.7475,7.9925 L10.5075,7.9925 C10.6475,7.9925 10.7675,7.9325 10.8675,7.8325 L12.7075,6.0125 L13.9875,7.2925 Z" id="Q"></path> </g> </g> </svg>
+                </span>
+                <span class="recurrence-wrapper" :class="{hidden: item.hiddenRecurrence}" title="Recurring to-do" tabindex="-1">
+                  <svg class="recurrence" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="recurrence"> <path d="M17.5193115,10 C17.2393115,10 16.9993115,10.2 16.9793115,10.46 C16.7393115,14.12 13.6793115,17 10.0193115,17 C6.15931146,17 3.01931146,13.86 3.01931146,10 C3.01931146,6.14 6.15931146,3 10.0193115,3 C13.3393115,3 15.2593115,5.48 16.3993115,6.98 C16.4193115,6.98 16.4193115,7 16.4193115,7 L12.9793115,7 C12.7193115,7 12.4793115,7.22 12.4793115,7.5 C12.4793115,7.78 12.7193115,8 12.9793115,8 C17.8393115,8 17.5593115,8.02 17.6793115,7.96 C17.8593115,7.88 17.9793115,7.7 17.9793115,7.5 L17.9793115,2.5 C17.9793115,2.22 17.7593115,2 17.4793115,2 C17.2193115,2 16.9793115,2.22 16.9793115,2.5 L16.9793115,6.08 C15.7793115,4.52 13.6193115,2 10.0193115,2 C5.59931146,2 2.01931146,5.58 2.01931146,10 C2.01931146,14.42 5.59931146,18 10.0193115,18 C14.1993115,18 17.6993115,14.72 17.9793115,10.54 C17.9993115,10.26 17.7993115,10.02 17.5193115,10 L17.5193115,10 Z M9.47931146,5 C9.21931146,5 8.97931146,5.22 8.97931146,5.5 L8.97931146,10.5 C8.97931146,10.78 9.21931146,11 9.47931146,11 L13.4793115,11 C13.7593115,11 13.9793115,10.78 13.9793115,10.5 C13.9793115,10.22 13.7593115,10 13.4793115,10 L9.97931146,10 L9.97931146,5.5 C9.97931146,5.22 9.75931146,5 9.47931146,5 L9.47931146,5 Z" id="f"></path> </g> </g> </svg>
+                </span>
+                <a class="taskItem-star" tabindex="-1" @click.stop="toggleTaskStarred(index, true)">
+                  <span class="star-wrapper" :class="{hidden: item.taskStarred}" title="标记为星标">
+                    <svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve"> <g> <path d="M3.74,18 C3.64,18 3.54,17.96 3.46,17.9 C3.28,17.76 3.2,17.54 3.28,17.34 L5.16,11.5 L0.2,7.9 C0.04,7.78 -0.04,7.56 0.02,7.34 C0.1,7.14 0.28,7 0.5,7 L6.64,7 L8.52,1.16 C8.66,0.76 9.34,0.76 9.48,1.16 L11.38,7 L17.5,7 C17.72,7 17.9,7.14 17.98,7.34 C18.04,7.56 17.96,7.78 17.8,7.9 L12.84,11.5 L14.72,17.34 C14.8,17.54 14.72,17.76 14.54,17.9 C14.38,18.02 14.14,18.02 13.96,17.9 L9,14.3 L4.04,17.9 C3.96,17.96 3.84,18 3.74,18 L3.74,18 Z M9,13.18 C9.1,13.18 9.2,13.2 9.3,13.28 L13.3,16.18 L11.78,11.46 C11.7,11.26 11.78,11.04 11.96,10.92 L15.96,8 L11,8 C10.8,8 10.6,7.86 10.54,7.66 L9,2.94 L7.46,7.66 C7.4,7.86 7.22,8 7,8 L2.04,8 L6.04,10.92 C6.22,11.04 6.3,11.26 6.22,11.46 L4.7,16.18 L8.7,13.28 C8.8,13.2 8.9,13.18 9,13.18 L9,13.18 Z"></path> </g> </svg>
+                  </span>
+                  <span class="starred-wrapper" :class="{hidden: !item.taskStarred}" title="移除星标">
+                    <svg width="22px" height="44px" viewBox="0 0 22 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M0,0l0,40.5c0,0.28 0.22,0.42 0.48,0.32l10.04,-3.64c0.28,-0.1 0.7,-0.1 0.96,0l10.04,3.64c0.28,0.1 0.48,-0.04 0.48,-0.32l0,-40.5l-22,0ZM14.46,24.08l1.68,5.26c0.08,0.18 0,0.38 -0.16,0.5c-0.14,0.1 -0.36,0.1 -0.52,0l-4.46,-3.24l-4.46,3.24c-0.08,0.06 -0.18,0.1 -0.28,0.1c-0.08,0 -0.18,-0.04 -0.24,-0.1c-0.16,-0.12 -0.24,-0.32 -0.16,-0.5l1.68,-5.26l-4.46,-3.24c-0.14,-0.12 -0.22,-0.32 -0.16,-0.52c0.08,-0.18 0.24,-0.32 0.44,-0.32l5.52,0l1.68,-5.24c0.14,-0.36 0.74,-0.36 0.88,0l1.7,5.24l5.5,0c0.2,0 0.36,0.14 0.44,0.32c0.06,0.2 -0.02,0.4 -0.16,0.52l-4.46,3.24Z"></path> </g> </svg>
+                  </span>
+                </a>
+                <div class="taskItem-progress">
+                  <span class="taskItem-progress-bar"></span>
+                </div>
+              </div>
+            </li>
+          </ol>
         </div>
 
+        <div class="task-404 hidden" >
+          <svg class="search rtl-flip" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g> <path d="M8.5025,15 C4.9225,15 2.0025,12.08 2.0025,8.5 C2.0025,4.92 4.9225,2 8.5025,2 C12.0825,2 15.0025,4.92 15.0025,8.5 C15.0025,12.08 12.0825,15 8.5025,15 L8.5025,15 Z M8.5025,3 C5.4625,3 3.0025,5.46 3.0025,8.5 C3.0025,11.54 5.4625,14 8.5025,14 C11.5425,14 14.0025,11.54 14.0025,8.5 C14.0025,5.46 11.5425,3 8.5025,3 L8.5025,3 Z M17.5025,18 C17.3825,18 17.2425,17.96 17.1425,17.86 L13.6425,14.36 C13.4625,14.16 13.4625,13.84 13.6425,13.64 C13.8425,13.46 14.1625,13.46 14.3625,13.64 L17.8625,17.14 C18.0425,17.34 18.0425,17.66 17.8625,17.86 C17.7625,17.96 17.6225,18 17.5025,18 L17.5025,18 Z" id="z"></path> </g> </g> </svg>
+          <h2>无搜索结果</h2>
+        </div>
       </div>
     </div>
 
-    <div class="tasks-scroll">
-      <div class="addTask" :class="{focus: addTaskData.focusAddTask}" @focusin="focusAddTaskData" @focusout="blurAddTaskData" tabindex="1" >
-        <!-- invisible transparent -->
-        <div class="addTask-meta" :class="{'invisible transparent': hiddenAllAddTaskMeta}">
-          <a class="addTask-meta-star float-right" title="星标任务" :class="{hidden: addTaskData.hiddenAddTaskMeta.star, starred: addTaskData.starred}" @click="toggleNewTaskStarred">
-            <svg class="starred" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g id="Web-svgs" stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="starred"> <g id="Rectangle-3-+-A" transform="translate(1.000000, 0.000000)"> <path d="M3.74,18 C3.64,18 3.54,17.96 3.46,17.9 C3.28,17.76 3.2,17.54 3.28,17.34 L5.16,11.5 L0.2,7.9 C0.04,7.78 -0.04,7.56 0.02,7.34 C0.1,7.14 0.28,7 0.5,7 L6.64,7 L8.52,1.16 C8.66,0.76 9.34,0.76 9.48,1.16 L11.38,7 L17.5,7 C17.72,7 17.9,7.14 17.98,7.34 C18.04,7.56 17.96,7.78 17.8,7.9 L12.84,11.5 L14.72,17.34 C14.8,17.54 14.72,17.76 14.54,17.9 C14.38,18.02 14.14,18.02 13.96,17.9 L9,14.3 L4.04,17.9 C3.96,17.96 3.84,18 3.74,18 L3.74,18 Z M9,13.18 C9.1,13.18 9.2,13.2 9.3,13.28 L13.3,16.18 L11.78,11.46 C11.7,11.26 11.78,11.04 11.96,10.92 L15.96,8 L11,8 C10.8,8 10.6,7.86 10.54,7.66 L9,2.94 L7.46,7.66 C7.4,7.86 7.22,8 7,8 L2.04,8 L6.04,10.92 C6.22,11.04 6.3,11.26 6.22,11.46 L4.7,16.18 L8.7,13.28 C8.8,13.2 8.9,13.18 9,13.18 L9,13.18 Z" id="C"></path> <path d="M3.74,18 C3.64,18 3.54,17.96 3.46,17.9 C3.28,17.76 3.2,17.54 3.28,17.34 L5.16,11.5 L0.2,7.9 C0.04,7.78 -0.04,7.56 0.02,7.34 C0.1,7.14 0.28,7 0.5,7 L6.64,7 L8.52,1.16 C8.66,0.76 9.34,0.76 9.48,1.16 L11.38,7 L17.5,7 C17.72,7 17.9,7.14 17.98,7.34 C18.04,7.56 17.96,7.78 17.8,7.9 L12.84,11.5 L14.72,17.34 C14.8,17.54 14.72,17.76 14.54,17.9 C14.38,18.02 14.14,18.02 13.96,17.9 L9,14.3 L4.04,17.9 C3.96,17.96 3.84,18 3.74,18 L3.74,18 Z" id="D" opacity="0.06"> </path> </g> </g> </g> </svg>
-          </a>
-          <a class="addTask-meta-assign float-right" :class="{hidden: addTaskData.hiddenAddTaskMeta.assign}" title="分配给">
-            <svg class="assigned" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g> <g id="Rectangle-3-+-A" transform="translate(1.000000, 2.000000)"> <path d="M10,10 C12.28,10 14,6.84 14,4 C14,1.8 12.2,0 10,0 C7.8,0 6,1.8 6,4 C6,6.5 7.52,10 10,10 L10,10 Z M4.94,7.74 C4.98,7.66 5,7.58 5,7.5 C5,7.42 4.98,7.34 4.94,7.26 C4.92,7.22 4.9,7.18 4.86,7.14 L2.86,5.14 C2.66,4.96 2.34,4.96 2.14,5.14 C1.96,5.34 1.96,5.66 2.14,5.86 L3.3,7 L0.5,7 C0.22,7 0,7.22 0,7.5 C0,7.78 0.22,8 0.5,8 L3.3,8 L2.14,9.14 C1.96,9.34 1.96,9.66 2.14,9.86 C2.24,9.96 2.38,10 2.5,10 C2.62,10 2.76,9.96 2.86,9.86 L4.86,7.86 C4.9,7.82 4.92,7.78 4.94,7.74 L4.94,7.74 Z M16.76,12.88 C16.56,12 15.9,11.28 15.02,11.04 L12.72,10.36 C12.58,10.32 12.46,10.26 12.36,10.14 C12.16,9.96 11.84,9.96 11.66,10.16 C11.46,10.34 8.54,10.34 8.36,10.14 C8.16,9.96 7.84,9.96 7.64,10.14 C7.54,10.24 7.42,10.32 7.28,10.36 L5.04,10.96 C4.14,11.2 3.46,11.92 3.24,12.82 L3.02,13.9 C2.98,14.06 3.02,14.24 3.14,14.36 C3.22,14.42 4.86,16 10,16 C15.14,16 16.78,14.42 16.86,14.36 C16.98,14.24 17.02,14.06 16.98,13.9 L16.76,12.88 Z" fill-opacity="0.06"></path> <path d="M10,10 C12.28,10 14,6.84 14,4 C14,1.8 12.2,0 10,0 C7.8,0 6,1.8 6,4 C6,6.5 7.52,10 10,10 L10,10 Z M10,1 C11.66,1 13,2.34 13,4 C13,6.26 11.62,9 10,9 C8.34,9 7,6.26 7,4 C7,2.34 8.34,1 10,1 L10,1 Z M4.94,7.74 C4.98,7.66 5,7.58 5,7.5 C5,7.42 4.98,7.34 4.94,7.26 C4.92,7.22 4.9,7.18 4.86,7.14 L2.86,5.14 C2.66,4.96 2.34,4.96 2.14,5.14 C1.96,5.34 1.96,5.66 2.14,5.86 L3.3,7 L0.5,7 C0.22,7 0,7.22 0,7.5 C0,7.78 0.22,8 0.5,8 L3.3,8 L2.14,9.14 C1.96,9.34 1.96,9.66 2.14,9.86 C2.24,9.96 2.38,10 2.5,10 C2.62,10 2.76,9.96 2.86,9.86 L4.86,7.86 C4.9,7.82 4.92,7.78 4.94,7.74 L4.94,7.74 Z M16.76,12.88 C16.56,12 15.9,11.28 15.02,11.04 L12.72,10.36 C12.58,10.32 12.46,10.26 12.36,10.14 C12.16,9.96 11.84,9.96 11.66,10.16 C11.46,10.34 11.46,10.66 11.66,10.86 C11.88,11.08 12.14,11.24 12.44,11.32 L14.74,12 C15.26,12.14 15.66,12.58 15.78,13.1 L15.94,13.8 C15.4,14.16 13.7,15 10,15 C6.3,15 4.6,14.14 4.06,13.8 L4.22,13.04 C4.34,12.5 4.76,12.06 5.3,11.92 L7.54,11.32 C7.84,11.24 8.12,11.08 8.36,10.86 C8.54,10.66 8.54,10.34 8.36,10.14 C8.16,9.96 7.84,9.96 7.64,10.14 C7.54,10.24 7.42,10.32 7.28,10.36 L5.04,10.96 C4.14,11.2 3.46,11.92 3.24,12.82 L3.02,13.9 C2.98,14.06 3.02,14.24 3.14,14.36 C3.22,14.42 4.86,16 10,16 C15.14,16 16.78,14.42 16.86,14.36 C16.98,14.24 17.02,14.06 16.98,13.9 L16.76,12.88 Z"> </path> </g> </g> </g> </svg>
-            <span class="icon input-assign-frame"></span>
-            <span class="icon input-assign-delete"></span>
-          </a>
-          <a class="addTask-meta-date float-right dated" :class="{hidden: addTaskData.hiddenAddTaskMeta.date}" title="设置到期日">
-            <span class="addTask-meta-date-label">{{ datePickerDate }}</span>
-            <!-- 
-              :input-class 输入框的类名，被我隐藏了
-              :wrapper-class 最外面的div 的类名
-              :calendar-class 日历的类名
-              :calendar-button-icon 日历小按钮的类名 被我覆盖在 svg.today 上
-              :calendar-button-icon-content="''"  日历小按钮的内容 设置为空
-              :calendar-button="true"  
-              :clear-button="true" 出现清空按钮
-              :highlighted="datePickerState.highlighted 让日期高亮
-             -->
-            <date-picker 
-              v-model="datePickerState.date" 
-              :input-class="'date-picker-input'" 
-              :wrapper-class="'date-picker-wrapper'"
-              :calendar-class="'date-picker-calendar'" 
-              :calendar-button-icon="'date-picker-icon'" 
-              :calendar-button-icon-content="''" 
-              :calendar-button="true" 
-              :clear-button="true"
-              :highlighted="datePickerState.highlighted"></date-picker>
-            <!-- <span class="icon input-assign-delete">
-              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" t="1527738984570" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" p-id="7043" width="200" height="200"><path d="M512 451.6608L403.3536 343.0144a42.606933 42.606933 0 0 0-60.305067 0.034133 42.666667 42.666667 0 0 0-0.034133 60.305067L451.6608 512 343.0144 620.6464a42.606933 42.606933 0 0 0 0.034133 60.305067 42.666667 42.666667 0 0 0 60.305067 0.034133L512 572.3392l108.6464 108.6464a42.606933 42.606933 0 0 0 60.305067-0.034133 42.666667 42.666667 0 0 0 0.034133-60.305067L572.3392 512l108.6464-108.6464a42.606933 42.606933 0 0 0-0.034133-60.305067 42.666667 42.666667 0 0 0-60.305067-0.034133L512 451.6608zM512 1024C229.666133 1024 0 794.333867 0 512S229.666133 0 512 0s512 229.666133 512 512-229.666133 512-512 512z m0-938.666667c-235.264 0-426.666667 191.402667-426.666667 426.666667s191.402667 426.666667 426.666667 426.666667 426.666667-191.402667 426.666667-426.666667-191.402667-426.666667-426.666667-426.666667z" fill="#ffffff" p-id="7044"/></svg>
-            </span> -->
-            <svg class="today" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="today"> <path d="M2.5,7 C2.22,7 2,6.78 2,6.5 L2,3.5 C2,2.68 2.68,2 3.5,2 L16.5,2 C17.32,2 18,2.68 18,3.5 L18,6.5 C18,6.78 17.78,7 17.5,7 L2.5,7 Z M3,6 L17,6 L17,3.5 C17,3.22 16.78,3 16.5,3 L3.5,3 C3.22,3 3,3.22 3,3.5 L3,6 Z M3.5,18 C2.68,18 2,17.32 2,16.5 L2,8.5 C2,8.22 2.22,8 2.5,8 C2.78,8 3,8.22 3,8.5 L3,16.5 C3,16.78 3.22,17 3.5,17 L16.5,17 C16.78,17 17,16.78 17,16.5 L17,8.5 C17,8.22 17.22,8 17.5,8 C17.78,8 18,8.22 18,8.5 L18,16.5 C18,17.32 17.32,18 16.5,18 L3.5,18 Z" id="E"></path> </g> </g> </svg>
-          </a>
-        </div>
-        <a class="plus-wrapper" :class="{hidden: addTaskData.focusAddTask}">
-          <svg class="plus-small" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve"> <g> <path d="M10,10l0,6.5c-0.003,0.053 -0.008,0.103 -0.024,0.155c-0.038,0.116 -0.12,0.217 -0.226,0.278c-0.047,0.027 -0.094,0.042 -0.146,0.056c-0.052,0.008 -0.051,0.008 -0.104,0.011c-0.053,-0.003 -0.103,-0.008 -0.155,-0.024c-0.15,-0.05 -0.271,-0.171 -0.321,-0.321c-0.016,-0.052 -0.021,-0.102 -0.024,-0.155l0,-6.5l-6.5,0c-0.046,-0.002 -0.058,-0.001 -0.104,-0.011c-0.103,-0.022 -0.197,-0.076 -0.268,-0.154c-0.169,-0.188 -0.169,-0.482 0,-0.67c0.035,-0.038 0.077,-0.072 0.122,-0.098c0.078,-0.045 0.161,-0.062 0.25,-0.067l6.5,0l0,-6.5c0.005,-0.089 0.022,-0.172 0.067,-0.25c0.126,-0.219 0.406,-0.31 0.636,-0.207c0.048,0.022 0.093,0.05 0.132,0.085c0.078,0.071 0.132,0.165 0.154,0.268c0.01,0.046 0.009,0.058 0.011,0.104l0,6.5l6.5,0c0.046,0.002 0.058,0.001 0.104,0.011c0.103,0.022 0.197,0.076 0.268,0.154c0.169,0.188 0.169,0.482 0,0.67c-0.035,0.038 -0.077,0.072 -0.122,0.098c-0.078,0.045 -0.161,0.062 -0.25,0.067l-6.5,0Z"></path> </g> </svg>
-        </a>
-        <input type="text" class="addTask-input chromeless" placeholder="添加任务..." @keypress.enter="addTask" v-model="newTask.title">
-        <a class="speech-wrapper" :class="{hidden: !addTaskData.focusAddTask}">
-          <svg class="speech" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="speech"> <path d="M10,13 C11.92,13 13.5,11.42 13.5,9.5 L13.5,5.5 C13.5,3.58 11.92,2 10,2 C8.08,2 6.5,3.58 6.5,5.5 L6.5,9.5 C6.5,11.42 8.08,13 10,13 L10,13 Z M7.5,5.5 C7.5,4.12 8.62,3 10,3 C11.38,3 12.5,4.12 12.5,5.5 L12.5,9.5 C12.5,10.88 11.38,12 10,12 C8.62,12 7.5,10.88 7.5,9.5 L7.5,5.5 Z M15.5,8.5 C15.5,8.22 15.28,8 15,8 C14.72,8 14.5,8.22 14.5,8.5 L14.5,9.5 C14.5,11.98 12.48,14 10,14 C7.52,14 5.5,11.98 5.5,9.5 L5.5,8.5 C5.5,8.22 5.28,8 5,8 C4.72,8 4.5,8.22 4.5,8.5 L4.5,9.5 C4.5,12.36 6.7,14.72 9.5,14.98 L9.5,17 L6,17 C5.72,17 5.5,17.22 5.5,17.5 C5.5,17.78 5.72,18 6,18 L14,18 C14.28,18 14.5,17.78 14.5,17.5 C14.5,17.22 14.28,17 14,17 L10.5,17 L10.5,14.98 C13.3,14.72 15.5,12.36 15.5,9.5 L15.5,8.5 Z" id="O"></path> </g> </g> </svg>
-        </a>
-      </div>
-
-      <div class="task-list starred">
-        <h2 class="heading normal">
-          <a class="group-header" href="/#/lists/inbox">inbox</a>
-        </h2>
-        <ol class="tasks">
-          <li tabindex="0" class="taskItem" draggable="true" v-for="(item, index) in taskItems" :class="{selected: item.selected}" @click="selectTaskItem($event, index)">
-            <div class="taskItem-body">
-              <a class="taskItem-checkboxWrapper checkbox" tabindex="-1" @click.stop="toggleTaskCheck(index)">
-                <span title="标记为已完成">
-                  <svg class="task-check" :class="{hidden: item.taskChecked}" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M17.5,4.5c0,-0.53 -0.211,-1.039 -0.586,-1.414c-0.375,-0.375 -0.884,-0.586 -1.414,-0.586c-2.871,0 -8.129,0 -11,0c-0.53,0 -1.039,0.211 -1.414,0.586c-0.375,0.375 -0.586,0.884 -0.586,1.414c0,2.871 0,8.129 0,11c0,0.53 0.211,1.039 0.586,1.414c0.375,0.375 0.884,0.586 1.414,0.586c2.871,0 8.129,0 11,0c0.53,0 1.039,-0.211 1.414,-0.586c0.375,-0.375 0.586,-0.884 0.586,-1.414c0,-2.871 0,-8.129 0,-11Z" style="fill:none;stroke-width:1px"></path> </g> </svg>
-                </span>  
-                <span title="标记为未完成">
-                  <svg class="task-checked" :class="{hidden: !item.taskChecked}" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M9.5,14c-0.132,0 -0.259,-0.052 -0.354,-0.146c-1.485,-1.486 -3.134,-2.808 -4.904,-3.932c-0.232,-0.148 -0.302,-0.457 -0.153,-0.691c0.147,-0.231 0.456,-0.299 0.69,-0.153c1.652,1.049 3.202,2.266 4.618,3.621c2.964,-4.9 5.989,-8.792 9.749,-12.553c0.196,-0.195 0.512,-0.195 0.708,0c0.195,0.196 0.195,0.512 0,0.708c-3.838,3.837 -6.899,7.817 -9.924,12.902c-0.079,0.133 -0.215,0.221 -0.368,0.24c-0.021,0.003 -0.041,0.004 -0.062,0.004"></path> <path d="M15.5,18l-11,0c-1.379,0 -2.5,-1.121 -2.5,-2.5l0,-11c0,-1.379 1.121,-2.5 2.5,-2.5l10,0c0.276,0 0.5,0.224 0.5,0.5c0,0.276 -0.224,0.5 -0.5,0.5l-10,0c-0.827,0 -1.5,0.673 -1.5,1.5l0,11c0,0.827 0.673,1.5 1.5,1.5l11,0c0.827,0 1.5,-0.673 1.5,-1.5l0,-9.5c0,-0.276 0.224,-0.5 0.5,-0.5c0.276,0 0.5,0.224 0.5,0.5l0,9.5c0,1.379 -1.121,2.5 -2.5,2.5"></path> </g> </svg>
-                </span>
-              </a>
-              <div class="taskItem-titleWrapper" tabindex="-1">
-                <span class="taskItem-titleWrapper-title">{{ item.title }}</span>
-              </div>
-              <span class="conversations-wrapper" :class="{hidden: item.hiddenConversation}" title="此任务已有评论" tabindex="-1">
-                <svg class="conversations-small rtl-flip" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g class="outlined"> <path d="M6.26,15 C5.98,15 5.68,14.96 5.38,14.9 C5.18,14.84 5.04,14.68 5,14.48 C4.98,14.26 5.08,14.06 5.26,13.96 C5.78,13.68 6.02,13.3 6,12.8 C6,12.48 5.84,12.16 5.64,11.76 C5.36,11.18 5,10.48 5,9.5 C5,7.02 7.24,5 10,5 C12.76,5 15,7.02 15,9.5 C15,11.98 12.76,14 10,14 C9.58,14 9.16,13.96 8.76,13.86 C8.38,14.28 7.56,15 6.26,15 L6.26,15 Z M10,6 C7.8,6 6,7.56 6,9.5 C6,10.24 6.28,10.78 6.54,11.32 C6.78,11.8 7,12.26 7,12.78 C7,13.22 6.9,13.62 6.7,13.96 C7.64,13.78 8.12,13.06 8.14,13.02 C8.26,12.84 8.5,12.76 8.7,12.82 C9.14,12.94 9.56,13 10,13 C12.2,13 14,11.42 14,9.5 C14,7.56 12.2,6 10,6 L10,6 Z"></path> </g> <g class="filled"> <path d="M6.26,15 C5.98,15 5.68,14.96 5.38,14.9 C5.18,14.84 5.04,14.68 5,14.48 C4.98,14.28 5.08,14.08 5.26,13.98 C5.78,13.68 6.02,13.32 6,12.8 C6,12.5 5.84,12.16 5.64,11.78 C5.36,11.2 5,10.48 5,9.5 C5,7.02 7.24,5 10,5 C12.76,5 15,7.02 15,9.5 C15,11.98 12.76,14 10,14 C9.58,14 9.16,13.96 8.76,13.88 C8.38,14.28 7.56,15 6.26,15 L6.26,15 Z" opacity="0"></path> </g> </svg>
-              </span>
-              <span class="attachment-wrapper" :class="{hidden: item.hiddenAttachment}" title="此任务带有附件" tabindex="-1">
-                <svg class="attachment" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="attachment"> <path d="M13.4075,5.2925 C13.0275,4.9125 12.3675,4.9125 11.9875,5.2925 L10.3075,6.9925 L8.7475,6.9925 C7.8075,6.9925 6.9475,7.3525 6.2675,8.0125 L5.1475,9.1325 C5.0675,9.2325 5.0075,9.3525 5.0075,9.4925 C5.0075,9.6125 5.0675,9.7525 5.1475,9.8325 L7.3075,11.9925 L5.1475,14.1325 C4.9675,14.3325 4.9675,14.6525 5.1475,14.8525 C5.2475,14.9525 5.3875,14.9925 5.5075,14.9925 C5.6475,14.9925 5.7675,14.9525 5.8675,14.8525 L8.0075,12.6925 L10.1675,14.8525 C10.2475,14.9525 10.3875,14.9925 10.5075,14.9925 C10.6475,14.9925 10.7675,14.9525 10.8675,14.8525 L11.9875,13.7325 C12.6475,13.0725 13.0075,12.1925 13.0075,11.2525 L13.0075,9.6925 L14.7075,8.0125 C15.0875,7.6125 15.0875,6.9725 14.7075,6.5925 L13.4075,5.2925 Z M13.9875,7.2925 L12.1675,9.1325 C12.0675,9.2325 12.0075,9.3525 12.0075,9.4925 L12.0075,11.2525 C12.0075,11.9125 11.7475,12.5525 11.2875,13.0125 L10.5075,13.7925 L6.2075,9.4925 L6.9875,8.7125 C7.4475,8.2525 8.0875,7.9925 8.7475,7.9925 L10.5075,7.9925 C10.6475,7.9925 10.7675,7.9325 10.8675,7.8325 L12.7075,6.0125 L13.9875,7.2925 Z" id="Q"></path> </g> </g> </svg>
-              </span>
-              <!-- 过期为红色，没过期为蓝色，没有倒计时就隐藏元素 -->
-              <!-- 时间格式为2018/5/3 -->
-              <span class="taskItem-deadline" tabindex="-1" aria-hidden="true" :class="item.deadline ? (new Date().getTime() > item.deadline && 'overdue')  : 'hidden' ">{{ new Date(item.deadline).toLocaleString().split(' ')[0] }}</span>
-              <span class="recurrence-wrapper" :class="{hidden: item.hiddenRecurrence}" title="Recurring to-do" tabindex="-1">
-                <svg class="recurrence" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="recurrence"> <path d="M17.5193115,10 C17.2393115,10 16.9993115,10.2 16.9793115,10.46 C16.7393115,14.12 13.6793115,17 10.0193115,17 C6.15931146,17 3.01931146,13.86 3.01931146,10 C3.01931146,6.14 6.15931146,3 10.0193115,3 C13.3393115,3 15.2593115,5.48 16.3993115,6.98 C16.4193115,6.98 16.4193115,7 16.4193115,7 L12.9793115,7 C12.7193115,7 12.4793115,7.22 12.4793115,7.5 C12.4793115,7.78 12.7193115,8 12.9793115,8 C17.8393115,8 17.5593115,8.02 17.6793115,7.96 C17.8593115,7.88 17.9793115,7.7 17.9793115,7.5 L17.9793115,2.5 C17.9793115,2.22 17.7593115,2 17.4793115,2 C17.2193115,2 16.9793115,2.22 16.9793115,2.5 L16.9793115,6.08 C15.7793115,4.52 13.6193115,2 10.0193115,2 C5.59931146,2 2.01931146,5.58 2.01931146,10 C2.01931146,14.42 5.59931146,18 10.0193115,18 C14.1993115,18 17.6993115,14.72 17.9793115,10.54 C17.9993115,10.26 17.7993115,10.02 17.5193115,10 L17.5193115,10 Z M9.47931146,5 C9.21931146,5 8.97931146,5.22 8.97931146,5.5 L8.97931146,10.5 C8.97931146,10.78 9.21931146,11 9.47931146,11 L13.4793115,11 C13.7593115,11 13.9793115,10.78 13.9793115,10.5 C13.9793115,10.22 13.7593115,10 13.4793115,10 L9.97931146,10 L9.97931146,5.5 C9.97931146,5.22 9.75931146,5 9.47931146,5 L9.47931146,5 Z" id="f"></path> </g> </g> </svg>
-              </span>
-              <a class="taskItem-star" tabindex="-1" @click.stop="toggleTaskStarred(index)">
-                <span class="star-wrapper" :class="{hidden: item.taskStarred}" title="标记为星标">
-                  <svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve"> <g> <path d="M3.74,18 C3.64,18 3.54,17.96 3.46,17.9 C3.28,17.76 3.2,17.54 3.28,17.34 L5.16,11.5 L0.2,7.9 C0.04,7.78 -0.04,7.56 0.02,7.34 C0.1,7.14 0.28,7 0.5,7 L6.64,7 L8.52,1.16 C8.66,0.76 9.34,0.76 9.48,1.16 L11.38,7 L17.5,7 C17.72,7 17.9,7.14 17.98,7.34 C18.04,7.56 17.96,7.78 17.8,7.9 L12.84,11.5 L14.72,17.34 C14.8,17.54 14.72,17.76 14.54,17.9 C14.38,18.02 14.14,18.02 13.96,17.9 L9,14.3 L4.04,17.9 C3.96,17.96 3.84,18 3.74,18 L3.74,18 Z M9,13.18 C9.1,13.18 9.2,13.2 9.3,13.28 L13.3,16.18 L11.78,11.46 C11.7,11.26 11.78,11.04 11.96,10.92 L15.96,8 L11,8 C10.8,8 10.6,7.86 10.54,7.66 L9,2.94 L7.46,7.66 C7.4,7.86 7.22,8 7,8 L2.04,8 L6.04,10.92 C6.22,11.04 6.3,11.26 6.22,11.46 L4.7,16.18 L8.7,13.28 C8.8,13.2 8.9,13.18 9,13.18 L9,13.18 Z"></path> </g> </svg>
-                </span>
-                <span class="starred-wrapper" :class="{hidden: !item.taskStarred}" title="移除星标">
-                  <svg width="22px" height="44px" viewBox="0 0 22 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M0,0l0,40.5c0,0.28 0.22,0.42 0.48,0.32l10.04,-3.64c0.28,-0.1 0.7,-0.1 0.96,0l10.04,3.64c0.28,0.1 0.48,-0.04 0.48,-0.32l0,-40.5l-22,0ZM14.46,24.08l1.68,5.26c0.08,0.18 0,0.38 -0.16,0.5c-0.14,0.1 -0.36,0.1 -0.52,0l-4.46,-3.24l-4.46,3.24c-0.08,0.06 -0.18,0.1 -0.28,0.1c-0.08,0 -0.18,-0.04 -0.24,-0.1c-0.16,-0.12 -0.24,-0.32 -0.16,-0.5l1.68,-5.26l-4.46,-3.24c-0.14,-0.12 -0.22,-0.32 -0.16,-0.52c0.08,-0.18 0.24,-0.32 0.44,-0.32l5.52,0l1.68,-5.24c0.14,-0.36 0.74,-0.36 0.88,0l1.7,5.24l5.5,0c0.2,0 0.36,0.14 0.44,0.32c0.06,0.2 -0.02,0.4 -0.16,0.52l-4.46,3.24Z"></path> </g> </svg>
-                </span>
-              </a>
-              <div class="taskItem-progress">
-                <span class="taskItem-progress-bar"></span>
-              </div>
-            </div>
-          </li>
-        </ol>
-        <h2 tabindex="0" class="heading normal" :class="{hidden: !doneTaskItems.length}">
-          <a href="/#/lists/342865566" class="group-header" @click="toggleDoneTaskItems">显示已完成任务</a>
-        </h2>
-        <ol class="tasks" :class="{hidden: this.isShowDoneItems}">
-          <li tabindex="0" class="taskItem done" draggable="true" v-for="(item, index) in doneTaskItems" :class="{selected: item.selected}" @click="selectTaskItem($event, index, true)">
-            <div class="taskItem-body">
-              <a class="taskItem-checkboxWrapper checkbox checked" tabindex="-1" @click.stop="toggleTaskCheck(index, true)">
-                <span title="标记为已完成">
-                  <svg class="task-check" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M17.5,4.5c0,-0.53 -0.211,-1.039 -0.586,-1.414c-0.375,-0.375 -0.884,-0.586 -1.414,-0.586c-2.871,0 -8.129,0 -11,0c-0.53,0 -1.039,0.211 -1.414,0.586c-0.375,0.375 -0.586,0.884 -0.586,1.414c0,2.871 0,8.129 0,11c0,0.53 0.211,1.039 0.586,1.414c0.375,0.375 0.884,0.586 1.414,0.586c2.871,0 8.129,0 11,0c0.53,0 1.039,-0.211 1.414,-0.586c0.375,-0.375 0.586,-0.884 0.586,-1.414c0,-2.871 0,-8.129 0,-11Z" style="fill:none;stroke-width:1px"></path> </g> </svg>
-                </span>  
-                <span title="标记为未完成">
-                  <svg class="task-checked" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M9.5,14c-0.132,0 -0.259,-0.052 -0.354,-0.146c-1.485,-1.486 -3.134,-2.808 -4.904,-3.932c-0.232,-0.148 -0.302,-0.457 -0.153,-0.691c0.147,-0.231 0.456,-0.299 0.69,-0.153c1.652,1.049 3.202,2.266 4.618,3.621c2.964,-4.9 5.989,-8.792 9.749,-12.553c0.196,-0.195 0.512,-0.195 0.708,0c0.195,0.196 0.195,0.512 0,0.708c-3.838,3.837 -6.899,7.817 -9.924,12.902c-0.079,0.133 -0.215,0.221 -0.368,0.24c-0.021,0.003 -0.041,0.004 -0.062,0.004"></path> <path d="M15.5,18l-11,0c-1.379,0 -2.5,-1.121 -2.5,-2.5l0,-11c0,-1.379 1.121,-2.5 2.5,-2.5l10,0c0.276,0 0.5,0.224 0.5,0.5c0,0.276 -0.224,0.5 -0.5,0.5l-10,0c-0.827,0 -1.5,0.673 -1.5,1.5l0,11c0,0.827 0.673,1.5 1.5,1.5l11,0c0.827,0 1.5,-0.673 1.5,-1.5l0,-9.5c0,-0.276 0.224,-0.5 0.5,-0.5c0.276,0 0.5,0.224 0.5,0.5l0,9.5c0,1.379 -1.121,2.5 -2.5,2.5"></path> </g> </svg>
-                </span>
-              </a>
-              <div class="taskItem-titleWrapper" tabindex="-1">
-                <span class="taskItem-titleWrapper-title">{{ item.title }}</span>
-                <div class="taskItem-titleMeta-info">{{item.deltaTime}} 由 {{username}}</div>
-              </div>
-              <span class="conversations-wrapper" :class="{hidden: item.hiddenConversation}" title="此任务已有评论" tabindex="-1">
-                <svg class="conversations-small rtl-flip" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g class="outlined"> <path d="M6.26,15 C5.98,15 5.68,14.96 5.38,14.9 C5.18,14.84 5.04,14.68 5,14.48 C4.98,14.26 5.08,14.06 5.26,13.96 C5.78,13.68 6.02,13.3 6,12.8 C6,12.48 5.84,12.16 5.64,11.76 C5.36,11.18 5,10.48 5,9.5 C5,7.02 7.24,5 10,5 C12.76,5 15,7.02 15,9.5 C15,11.98 12.76,14 10,14 C9.58,14 9.16,13.96 8.76,13.86 C8.38,14.28 7.56,15 6.26,15 L6.26,15 Z M10,6 C7.8,6 6,7.56 6,9.5 C6,10.24 6.28,10.78 6.54,11.32 C6.78,11.8 7,12.26 7,12.78 C7,13.22 6.9,13.62 6.7,13.96 C7.64,13.78 8.12,13.06 8.14,13.02 C8.26,12.84 8.5,12.76 8.7,12.82 C9.14,12.94 9.56,13 10,13 C12.2,13 14,11.42 14,9.5 C14,7.56 12.2,6 10,6 L10,6 Z"></path> </g> <g class="filled"> <path d="M6.26,15 C5.98,15 5.68,14.96 5.38,14.9 C5.18,14.84 5.04,14.68 5,14.48 C4.98,14.28 5.08,14.08 5.26,13.98 C5.78,13.68 6.02,13.32 6,12.8 C6,12.5 5.84,12.16 5.64,11.78 C5.36,11.2 5,10.48 5,9.5 C5,7.02 7.24,5 10,5 C12.76,5 15,7.02 15,9.5 C15,11.98 12.76,14 10,14 C9.58,14 9.16,13.96 8.76,13.88 C8.38,14.28 7.56,15 6.26,15 L6.26,15 Z" opacity="0"></path> </g> </svg>
-              </span>
-              <span class="attachment-wrapper" :class="{hidden: item.hiddenAttachment}" title="此任务带有附件" tabindex="-1">
-                <svg class="attachment" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="attachment"> <path d="M13.4075,5.2925 C13.0275,4.9125 12.3675,4.9125 11.9875,5.2925 L10.3075,6.9925 L8.7475,6.9925 C7.8075,6.9925 6.9475,7.3525 6.2675,8.0125 L5.1475,9.1325 C5.0675,9.2325 5.0075,9.3525 5.0075,9.4925 C5.0075,9.6125 5.0675,9.7525 5.1475,9.8325 L7.3075,11.9925 L5.1475,14.1325 C4.9675,14.3325 4.9675,14.6525 5.1475,14.8525 C5.2475,14.9525 5.3875,14.9925 5.5075,14.9925 C5.6475,14.9925 5.7675,14.9525 5.8675,14.8525 L8.0075,12.6925 L10.1675,14.8525 C10.2475,14.9525 10.3875,14.9925 10.5075,14.9925 C10.6475,14.9925 10.7675,14.9525 10.8675,14.8525 L11.9875,13.7325 C12.6475,13.0725 13.0075,12.1925 13.0075,11.2525 L13.0075,9.6925 L14.7075,8.0125 C15.0875,7.6125 15.0875,6.9725 14.7075,6.5925 L13.4075,5.2925 Z M13.9875,7.2925 L12.1675,9.1325 C12.0675,9.2325 12.0075,9.3525 12.0075,9.4925 L12.0075,11.2525 C12.0075,11.9125 11.7475,12.5525 11.2875,13.0125 L10.5075,13.7925 L6.2075,9.4925 L6.9875,8.7125 C7.4475,8.2525 8.0875,7.9925 8.7475,7.9925 L10.5075,7.9925 C10.6475,7.9925 10.7675,7.9325 10.8675,7.8325 L12.7075,6.0125 L13.9875,7.2925 Z" id="Q"></path> </g> </g> </svg>
-              </span>
-              <span class="recurrence-wrapper" :class="{hidden: item.hiddenRecurrence}" title="Recurring to-do" tabindex="-1">
-                <svg class="recurrence" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="recurrence"> <path d="M17.5193115,10 C17.2393115,10 16.9993115,10.2 16.9793115,10.46 C16.7393115,14.12 13.6793115,17 10.0193115,17 C6.15931146,17 3.01931146,13.86 3.01931146,10 C3.01931146,6.14 6.15931146,3 10.0193115,3 C13.3393115,3 15.2593115,5.48 16.3993115,6.98 C16.4193115,6.98 16.4193115,7 16.4193115,7 L12.9793115,7 C12.7193115,7 12.4793115,7.22 12.4793115,7.5 C12.4793115,7.78 12.7193115,8 12.9793115,8 C17.8393115,8 17.5593115,8.02 17.6793115,7.96 C17.8593115,7.88 17.9793115,7.7 17.9793115,7.5 L17.9793115,2.5 C17.9793115,2.22 17.7593115,2 17.4793115,2 C17.2193115,2 16.9793115,2.22 16.9793115,2.5 L16.9793115,6.08 C15.7793115,4.52 13.6193115,2 10.0193115,2 C5.59931146,2 2.01931146,5.58 2.01931146,10 C2.01931146,14.42 5.59931146,18 10.0193115,18 C14.1993115,18 17.6993115,14.72 17.9793115,10.54 C17.9993115,10.26 17.7993115,10.02 17.5193115,10 L17.5193115,10 Z M9.47931146,5 C9.21931146,5 8.97931146,5.22 8.97931146,5.5 L8.97931146,10.5 C8.97931146,10.78 9.21931146,11 9.47931146,11 L13.4793115,11 C13.7593115,11 13.9793115,10.78 13.9793115,10.5 C13.9793115,10.22 13.7593115,10 13.4793115,10 L9.97931146,10 L9.97931146,5.5 C9.97931146,5.22 9.75931146,5 9.47931146,5 L9.47931146,5 Z" id="f"></path> </g> </g> </svg>
-              </span>
-              <a class="taskItem-star" tabindex="-1" @click.stop="toggleTaskStarred(index, true)">
-                <span class="star-wrapper" :class="{hidden: item.taskStarred}" title="标记为星标">
-                  <svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve"> <g> <path d="M3.74,18 C3.64,18 3.54,17.96 3.46,17.9 C3.28,17.76 3.2,17.54 3.28,17.34 L5.16,11.5 L0.2,7.9 C0.04,7.78 -0.04,7.56 0.02,7.34 C0.1,7.14 0.28,7 0.5,7 L6.64,7 L8.52,1.16 C8.66,0.76 9.34,0.76 9.48,1.16 L11.38,7 L17.5,7 C17.72,7 17.9,7.14 17.98,7.34 C18.04,7.56 17.96,7.78 17.8,7.9 L12.84,11.5 L14.72,17.34 C14.8,17.54 14.72,17.76 14.54,17.9 C14.38,18.02 14.14,18.02 13.96,17.9 L9,14.3 L4.04,17.9 C3.96,17.96 3.84,18 3.74,18 L3.74,18 Z M9,13.18 C9.1,13.18 9.2,13.2 9.3,13.28 L13.3,16.18 L11.78,11.46 C11.7,11.26 11.78,11.04 11.96,10.92 L15.96,8 L11,8 C10.8,8 10.6,7.86 10.54,7.66 L9,2.94 L7.46,7.66 C7.4,7.86 7.22,8 7,8 L2.04,8 L6.04,10.92 C6.22,11.04 6.3,11.26 6.22,11.46 L4.7,16.18 L8.7,13.28 C8.8,13.2 8.9,13.18 9,13.18 L9,13.18 Z"></path> </g> </svg>
-                </span>
-                <span class="starred-wrapper" :class="{hidden: !item.taskStarred}" title="移除星标">
-                  <svg width="22px" height="44px" viewBox="0 0 22 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M0,0l0,40.5c0,0.28 0.22,0.42 0.48,0.32l10.04,-3.64c0.28,-0.1 0.7,-0.1 0.96,0l10.04,3.64c0.28,0.1 0.48,-0.04 0.48,-0.32l0,-40.5l-22,0ZM14.46,24.08l1.68,5.26c0.08,0.18 0,0.38 -0.16,0.5c-0.14,0.1 -0.36,0.1 -0.52,0l-4.46,-3.24l-4.46,3.24c-0.08,0.06 -0.18,0.1 -0.28,0.1c-0.08,0 -0.18,-0.04 -0.24,-0.1c-0.16,-0.12 -0.24,-0.32 -0.16,-0.5l1.68,-5.26l-4.46,-3.24c-0.14,-0.12 -0.22,-0.32 -0.16,-0.52c0.08,-0.18 0.24,-0.32 0.44,-0.32l5.52,0l1.68,-5.24c0.14,-0.36 0.74,-0.36 0.88,0l1.7,5.24l5.5,0c0.2,0 0.36,0.14 0.44,0.32c0.06,0.2 -0.02,0.4 -0.16,0.52l-4.46,3.24Z"></path> </g> </svg>
-                </span>
-              </a>
-              <div class="taskItem-progress">
-                <span class="taskItem-progress-bar"></span>
-              </div>
-            </div>
-          </li>
-        </ol>
-      </div>
-
-      <div class="task-404 hidden" >
-        <svg class="search rtl-flip" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g> <path d="M8.5025,15 C4.9225,15 2.0025,12.08 2.0025,8.5 C2.0025,4.92 4.9225,2 8.5025,2 C12.0825,2 15.0025,4.92 15.0025,8.5 C15.0025,12.08 12.0825,15 8.5025,15 L8.5025,15 Z M8.5025,3 C5.4625,3 3.0025,5.46 3.0025,8.5 C3.0025,11.54 5.4625,14 8.5025,14 C11.5425,14 14.0025,11.54 14.0025,8.5 C14.0025,5.46 11.5425,3 8.5025,3 L8.5025,3 Z M17.5025,18 C17.3825,18 17.2425,17.96 17.1425,17.86 L13.6425,14.36 C13.4625,14.16 13.4625,13.84 13.6425,13.64 C13.8425,13.46 14.1625,13.46 14.3625,13.64 L17.8625,17.14 C18.0425,17.34 18.0425,17.66 17.8625,17.86 C17.7625,17.96 17.6225,18 17.5025,18 L17.5025,18 Z" id="z"></path> </g> </g> </svg>
-        <h2>无搜索结果</h2>
-      </div>
-    </div>
+    <!-- 编辑任务 -->
+    <task-detail :username="username" v-show="showDetail"></task-detail>
   </div>
 </template>
 
 <script>
 import DatePicker from 'vuejs-datepicker'
+import TaskDetail from './TaskDetail'
 // var d
 export default {
   name: 'Task',
-  components: {DatePicker},
+  components: {DatePicker, TaskDetail},
   props: ['username'],
   data(){
     return {
       // show: true, // 用于显示date-picker
       // date: '', // date-picker 中 date 双向绑定
       datePickerState,
+      showDetail: false,
       taskItems: [
   {
     selected: false,
@@ -643,7 +651,8 @@ let actionBarTopMore = [
 </script>
 
 <style scoped>
-#tasks{height: 100vh; position: relative; display: flex; flex-direction: column;}
+#tasks{height: 100vh; position: relative; display: flex;}
+.tasks-main{height: 100vh; position: relative; display: flex; flex-direction: column; flex:1;}
 .list-toolbar{position: relative; height: 45px; min-height: 45px; display: flex; align-items: center; background: #0e91c5;}
 .list-toolbar h1{flex:1; font-size: 20px; color: #fff; padding: 10px 14px; font-weight: 200; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;}
 .action-bar{position: relative; opacity: 1; filter: none; transition: opacity 200ms ease-in;}

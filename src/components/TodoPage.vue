@@ -3,18 +3,16 @@
     <div class="todo-page-inner">
       <lists-navigation :username="username"></lists-navigation>
       <task class="tasks" :username="username"></task>
-      <task-detail :username="username"></task-detail>
     </div>
   </section>
 </template>
 
 <script>
 import ListsNavigation from './ListsNavigation'
-import TaskDetail from './TaskDetail'
 import Task from './Task'
 export default {
   name: 'TodoPage',
-  components: {ListsNavigation, TaskDetail, Task},
+  components: {ListsNavigation, Task},
   props:['username'],
   data (){
     return {

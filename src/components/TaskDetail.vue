@@ -10,11 +10,11 @@
           </span>
         </a>
 
-        <a class="detail-star" tabindex="0">
-          <span class="star-wrapper" title="标记为星标">
+        <a class="detail-star" tabindex="0" @click.stop="toggleTaskStarred">
+          <span class="star-wrapper" title="标记为星标" :class="{hidden: taskItem.taskStarred}">
             <svg width="100%" height="100%" viewBox="0 0 22 49" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M11,20.48c-0.18,0 -0.36,0.08 -0.44,0.26l-1.68,5.26l-5.54,0c-0.18,0 -0.36,0.12 -0.42,0.3c-0.06,0.2 0.02,0.4 0.16,0.5l4.46,3.24l-1.68,5.26c-0.08,0.18 0,0.38 0.16,0.5c0.06,0.06 0.16,0.1 0.24,0.1c0.1,0 0.2,-0.04 0.28,-0.1l4.46,-3.24l4.46,3.24c0.08,0.06 0.18,0.08 0.28,0.08c0.08,0 0.18,-0.02 0.24,-0.08c0.16,-0.12 0.24,-0.32 0.16,-0.5l-1.68,-5.26l4.46,-3.24c0.14,-0.1 0.22,-0.3 0.16,-0.5c-0.08,-0.18 -0.24,-0.3 -0.42,-0.3l-5.52,0l-1.7,-5.26c-0.08,-0.18 -0.26,-0.26 -0.44,-0.26ZM11,22.66l1.2,3.64l0.22,0.7l4.54,0l-3.68,2.66l0.22,0.7l1.18,3.64l-3.68,-2.66l-3.68,2.66l1.18,-3.64l0.22,-0.7l-3.68,-2.66l4.56,0l0.22,-0.7l1.18,-3.64Z"> </path></g> </svg>
           </span>
-          <span class="starred-wrapper" title="移除星标">
+          <span class="starred-wrapper" title="移除星标" :class="{hidden: !taskItem.taskStarred}">
             <svg width="100%" height="100%" viewBox="0 0 22 49" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M0,0l0,48.48c0,0.28 0.22,0.42 0.48,0.34l10.04,-3.66c0.28,-0.1 0.7,-0.1 0.96,0l10.04,3.66c0.28,0.08 0.48,-0.06 0.48,-0.34l0,-48.48l-22,0ZM14.56,30.06l1.68,5.26c0.08,0.18 0,0.38 -0.16,0.5c-0.14,0.1 -0.36,0.1 -0.52,0l-4.46,-3.24l-4.46,3.24c-0.08,0.06 -0.18,0.08 -0.28,0.08c-0.08,0 -0.18,-0.02 -0.24,-0.08c-0.16,-0.12 -0.24,-0.32 -0.16,-0.5l1.68,-5.26l-4.46,-3.24c-0.14,-0.1 -0.22,-0.32 -0.16,-0.52c0.06,-0.16 0.24,-0.3 0.42,-0.3l5.54,0l1.68,-5.26c0.14,-0.36 0.74,-0.36 0.88,0l1.7,5.26l5.5,0c0.2,0 0.36,0.14 0.44,0.3c0.06,0.2 -0.02,0.42 -0.16,0.52l-4.46,3.24Z"> </path></g> </svg>
           </span>
         </a>
@@ -23,13 +23,13 @@
           <div tabindex="0" class="title">
             <span class="title-text">
               <div class="content-fakable">
-                <div class="display-view">
-                  <span>写代码</span>
+                <div class="display-view hidden">
+                  <span>{{ taskItem.title }}</span>
                 </div>
-                <div class="edit-view hidden">
+                <div class="edit-view">
                   <div class="expandingArea active">
-                    <pre>写代码</pre>
-                    <textarea tabindex="0">写代码</textarea>
+                    <pre>{{taskItem.title}}</pre>
+                    <textarea tabindex="0" v-model="taskItem.title">{{taskItem.title}}</textarea>
                   </div>
                 </div>
               </div>
@@ -39,7 +39,7 @@
       </div>
 
       <div class="body">
-        <div class="section section-item detail-assign" tabindex="0">
+        <!-- <div class="section section-item detail-assign" tabindex="0">
           <div class="section-icon">
             <svg class="assigned" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g> <g id="Rectangle-3-+-A" transform="translate(1.000000, 2.000000)"> <path d="M10,10 C12.28,10 14,6.84 14,4 C14,1.8 12.2,0 10,0 C7.8,0 6,1.8 6,4 C6,6.5 7.52,10 10,10 L10,10 Z M4.94,7.74 C4.98,7.66 5,7.58 5,7.5 C5,7.42 4.98,7.34 4.94,7.26 C4.92,7.22 4.9,7.18 4.86,7.14 L2.86,5.14 C2.66,4.96 2.34,4.96 2.14,5.14 C1.96,5.34 1.96,5.66 2.14,5.86 L3.3,7 L0.5,7 C0.22,7 0,7.22 0,7.5 C0,7.78 0.22,8 0.5,8 L3.3,8 L2.14,9.14 C1.96,9.34 1.96,9.66 2.14,9.86 C2.24,9.96 2.38,10 2.5,10 C2.62,10 2.76,9.96 2.86,9.86 L4.86,7.86 C4.9,7.82 4.92,7.78 4.94,7.74 L4.94,7.74 Z M16.76,12.88 C16.56,12 15.9,11.28 15.02,11.04 L12.72,10.36 C12.58,10.32 12.46,10.26 12.36,10.14 C12.16,9.96 11.84,9.96 11.66,10.16 C11.46,10.34 8.54,10.34 8.36,10.14 C8.16,9.96 7.84,9.96 7.64,10.14 C7.54,10.24 7.42,10.32 7.28,10.36 L5.04,10.96 C4.14,11.2 3.46,11.92 3.24,12.82 L3.02,13.9 C2.98,14.06 3.02,14.24 3.14,14.36 C3.22,14.42 4.86,16 10,16 C15.14,16 16.78,14.42 16.86,14.36 C16.98,14.24 17.02,14.06 16.98,13.9 L16.76,12.88 Z" fill-opacity="0.06"></path> <path d="M10,10 C12.28,10 14,6.84 14,4 C14,1.8 12.2,0 10,0 C7.8,0 6,1.8 6,4 C6,6.5 7.52,10 10,10 L10,10 Z M10,1 C11.66,1 13,2.34 13,4 C13,6.26 11.62,9 10,9 C8.34,9 7,6.26 7,4 C7,2.34 8.34,1 10,1 L10,1 Z M4.94,7.74 C4.98,7.66 5,7.58 5,7.5 C5,7.42 4.98,7.34 4.94,7.26 C4.92,7.22 4.9,7.18 4.86,7.14 L2.86,5.14 C2.66,4.96 2.34,4.96 2.14,5.14 C1.96,5.34 1.96,5.66 2.14,5.86 L3.3,7 L0.5,7 C0.22,7 0,7.22 0,7.5 C0,7.78 0.22,8 0.5,8 L3.3,8 L2.14,9.14 C1.96,9.34 1.96,9.66 2.14,9.86 C2.24,9.96 2.38,10 2.5,10 C2.62,10 2.76,9.96 2.86,9.86 L4.86,7.86 C4.9,7.82 4.92,7.78 4.94,7.74 L4.94,7.74 Z M16.76,12.88 C16.56,12 15.9,11.28 15.02,11.04 L12.72,10.36 C12.58,10.32 12.46,10.26 12.36,10.14 C12.16,9.96 11.84,9.96 11.66,10.16 C11.46,10.34 11.46,10.66 11.66,10.86 C11.88,11.08 12.14,11.24 12.44,11.32 L14.74,12 C15.26,12.14 15.66,12.58 15.78,13.1 L15.94,13.8 C15.4,14.16 13.7,15 10,15 C6.3,15 4.6,14.14 4.06,13.8 L4.22,13.04 C4.34,12.5 4.76,12.06 5.3,11.92 L7.54,11.32 C7.84,11.24 8.12,11.08 8.36,10.86 C8.54,10.66 8.54,10.34 8.36,10.14 C8.16,9.96 7.84,9.96 7.64,10.14 C7.54,10.24 7.42,10.32 7.28,10.36 L5.04,10.96 C4.14,11.2 3.46,11.92 3.24,12.82 L3.02,13.9 C2.98,14.06 3.02,14.24 3.14,14.36 C3.22,14.42 4.86,16 10,16 C15.14,16 16.78,14.42 16.86,14.36 C16.98,14.24 17.02,14.06 16.98,13.9 L16.76,12.88 Z"> </path> </g> </g> </g> </svg>
           </div>
@@ -52,7 +52,7 @@
           <a class="section-delete" title="删除" tabindex="0">
             <svg class="delete" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="delete"> <path d="M10.72,9.9975 L13.86,6.8575 C14.04,6.6575 14.04,6.3375 13.86,6.1375 C13.66,5.9575 13.34,5.9575 13.14,6.1375 L10,9.2775 L6.86,6.1375 C6.66,5.9575 6.34,5.9575 6.14,6.1375 C5.96,6.3375 5.96,6.6575 6.14,6.8575 L9.28,9.9975 L6.14,13.1375 C5.96,13.3375 5.96,13.6575 6.14,13.8575 C6.24,13.9575 6.38,13.9975 6.5,13.9975 C6.62,13.9975 6.76,13.9575 6.86,13.8575 L10,10.7175 L13.14,13.8575 C13.24,13.9575 13.38,13.9975 13.5,13.9975 C13.62,13.9975 13.76,13.9575 13.86,13.8575 C14.04,13.6575 14.04,13.3375 13.86,13.1375 L10.72,9.9975 Z" id="4"></path> </g> </g> </svg>
           </a>
-        </div>
+        </div> -->
 
         <div class="section section-item detail-date date" tabindex="0">
           <div class="section-icon">
@@ -67,7 +67,7 @@
           </a>
         </div>
 
-        <div class="section section-item detail-reminder date overdue" tabindex="0">
+        <!-- <div class="section section-item detail-reminder date overdue" tabindex="0">
           <div class="section-icon">
             <svg class="reminder" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="reminder"> <path d="M3.26,6.6 C3.1,6.24 3,5.88 3,5.5 C3,4.12 4.12,3 5.5,3 C6.04,3 6.54,3.18 6.98,3.5 C7.2,3.66 7.52,3.62 7.68,3.4 C7.86,3.18 7.8,2.86 7.58,2.7 C6.98,2.24 6.24,2 5.5,2 C3.58,2 2,3.58 2,5.5 C2,6.02 2.12,6.54 2.38,7.04 C2.46,7.22 2.64,7.32 2.82,7.32 C2.9,7.32 2.98,7.3 3.04,7.28 C3.3,7.14 3.4,6.84 3.26,6.6 L3.26,6.6 Z M14.5,2 C13.76,2 13.04,2.24 12.42,2.7 C12.2,2.86 12.16,3.18 12.32,3.4 C12.48,3.62 12.8,3.66 13.02,3.5 C13.46,3.18 13.98,3 14.5,3 C15.88,3 17,4.12 17,5.5 C17,5.88 16.92,6.24 16.74,6.6 C16.62,6.84 16.72,7.14 16.96,7.28 C17.04,7.3 17.1,7.32 17.18,7.32 C17.36,7.32 17.54,7.22 17.64,7.04 C17.88,6.54 18,6.02 18,5.5 C18,3.58 16.44,2 14.5,2 L14.5,2 Z M17,11 C17,7.14 13.86,4 10,4 C6.14,4 3,7.14 3,11 C3,13 3.84,14.82 5.2,16.1 L4.14,17.14 C3.96,17.34 3.96,17.66 4.14,17.86 C4.24,17.96 4.38,18 4.5,18 C4.62,18 4.76,17.96 4.86,17.86 L5.98,16.72 C7.12,17.52 8.5,18 10,18 C11.5,18 12.88,17.52 14.02,16.72 L15.14,17.86 C15.24,17.96 15.38,18 15.5,18 C15.62,18 15.76,17.96 15.86,17.86 C16.04,17.66 16.04,17.34 15.86,17.14 L14.8,16.1 C16.16,14.82 17,13 17,11 L17,11 Z M4,11 C4,7.7 6.7,5 10,5 C13.3,5 16,7.7 16,11 C16,14.3 13.3,17 10,17 C6.7,17 4,14.3 4,11 L4,11 Z M10.5,7 C10.22,7 10,7.22 10,7.5 L10,11 L7.46,11 C7.2,11 6.96,11.22 6.96,11.5 C6.96,11.78 7.2,12 7.46,12 L10.5,12 C10.78,12 11,11.78 11,11.5 L11,7.5 C11,7.22 10.78,7 10.5,7 L10.5,7 Z" id="…"></path> </g> </g> </svg>
           </div>
@@ -78,7 +78,7 @@
           <a class="section-delete" title="删除" tabindex="0">
             <svg class="delete" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="delete"> <path d="M10.72,9.9975 L13.86,6.8575 C14.04,6.6575 14.04,6.3375 13.86,6.1375 C13.66,5.9575 13.34,5.9575 13.14,6.1375 L10,9.2775 L6.86,6.1375 C6.66,5.9575 6.34,5.9575 6.14,6.1375 C5.96,6.3375 5.96,6.6575 6.14,6.8575 L9.28,9.9975 L6.14,13.1375 C5.96,13.3375 5.96,13.6575 6.14,13.8575 C6.24,13.9575 6.38,13.9975 6.5,13.9975 C6.62,13.9975 6.76,13.9575 6.86,13.8575 L10,10.7175 L13.14,13.8575 C13.24,13.9575 13.38,13.9975 13.5,13.9975 C13.62,13.9975 13.76,13.9575 13.86,13.8575 C14.04,13.6575 14.04,13.3375 13.86,13.1375 L10.72,9.9975 Z" id="4"></path> </g> </g> </svg>
           </a>
-        </div>
+        </div> -->
 
         <div class="section subtasks hasSubtasks" tabindex="0">
           <ul>
@@ -237,7 +237,25 @@
 export default {
   name: 'TaskDetail',
   data() {
-    return {}
+    return {
+      taskItem: {
+        selected: false,
+        taskChecked: false,
+        title: '码代码1',
+        hiddenConversation: false,
+        hiddenAttachment: true,
+        hiddenRecurrence: true,
+        taskStarred: false,
+        createDate: 1525331956726,
+        deadline: 1525331976726,
+      },
+    }
+  },
+  methods: {
+    toggleTaskStarred(){
+      console.log(0)
+      this.taskItem.taskStarred = !this.taskItem.taskStarred
+    }
   }
 }
 
@@ -248,10 +266,11 @@ export default {
 textarea{outline: none; background: transparent; font-weight: 500; line-height: 20px;}
 textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
 
-.topbar{height: 55px; position: relative;}
+.topbar{min-height: 55px; position: relative;}
 .detail-checkbox{position: absolute; left: 18px; top: 18px; z-index: 1;}
 .checkbox .detail-check{stroke: rgba(0, 0, 0, 0.35);}
 .checkbox .detail-checked{fill: rgba(0, 0, 0, 0.35);}
+.detail-star{position: absolute; top: 0; right: 0; z-index: 2;}
 .star-wrapper{position: absolute; fill: rgba(0, 0, 0, 0.3); right: 15px; top: -4px; z-index: 1; width: 22px; height: 49px;}
 .starred-wrapper{position: absolute; fill: #d74e48; right: 15px; top: -4px; z-index: 1; width: 22px; height: 49px;}
 .title-container{position: relative; z-index: 1;}
@@ -259,11 +278,12 @@ textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
 .content-fakable .display-view{white-space: pre-wrap; word-wrap: break-word; overflow: hidden; margin-top: 1px;}
 .content-fakable .display-view span{white-space: pre-wrap; user-select: text;}
 .expandingArea{position: relative;}
-.expandingArea pre{line-height: 24px; font-size: 16px; font-weight: bold; tab-size: 1; margin-top: 1px; padding: 0; border: none; visibility: hidden; display: block; white-space: pre-wrap; word-wrap: break-word;}
+.expandingArea pre{line-height: 24px; font-size: 16px; font-weight: bold; tab-size: 1; margin-top: 1px; padding: 0; border: none;
+ visibility: hidden; display: block; white-space: pre-wrap; word-wrap: break-word; word-break: break-all;}
 .expandingArea textarea{line-height: 24px; font-size: 16px; 
-overflow: hidden; position: absolute; top: -1px; left: 0; width: 100%; height: 100%;
-font-weight: bold; tab-size: 1; resize: none; color: #262626; margin-top: 1px; padding: 0; 
-border: none; display: block; white-space: pre-wrap; word-wrap: break-word; font-family: 'Avenir', Helvetica, Arial, sans-serif;}
+  overflow: hidden; position: absolute; top: -1px; left: 0; width: 100%; height: 100%;
+  font-weight: bold; tab-size: 1; resize: none; color: #262626; margin-top: 1px; padding: 0; 
+  border: none; display: block; white-space: pre-wrap; word-wrap: break-word; word-break: break-all; font-family: 'Avenir', Helvetica, Arial, sans-serif;}
 
 .body{flex: 1; padding-bottom: 16px; transition: margin 150ms; background: #fafafa; overflow-x: hidden; overflow-y: auto;}
 .section{outline: none; position: relative; padding: 8px 0; text-align: left;}
