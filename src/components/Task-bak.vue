@@ -112,14 +112,14 @@
             <a class="group-header" href="/#/lists/inbox">inbox</a>
           </h2>
           <ol class="tasks">
-            <li tabindex="0" class="taskItem" draggable="true" v-for="(item, index) in taskItems" :class="{selected: item.selected}" @click="selectTaskItem($event, index)" @click.double="editTask(item)">
+            <li tabindex="0" class="taskItem" draggable="true" v-for="(item, index) in taskItems" :class="{selected: item.selected}" @click="selectTaskItem($event, index)" @click.double="showDetail = true">
               <div class="taskItem-body">
-                <a class="taskItem-checkboxWrapper checkbox" tabindex="-1" @click.stop="toggleTaskCheck(item)">
+                <a class="taskItem-checkboxWrapper checkbox" tabindex="-1" @click.stop="toggleTaskCheck(index)">
                   <span title="标记为已完成">
-                    <svg class="task-check" :class="{hidden: item.isCompleted}" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M17.5,4.5c0,-0.53 -0.211,-1.039 -0.586,-1.414c-0.375,-0.375 -0.884,-0.586 -1.414,-0.586c-2.871,0 -8.129,0 -11,0c-0.53,0 -1.039,0.211 -1.414,0.586c-0.375,0.375 -0.586,0.884 -0.586,1.414c0,2.871 0,8.129 0,11c0,0.53 0.211,1.039 0.586,1.414c0.375,0.375 0.884,0.586 1.414,0.586c2.871,0 8.129,0 11,0c0.53,0 1.039,-0.211 1.414,-0.586c0.375,-0.375 0.586,-0.884 0.586,-1.414c0,-2.871 0,-8.129 0,-11Z" style="fill:none;stroke-width:1px"></path> </g> </svg>
+                    <svg class="task-check" :class="{hidden: item.taskChecked}" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M17.5,4.5c0,-0.53 -0.211,-1.039 -0.586,-1.414c-0.375,-0.375 -0.884,-0.586 -1.414,-0.586c-2.871,0 -8.129,0 -11,0c-0.53,0 -1.039,0.211 -1.414,0.586c-0.375,0.375 -0.586,0.884 -0.586,1.414c0,2.871 0,8.129 0,11c0,0.53 0.211,1.039 0.586,1.414c0.375,0.375 0.884,0.586 1.414,0.586c2.871,0 8.129,0 11,0c0.53,0 1.039,-0.211 1.414,-0.586c0.375,-0.375 0.586,-0.884 0.586,-1.414c0,-2.871 0,-8.129 0,-11Z" style="fill:none;stroke-width:1px"></path> </g> </svg>
                   </span>  
                   <span title="标记为未完成">
-                    <svg class="task-checked" :class="{hidden: !item.isCompleted}" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M9.5,14c-0.132,0 -0.259,-0.052 -0.354,-0.146c-1.485,-1.486 -3.134,-2.808 -4.904,-3.932c-0.232,-0.148 -0.302,-0.457 -0.153,-0.691c0.147,-0.231 0.456,-0.299 0.69,-0.153c1.652,1.049 3.202,2.266 4.618,3.621c2.964,-4.9 5.989,-8.792 9.749,-12.553c0.196,-0.195 0.512,-0.195 0.708,0c0.195,0.196 0.195,0.512 0,0.708c-3.838,3.837 -6.899,7.817 -9.924,12.902c-0.079,0.133 -0.215,0.221 -0.368,0.24c-0.021,0.003 -0.041,0.004 -0.062,0.004"></path> <path d="M15.5,18l-11,0c-1.379,0 -2.5,-1.121 -2.5,-2.5l0,-11c0,-1.379 1.121,-2.5 2.5,-2.5l10,0c0.276,0 0.5,0.224 0.5,0.5c0,0.276 -0.224,0.5 -0.5,0.5l-10,0c-0.827,0 -1.5,0.673 -1.5,1.5l0,11c0,0.827 0.673,1.5 1.5,1.5l11,0c0.827,0 1.5,-0.673 1.5,-1.5l0,-9.5c0,-0.276 0.224,-0.5 0.5,-0.5c0.276,0 0.5,0.224 0.5,0.5l0,9.5c0,1.379 -1.121,2.5 -2.5,2.5"></path> </g> </svg>
+                    <svg class="task-checked" :class="{hidden: !item.taskChecked}" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M9.5,14c-0.132,0 -0.259,-0.052 -0.354,-0.146c-1.485,-1.486 -3.134,-2.808 -4.904,-3.932c-0.232,-0.148 -0.302,-0.457 -0.153,-0.691c0.147,-0.231 0.456,-0.299 0.69,-0.153c1.652,1.049 3.202,2.266 4.618,3.621c2.964,-4.9 5.989,-8.792 9.749,-12.553c0.196,-0.195 0.512,-0.195 0.708,0c0.195,0.196 0.195,0.512 0,0.708c-3.838,3.837 -6.899,7.817 -9.924,12.902c-0.079,0.133 -0.215,0.221 -0.368,0.24c-0.021,0.003 -0.041,0.004 -0.062,0.004"></path> <path d="M15.5,18l-11,0c-1.379,0 -2.5,-1.121 -2.5,-2.5l0,-11c0,-1.379 1.121,-2.5 2.5,-2.5l10,0c0.276,0 0.5,0.224 0.5,0.5c0,0.276 -0.224,0.5 -0.5,0.5l-10,0c-0.827,0 -1.5,0.673 -1.5,1.5l0,11c0,0.827 0.673,1.5 1.5,1.5l11,0c0.827,0 1.5,-0.673 1.5,-1.5l0,-9.5c0,-0.276 0.224,-0.5 0.5,-0.5c0.276,0 0.5,0.224 0.5,0.5l0,9.5c0,1.379 -1.121,2.5 -2.5,2.5"></path> </g> </svg>
                   </span>
                 </a>
                 <div class="taskItem-titleWrapper" tabindex="-1">
@@ -133,10 +133,7 @@
                 </span>
                 <!-- 过期为红色，没过期为蓝色，没有倒计时就隐藏元素 -->
                 <!-- 时间格式为2018/5/3 -->
-                <span class="taskItem-deadline" tabindex="-1" aria-hidden="true" 
-                  :class="item.deadline ? (new Date().getTime() > item.deadline && 'overdue')  : 'hidden' ">
-                    {{formatDate(item.deadline)}}
-                </span>
+                <span class="taskItem-deadline" tabindex="-1" aria-hidden="true" :class="item.deadline ? (new Date().getTime() > item.deadline && 'overdue')  : 'hidden' ">{{ new Date(item.deadline).toLocaleString().split(' ')[0] }}</span>
                 <span class="recurrence-wrapper" :class="{hidden: item.hiddenRecurrence}" title="Recurring to-do" tabindex="-1">
                   <svg class="recurrence" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="recurrence"> <path d="M17.5193115,10 C17.2393115,10 16.9993115,10.2 16.9793115,10.46 C16.7393115,14.12 13.6793115,17 10.0193115,17 C6.15931146,17 3.01931146,13.86 3.01931146,10 C3.01931146,6.14 6.15931146,3 10.0193115,3 C13.3393115,3 15.2593115,5.48 16.3993115,6.98 C16.4193115,6.98 16.4193115,7 16.4193115,7 L12.9793115,7 C12.7193115,7 12.4793115,7.22 12.4793115,7.5 C12.4793115,7.78 12.7193115,8 12.9793115,8 C17.8393115,8 17.5593115,8.02 17.6793115,7.96 C17.8593115,7.88 17.9793115,7.7 17.9793115,7.5 L17.9793115,2.5 C17.9793115,2.22 17.7593115,2 17.4793115,2 C17.2193115,2 16.9793115,2.22 16.9793115,2.5 L16.9793115,6.08 C15.7793115,4.52 13.6193115,2 10.0193115,2 C5.59931146,2 2.01931146,5.58 2.01931146,10 C2.01931146,14.42 5.59931146,18 10.0193115,18 C14.1993115,18 17.6993115,14.72 17.9793115,10.54 C17.9993115,10.26 17.7993115,10.02 17.5193115,10 L17.5193115,10 Z M9.47931146,5 C9.21931146,5 8.97931146,5.22 8.97931146,5.5 L8.97931146,10.5 C8.97931146,10.78 9.21931146,11 9.47931146,11 L13.4793115,11 C13.7593115,11 13.9793115,10.78 13.9793115,10.5 C13.9793115,10.22 13.7593115,10 13.4793115,10 L9.97931146,10 L9.97931146,5.5 C9.97931146,5.22 9.75931146,5 9.47931146,5 L9.47931146,5 Z" id="f"></path> </g> </g> </svg>
                 </span>
@@ -158,9 +155,9 @@
             <a href="/#/lists/342865566" class="group-header" @click="toggleDoneTaskItems">显示已完成任务</a>
           </h2>
           <ol class="tasks" :class="{hidden: this.isShowDoneItems}">
-            <li tabindex="0" class="taskItem done" draggable="true" v-for="(item, index) in doneTaskItems" :class="{selected: item.selected}" @click="selectTaskItem($event, index, true)" @click.double="editTask(item)">
+            <li tabindex="0" class="taskItem done" draggable="true" v-for="(item, index) in doneTaskItems" :class="{selected: item.selected}" @click="selectTaskItem($event, index, true)">
               <div class="taskItem-body">
-                <a class="taskItem-checkboxWrapper checkbox checked" tabindex="-1" @click.stop="toggleTaskCheck(item)">
+                <a class="taskItem-checkboxWrapper checkbox checked" tabindex="-1" @click.stop="toggleTaskCheck(index, true)">
                   <span title="标记为已完成">
                     <svg class="task-check" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M17.5,4.5c0,-0.53 -0.211,-1.039 -0.586,-1.414c-0.375,-0.375 -0.884,-0.586 -1.414,-0.586c-2.871,0 -8.129,0 -11,0c-0.53,0 -1.039,0.211 -1.414,0.586c-0.375,0.375 -0.586,0.884 -0.586,1.414c0,2.871 0,8.129 0,11c0,0.53 0.211,1.039 0.586,1.414c0.375,0.375 0.884,0.586 1.414,0.586c2.871,0 8.129,0 11,0c0.53,0 1.039,-0.211 1.414,-0.586c0.375,-0.375 0.586,-0.884 0.586,-1.414c0,-2.871 0,-8.129 0,-11Z" style="fill:none;stroke-width:1px"></path> </g> </svg>
                   </span>  
@@ -205,7 +202,7 @@
     </div>
 
     <!-- 编辑任务 -->
-    <task-detail :username="username" v-show="showDetail" :taskItem="editItem" @toggleDetailCheckbox="toggleTaskCheck"></task-detail>
+    <task-detail :username="username" v-show="showDetail"></task-detail>
   </div>
 </template>
 
@@ -226,6 +223,7 @@ export default {
       taskItems: [
   {
     selected: false,
+    taskChecked: false,
     title: '码代码1',
     hiddenConversation: false,
     hiddenAttachment: true,
@@ -233,19 +231,15 @@ export default {
     taskStarred: false,
     createDate: 1525331956726,
     deadline: 1525331976726,
-    isCompleted: false,
-    subTasks: [],
   },{
     selected: false,
+    taskChecked: false,
     title: '代码3',
     hiddenConversation: false,
     hiddenAttachment: false,
     hiddenRecurrence: false,
     taskStarred: true,
     createDate: 1525331956727,
-    deadline: null,
-    isCompleted: false,
-    subTasks: [],
   }
       ],
       actionBarTopSort:[
@@ -301,7 +295,6 @@ export default {
       doneTaskItems,
       isShowDoneItems: true,  // 显示已经完成任务列表
       newTask: this.createTaskTemplate(),
-      editItem: this.createTaskTemplate(),
     }
   },
   methods: {
@@ -315,6 +308,7 @@ export default {
       // 返回一个 任务模板
       return {
         selected: false, // 用于设置被选中时的样式
+        taskChecked: false, // 复选框是否勾上
         title: '',
         hiddenConversation: true,  // 是否有评论 没有就隐藏
         hiddenAttachment: true,  // 是否有附件 没有就隐藏
@@ -322,8 +316,6 @@ export default {
         taskStarred: false,  // 是否加了星星
         createDate: null, // 创建的时间
         deadline: null, // 到期时间
-        isCompleted: false, // 是否已经完成
-        subTasks: [],   // 子任务数组
       }
     },
     addTask (){
@@ -383,33 +375,19 @@ export default {
       // 是否 blur 在添加任务的输入框
       this.addTaskData.focusAddTask = false
     },
-    toggleTaskCheck (item){
-    // 点击复选框 完成 或 未完成
-      let index
-      if(item.isCompleted === true){
-      // 用户在已经完成 item 的checkbox 上点击
-        index = this.doneTaskItems.indexOf(item)
-        this.doneTaskItems = [].concat(this.doneTaskItems.slice(0, index), this.doneTaskItems.slice(index + 1))
-        // this.doneTaskItems.splice(this.doneTaskItems.indexOf(item), 1)
-        // 重置为 未完成
-        item.isCompleted = false
-        // 完成时间重置为 null
-        item.doneDate = null
+    toggleTaskCheck (index, isDone){
+      // 点击复选框 切换完成 或 未完成
+      if(isDone){
+        this.doneTaskItems[index].taskChecked = false
+        let item = this.doneTaskItems.splice(index, 1)[0]
         this.taskItems.push(item)
-      }else if(item.isCompleted === false){
-      // 用户在未完成 item 的checkbox 上点击
-        index = this.taskItems.indexOf(item)
-        this.taskItems = [].concat(this.taskItems.slice(0, index), this.taskItems.slice(index + 1))
-        // this.taskItems.splice(this.taskItems.indexOf(item), 1)
-        // 完成时间为当前时间
+      }else{
+        this.taskItems[index].taskChecked = !this.taskItems[index].taskChecked
+        let item = this.taskItems.splice(index, 1)[0]
         item.doneDate = new Date().getTime()
         // 更新距离时间
         item.deltaTime = this.showTime(item)
-        // 重置为 已经完成
-        item.isCompleted = true
         this.doneTaskItems.push(item)
-      }else{
-        throw Error('toggleTaskCheck 函数报错')
       }
     },
     toggleTaskStarred (index, isDone){
@@ -475,17 +453,6 @@ export default {
         return a.deadline - b.deadline
       })
     },
-    editTask(item){
-    // 打开任务编辑的区域
-      this.showDetail = true
-      this.editItem = item
-    },
-    formatDate(timeStamp){
-    // 传入一个时间戳 返回一个 '2018-05-20' 的时间格式
-      return new Date(timeStamp).toLocaleString().split(' ')[0].replace(/(\d+)\/(\d+)\/(\d+)/g, function(str,$1, $2, $3){
-        return $1 + '-' + (Number($2) < 10 ? '0'+$2 : $2) + '-' + (Number($3) < 10 ? '0'+$3 : $3)
-      }) 
-    },
   },
   computed:{
     hiddenAllAddTaskMeta (){
@@ -524,6 +491,7 @@ let datePickerState = {
 let doneTaskItems = [
   {
     selected: false,
+    taskChecked: false,
     title: '码代码2',
     hiddenConversation: false,
     hiddenAttachment: true,
@@ -531,14 +499,13 @@ let doneTaskItems = [
     taskStarred: false,
     createDate: 1525331956728,
     doneDate: 1525331966728,
-    dealine: null,
-    isCompleted: true
   },
 ]
 
 // let taskItems = [
 //   {
 //     selected: false,
+//     taskChecked: false,
 //     title: '码代码1',
 //     hiddenConversation: false,
 //     hiddenAttachment: true,
@@ -547,6 +514,7 @@ let doneTaskItems = [
 //     createDate: 1525331956726,
 //   },{
 //     selected: false,
+//     taskChecked: false,
 //     title: '代码3',
 //     hiddenConversation: false,
 //     hiddenAttachment: false,

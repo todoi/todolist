@@ -1,12 +1,12 @@
 <template>
   <div id="task-detail" class="animate">
       <div class="topbar">
-        <a class="detail-checkbox checkbox" tabindex="0">
+        <a class="detail-checkbox checkbox" tabindex="0"  @click.stop="emitCheckedEvent">
           <span title="标记为已完成">
-            <svg class="detail-check" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M17.5,4.5c0,-0.53 -0.211,-1.039 -0.586,-1.414c-0.375,-0.375 -0.884,-0.586 -1.414,-0.586c-3.271,0 -9.729,0 -13,0c-0.53,0 -1.039,0.211 -1.414,0.586c-0.375,0.375 -0.586,0.884 -0.586,1.414c0,3.271 0,9.729 0,13c0,0.53 0.211,1.039 0.586,1.414c0.375,0.375 0.884,0.586 1.414,0.586c3.271,0 9.729,0 13,0c0.53,0 1.039,-0.211 1.414,-0.586c0.375,-0.375 0.586,-0.884 0.586,-1.414c0,-3.271 0,-9.729 0,-13Z" style="fill:none;stroke-width:1px"></path> </g> </svg>
+            <svg class="detail-check" :class="{hidden: taskItem.isCompleted}"  width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M17.5,4.5c0,-0.53 -0.211,-1.039 -0.586,-1.414c-0.375,-0.375 -0.884,-0.586 -1.414,-0.586c-3.271,0 -9.729,0 -13,0c-0.53,0 -1.039,0.211 -1.414,0.586c-0.375,0.375 -0.586,0.884 -0.586,1.414c0,3.271 0,9.729 0,13c0,0.53 0.211,1.039 0.586,1.414c0.375,0.375 0.884,0.586 1.414,0.586c3.271,0 9.729,0 13,0c0.53,0 1.039,-0.211 1.414,-0.586c0.375,-0.375 0.586,-0.884 0.586,-1.414c0,-3.271 0,-9.729 0,-13Z" style="fill:none;stroke-width:1px"></path> </g> </svg>
           </span>
           <span title="标记为未完成">
-            <svg class="detail-checked hidden" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M8.489,15c-0.132,0 -0.259,-0.052 -0.354,-0.146c-1.485,-1.486 -3.134,-2.808 -4.904,-3.932c-0.232,-0.148 -0.302,-0.457 -0.153,-0.691c0.147,-0.232 0.456,-0.299 0.69,-0.153c1.652,1.049 3.202,2.266 4.618,3.621c3.242,-5.361 6.486,-9.443 10.767,-13.559c0.198,-0.192 0.517,-0.185 0.707,0.013c0.192,0.2 0.186,0.516 -0.014,0.707c-4.356,4.189 -7.625,8.344 -10.927,13.896c-0.079,0.133 -0.215,0.221 -0.368,0.24c-0.021,0.003 -0.041,0.004 -0.062,0.004" style="fill-rule:nonzero;"></path> <path d="M15.5,20l-13,0c-1.379,0 -2.5,-1.121 -2.5,-2.5l0,-13c0,-1.379 1.121,-2.5 2.5,-2.5l11,0c0.276,0 0.5,0.224 0.5,0.5c0,0.276 -0.224,0.5 -0.5,0.5l-11,0c-0.827,0 -1.5,0.673 -1.5,1.5l0,13c0,0.827 0.673,1.5 1.5,1.5l13,0c0.827,0 1.5,-0.673 1.5,-1.5l0,-11c0,-0.276 0.224,-0.5 0.5,-0.5c0.276,0 0.5,0.224 0.5,0.5l0,11c0,1.379 -1.121,2.5 -2.5,2.5" style="fill-rule:nonzero;"></path> </g> </svg>
+            <svg class="detail-checked" :class="{hidden: !taskItem.isCompleted}"  width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M8.489,15c-0.132,0 -0.259,-0.052 -0.354,-0.146c-1.485,-1.486 -3.134,-2.808 -4.904,-3.932c-0.232,-0.148 -0.302,-0.457 -0.153,-0.691c0.147,-0.232 0.456,-0.299 0.69,-0.153c1.652,1.049 3.202,2.266 4.618,3.621c3.242,-5.361 6.486,-9.443 10.767,-13.559c0.198,-0.192 0.517,-0.185 0.707,0.013c0.192,0.2 0.186,0.516 -0.014,0.707c-4.356,4.189 -7.625,8.344 -10.927,13.896c-0.079,0.133 -0.215,0.221 -0.368,0.24c-0.021,0.003 -0.041,0.004 -0.062,0.004" style="fill-rule:nonzero;"></path> <path d="M15.5,20l-13,0c-1.379,0 -2.5,-1.121 -2.5,-2.5l0,-13c0,-1.379 1.121,-2.5 2.5,-2.5l11,0c0.276,0 0.5,0.224 0.5,0.5c0,0.276 -0.224,0.5 -0.5,0.5l-11,0c-0.827,0 -1.5,0.673 -1.5,1.5l0,13c0,0.827 0.673,1.5 1.5,1.5l13,0c0.827,0 1.5,-0.673 1.5,-1.5l0,-11c0,-0.276 0.224,-0.5 0.5,-0.5c0.276,0 0.5,0.224 0.5,0.5l0,11c0,1.379 -1.121,2.5 -2.5,2.5" style="fill-rule:nonzero;"></path> </g> </svg>
           </span>
         </a>
 
@@ -22,14 +22,14 @@
         <div class="title-container">
           <div tabindex="0" class="title">
             <span class="title-text">
-              <div class="content-fakable">
-                <div class="display-view hidden">
+              <div class="content-fakable" @click="displayView = false">
+                <div class="display-view" :class="{hidden: !displayView}">
                   <span>{{ taskItem.title }}</span>
                 </div>
-                <div class="edit-view">
+                <div class="edit-view" :class="{hidden: displayView}" @focusout="displayView = true">
                   <div class="expandingArea active">
                     <pre>{{taskItem.title}}</pre>
-                    <textarea tabindex="0" v-model="taskItem.title">{{taskItem.title}}</textarea>
+                    <textarea tabindex="0" v-model="taskItem.title" @keypress.enter.prevent="displayView = true">{{taskItem.title}}</textarea>
                   </div>
                 </div>
               </div>
@@ -54,12 +54,14 @@
           </a>
         </div> -->
 
-        <div class="section section-item detail-date date" tabindex="0">
+        <div class="section section-item detail-date date" tabindex="0" :class="{'overdue' : taskItem.deadline && (new Date().getTime() > taskItem.deadline)}">
           <div class="section-icon">
             <svg class="date" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="date"> <path d="M2.5,7 C2.22,7 2,6.78 2,6.5 L2,3.5 C2,2.68 2.68,2 3.5,2 L16.5,2 C17.32,2 18,2.68 18,3.5 L18,6.5 C18,6.78 17.78,7 17.5,7 L2.5,7 Z M3,6 L17,6 L17,3.5 C17,3.22 16.78,3 16.5,3 L3.5,3 C3.22,3 3,3.22 3,3.5 L3,6 Z M3.5,18 C2.68,18 2,17.32 2,16.5 L2,8.5 C2,8.22 2.22,8 2.5,8 C2.78,8 3,8.22 3,8.5 L3,16.5 C3,16.78 3.22,17 3.5,17 L16.5,17 C16.78,17 17,16.78 17,16.5 L17,8.5 C17,8.22 17.22,8 17.5,8 C17.78,8 18,8.22 18,8.5 L18,16.5 C18,17.32 17.32,18 16.5,18 L3.5,18 Z M8.5,12 C7.68,12 7,11.32 7,10.5 L7,9.5 C7,8.68 7.68,8 8.5,8 C9.32,8 10,8.68 10,9.5 L10,10.5 C10,11.32 9.32,12 8.5,12 L8.5,12 Z M5.5,11 C5.22,11 5,10.78 5,10.5 L5,9.5 C5,9.22 5.22,9 5.5,9 C5.78,9 6,9.22 6,9.5 L6,10.5 C6,10.78 5.78,11 5.5,11 L5.5,11 Z M8.5,9 C8.22,9 8,9.22 8,9.5 L8,10.5 C8,10.78 8.22,11 8.5,11 C8.78,11 9,10.78 9,10.5 L9,9.5 C9,9.22 8.78,9 8.5,9 L8.5,9 Z M11.5,11 C11.22,11 11,10.78 11,10.5 L11,9.5 C11,9.22 11.22,9 11.5,9 C11.78,9 12,9.22 12,9.5 L12,10.5 C12,10.78 11.78,11 11.5,11 L11.5,11 Z M14.5,11 C14.22,11 14,10.78 14,10.5 L14,9.5 C14,9.22 14.22,9 14.5,9 C14.78,9 15,9.22 15,9.5 L15,10.5 C15,10.78 14.78,11 14.5,11 L14.5,11 Z M5.5,15 C5.22,15 5,14.78 5,14.5 L5,13.5 C5,13.22 5.22,13 5.5,13 C5.78,13 6,13.22 6,13.5 L6,14.5 C6,14.78 5.78,15 5.5,15 L5.5,15 Z M8.5,15 C8.22,15 8,14.78 8,14.5 L8,13.5 C8,13.22 8.22,13 8.5,13 C8.78,13 9,13.22 9,13.5 L9,14.5 C9,14.78 8.78,15 8.5,15 L8.5,15 Z M11.5,15 C11.22,15 11,14.78 11,14.5 L11,13.5 C11,13.22 11.22,13 11.5,13 C11.78,13 12,13.22 12,13.5 L12,14.5 C12,14.78 11.78,15 11.5,15 L11.5,15 Z M14.5,15 C14.22,15 14,14.78 14,14.5 L14,13.5 C14,13.22 14.22,13 14.5,13 C14.78,13 15,13.22 15,13.5 L15,14.5 C15,14.78 14.78,15 14.5,15 L14.5,15 Z"></path> </g> </g> </svg>
           </div>
           <div class="section-content">
-            <div class="section-title">设置到期日</div>
+            <div class="section-title">
+                {{ taskItem.deadline ? formatDate(taskItem.deadline) : '设置到期日'}}
+            </div>
             <div class="section-description"></div>
           </div>
           <a class="section-delete" title="删除" tabindex="0">
@@ -236,26 +238,26 @@
 <script>
 export default {
   name: 'TaskDetail',
+  props: ['username', 'taskItem'],
   data() {
     return {
-      taskItem: {
-        selected: false,
-        taskChecked: false,
-        title: '码代码1',
-        hiddenConversation: false,
-        hiddenAttachment: true,
-        hiddenRecurrence: true,
-        taskStarred: false,
-        createDate: 1525331956726,
-        deadline: 1525331976726,
-      },
+      displayView: true,
     }
   },
   methods: {
     toggleTaskStarred(){
-      console.log(0)
       this.taskItem.taskStarred = !this.taskItem.taskStarred
-    }
+    },
+    emitCheckedEvent(){
+      // this.taskItem.isCompleted = !this.taskItem.isCompleted
+      this.$emit('toggleDetailCheckbox', this.taskItem)
+    },
+    formatDate(timeStamp){
+    // 传入一个时间戳 返回一个 '2018-05-20' 的时间格式
+      return new Date(timeStamp).toLocaleString().split(' ')[0].replace(/(\d+)\/(\d+)\/(\d+)/g, function(str,$1, $2, $3){
+        return $1 + '-' + (Number($2) < 10 ? '0'+$2 : $2) + '-' + (Number($3) < 10 ? '0'+$3 : $3)
+      }) 
+    },
   }
 }
 
@@ -267,7 +269,7 @@ textarea{outline: none; background: transparent; font-weight: 500; line-height: 
 textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
 
 .topbar{min-height: 55px; position: relative;}
-.detail-checkbox{position: absolute; left: 18px; top: 18px; z-index: 1;}
+.detail-checkbox{position: absolute; left: 18px; top: 18px; z-index: 3;}
 .checkbox .detail-check{stroke: rgba(0, 0, 0, 0.35);}
 .checkbox .detail-checked{fill: rgba(0, 0, 0, 0.35);}
 .detail-star{position: absolute; top: 0; right: 0; z-index: 2;}
@@ -278,7 +280,7 @@ textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
 .content-fakable .display-view{white-space: pre-wrap; word-wrap: break-word; overflow: hidden; margin-top: 1px;}
 .content-fakable .display-view span{white-space: pre-wrap; user-select: text;}
 .expandingArea{position: relative;}
-.expandingArea pre{line-height: 24px; font-size: 16px; font-weight: bold; tab-size: 1; margin-top: 1px; padding: 0; border: none;
+.expandingArea pre{line-height: 24px; min-height: 24px; font-size: 16px; font-weight: bold; tab-size: 1; margin-top: 1px; padding: 0; border: none;
  visibility: hidden; display: block; white-space: pre-wrap; word-wrap: break-word; word-break: break-all;}
 .expandingArea textarea{line-height: 24px; font-size: 16px; 
   overflow: hidden; position: absolute; top: -1px; left: 0; width: 100%; height: 100%;
