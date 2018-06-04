@@ -54,7 +54,7 @@
           </a>
         </div> -->
 
-        <div class="section section-item detail-date date" tabindex="0" :class="{'overdue' : taskItem.deadline && (new Date().getTime() > taskItem.deadline)}">
+        <div class="section section-item detail-date" tabindex="0" :class="{'overdue' : taskItem.deadline && (new Date().getTime() > taskItem.deadline), date: taskItem.deadline}">
           <div class="section-icon">
             <svg class="date" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="date"> <path d="M2.5,7 C2.22,7 2,6.78 2,6.5 L2,3.5 C2,2.68 2.68,2 3.5,2 L16.5,2 C17.32,2 18,2.68 18,3.5 L18,6.5 C18,6.78 17.78,7 17.5,7 L2.5,7 Z M3,6 L17,6 L17,3.5 C17,3.22 16.78,3 16.5,3 L3.5,3 C3.22,3 3,3.22 3,3.5 L3,6 Z M3.5,18 C2.68,18 2,17.32 2,16.5 L2,8.5 C2,8.22 2.22,8 2.5,8 C2.78,8 3,8.22 3,8.5 L3,16.5 C3,16.78 3.22,17 3.5,17 L16.5,17 C16.78,17 17,16.78 17,16.5 L17,8.5 C17,8.22 17.22,8 17.5,8 C17.78,8 18,8.22 18,8.5 L18,16.5 C18,17.32 17.32,18 16.5,18 L3.5,18 Z M8.5,12 C7.68,12 7,11.32 7,10.5 L7,9.5 C7,8.68 7.68,8 8.5,8 C9.32,8 10,8.68 10,9.5 L10,10.5 C10,11.32 9.32,12 8.5,12 L8.5,12 Z M5.5,11 C5.22,11 5,10.78 5,10.5 L5,9.5 C5,9.22 5.22,9 5.5,9 C5.78,9 6,9.22 6,9.5 L6,10.5 C6,10.78 5.78,11 5.5,11 L5.5,11 Z M8.5,9 C8.22,9 8,9.22 8,9.5 L8,10.5 C8,10.78 8.22,11 8.5,11 C8.78,11 9,10.78 9,10.5 L9,9.5 C9,9.22 8.78,9 8.5,9 L8.5,9 Z M11.5,11 C11.22,11 11,10.78 11,10.5 L11,9.5 C11,9.22 11.22,9 11.5,9 C11.78,9 12,9.22 12,9.5 L12,10.5 C12,10.78 11.78,11 11.5,11 L11.5,11 Z M14.5,11 C14.22,11 14,10.78 14,10.5 L14,9.5 C14,9.22 14.22,9 14.5,9 C14.78,9 15,9.22 15,9.5 L15,10.5 C15,10.78 14.78,11 14.5,11 L14.5,11 Z M5.5,15 C5.22,15 5,14.78 5,14.5 L5,13.5 C5,13.22 5.22,13 5.5,13 C5.78,13 6,13.22 6,13.5 L6,14.5 C6,14.78 5.78,15 5.5,15 L5.5,15 Z M8.5,15 C8.22,15 8,14.78 8,14.5 L8,13.5 C8,13.22 8.22,13 8.5,13 C8.78,13 9,13.22 9,13.5 L9,14.5 C9,14.78 8.78,15 8.5,15 L8.5,15 Z M11.5,15 C11.22,15 11,14.78 11,14.5 L11,13.5 C11,13.22 11.22,13 11.5,13 C11.78,13 12,13.22 12,13.5 L12,14.5 C12,14.78 11.78,15 11.5,15 L11.5,15 Z M14.5,15 C14.22,15 14,14.78 14,14.5 L14,13.5 C14,13.22 14.22,13 14.5,13 C14.78,13 15,13.22 15,13.5 L15,14.5 C15,14.78 14.78,15 14.5,15 L14.5,15 Z"></path> </g> </g> </svg>
           </div>
@@ -62,9 +62,27 @@
             <div class="section-title">
                 {{ taskItem.deadline ? formatDate(taskItem.deadline) : '设置到期日'}}
             </div>
+            <date-picker 
+              v-model="taskItem.deadline" 
+              :input-class="'date-picker-input-taskdetail'" 
+              :wrapper-class="'date-picker-wrapper-taskdetail'"
+              :calendar-class="'date-picker-calendar-taskdetail'" 
+              :calendar-button-icon="'date-picker-icon-taskdetail'" 
+              :calendar-button-icon-content="''" 
+              :calendar-button="true" 
+              :highlighted="datePickerState.highlighted" 
+              v-on:closed="showCalenderTrigon = !showCalenderTrigon"
+              v-on:opened="showCalenderTrigon = !showCalenderTrigon"
+              :ref="'task-detail-date-picker'"
+            >
+                <template slot="afterDateInput">
+                  <div class="calender-trigon trigon1" v-show="showCalenderTrigon"></div>
+                  <div class="calender-trigon trigon2" v-show="showCalenderTrigon"></div>
+                </template>
+              </date-picker>
             <div class="section-description"></div>
           </div>
-          <a class="section-delete" title="删除" tabindex="0">
+          <a class="section-delete" title="删除" tabindex="0" @click="taskItem.deadline = null">
             <svg class="delete" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="delete"> <path d="M10.72,9.9975 L13.86,6.8575 C14.04,6.6575 14.04,6.3375 13.86,6.1375 C13.66,5.9575 13.34,5.9575 13.14,6.1375 L10,9.2775 L6.86,6.1375 C6.66,5.9575 6.34,5.9575 6.14,6.1375 C5.96,6.3375 5.96,6.6575 6.14,6.8575 L9.28,9.9975 L6.14,13.1375 C5.96,13.3375 5.96,13.6575 6.14,13.8575 C6.24,13.9575 6.38,13.9975 6.5,13.9975 C6.62,13.9975 6.76,13.9575 6.86,13.8575 L10,10.7175 L13.14,13.8575 C13.24,13.9575 13.38,13.9975 13.5,13.9975 C13.62,13.9975 13.76,13.9575 13.86,13.8575 C14.04,13.6575 14.04,13.3375 13.86,13.1375 L10.72,9.9975 Z" id="4"></path> </g> </g> </svg>
           </a>
         </div>
@@ -85,28 +103,28 @@
         <div class="section subtasks hasSubtasks" tabindex="0">
           <ul>
             <!-- done -->
-            <li tabindex="0" class="section-item subtask done" draggable="true">
+            <li tabindex="0" class="section-item subtask" draggable="true" v-for="(item, index) in taskItem.subTasks" :class="{done: item.isCompleted}">
               <div class="section-icon">
                 <!-- checked -->
-                <a class="subtask-checkbox check-box checked">
+                <a class="subtask-checkbox check-box" :class="{checked: item.isCompleted}" @click="toggleSubtaskCheckbox(index)">
                   <svg class="task-check" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M17.5,4.5c0,-0.53 -0.211,-1.039 -0.586,-1.414c-0.375,-0.375 -0.884,-0.586 -1.414,-0.586c-2.871,0 -8.129,0 -11,0c-0.53,0 -1.039,0.211 -1.414,0.586c-0.375,0.375 -0.586,0.884 -0.586,1.414c0,2.871 0,8.129 0,11c0,0.53 0.211,1.039 0.586,1.414c0.375,0.375 0.884,0.586 1.414,0.586c2.871,0 8.129,0 11,0c0.53,0 1.039,-0.211 1.414,-0.586c0.375,-0.375 0.586,-0.884 0.586,-1.414c0,-2.871 0,-8.129 0,-11Z" style="fill:none;stroke-width:1px"></path> </g> </svg>
                   <svg class="task-checked" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"> <g> <path d="M9.5,14c-0.132,0 -0.259,-0.052 -0.354,-0.146c-1.485,-1.486 -3.134,-2.808 -4.904,-3.932c-0.232,-0.148 -0.302,-0.457 -0.153,-0.691c0.147,-0.231 0.456,-0.299 0.69,-0.153c1.652,1.049 3.202,2.266 4.618,3.621c2.964,-4.9 5.989,-8.792 9.749,-12.553c0.196,-0.195 0.512,-0.195 0.708,0c0.195,0.196 0.195,0.512 0,0.708c-3.838,3.837 -6.899,7.817 -9.924,12.902c-0.079,0.133 -0.215,0.221 -0.368,0.24c-0.021,0.003 -0.041,0.004 -0.062,0.004"></path> <path d="M15.5,18l-11,0c-1.379,0 -2.5,-1.121 -2.5,-2.5l0,-11c0,-1.379 1.121,-2.5 2.5,-2.5l10,0c0.276,0 0.5,0.224 0.5,0.5c0,0.276 -0.224,0.5 -0.5,0.5l-10,0c-0.827,0 -1.5,0.673 -1.5,1.5l0,11c0,0.827 0.673,1.5 1.5,1.5l11,0c0.827,0 1.5,-0.673 1.5,-1.5l0,-9.5c0,-0.276 0.224,-0.5 0.5,-0.5c0.276,0 0.5,0.224 0.5,0.5l0,9.5c0,1.379 -1.121,2.5 -2.5,2.5"></path> </g> </svg>
                 </a>
               </div>
               <div class="section-content top">
-                <div class="section-title selectable">
-                  <div class="content-fakable">
-                    <div class="display-view">份额份额</div>
-                    <div class="edit-view hidden">
+                <div class="section-title selectable ">
+                  <div class="content-fakable" @click="item.displayView=false">
+                    <div class="display-view" :class="{hidden: !item.displayView}">{{ item.title }}</div>
+                    <div class="edit-view" :class="{hidden: item.displayView}" @focusout="item.displayView = true">
                       <div class="expandingArea active">
-                        <pre>份额份额</pre>
-                        <textarea tabindex="0">份额份额</textarea>
+                        <pre>{{ item.title }}</pre>
+                        <textarea tabindex="0" v-model="item.title">{{ item.title }}</textarea>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <a class="section-delete"><svg class="delete" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="delete"> <path d="M10.72,9.9975 L13.86,6.8575 C14.04,6.6575 14.04,6.3375 13.86,6.1375 C13.66,5.9575 13.34,5.9575 13.14,6.1375 L10,9.2775 L6.86,6.1375 C6.66,5.9575 6.34,5.9575 6.14,6.1375 C5.96,6.3375 5.96,6.6575 6.14,6.8575 L9.28,9.9975 L6.14,13.1375 C5.96,13.3375 5.96,13.6575 6.14,13.8575 C6.24,13.9575 6.38,13.9975 6.5,13.9975 C6.62,13.9975 6.76,13.9575 6.86,13.8575 L10,10.7175 L13.14,13.8575 C13.24,13.9575 13.38,13.9975 13.5,13.9975 C13.62,13.9975 13.76,13.9575 13.86,13.8575 C14.04,13.6575 14.04,13.3375 13.86,13.1375 L10.72,9.9975 Z" id="4"></path> </g> </g> </svg></a>
+              <a class="section-delete" @click="deleteTask(item, index)"><svg class="delete" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="delete"> <path d="M10.72,9.9975 L13.86,6.8575 C14.04,6.6575 14.04,6.3375 13.86,6.1375 C13.66,5.9575 13.34,5.9575 13.14,6.1375 L10,9.2775 L6.86,6.1375 C6.66,5.9575 6.34,5.9575 6.14,6.1375 C5.96,6.3375 5.96,6.6575 6.14,6.8575 L9.28,9.9975 L6.14,13.1375 C5.96,13.3375 5.96,13.6575 6.14,13.8575 C6.24,13.9575 6.38,13.9975 6.5,13.9975 C6.62,13.9975 6.76,13.9575 6.86,13.8575 L10,10.7175 L13.14,13.8575 C13.24,13.9575 13.38,13.9975 13.5,13.9975 C13.62,13.9975 13.76,13.9575 13.86,13.8575 C14.04,13.6575 14.04,13.3375 13.86,13.1375 L10.72,9.9975 Z" id="4"></path> </g> </g> </svg></a>
             </li>
           </ul>
           <div class="section-item subtask-add">
@@ -143,7 +161,8 @@
               </div>
             </div>
           </div>
-          <div class="section-attachments" title="删除" tabindex="0">
+          <!-- 功能暂不实现 -->
+          <div class="section-attachments hidden" title="删除" tabindex="0">
             <a class="open-fullscreen-note" title="全屏打开笔记" tabindex="0">
               <svg class="fullscreen" width="20px" height="20px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <g> <path d="M12.5,10c-0.276,0-0.5,0.224-0.5,0.5v3c0,0.275-0.225,0.5-0.5,0.5h-6C5.224,14,5,13.775,5,13.5v-6 C5,7.224,5.224,7,5.5,7h3C8.776,7,9,6.776,9,6.5S8.776,6,8.5,6h-3C4.673,6,4,6.673,4,7.5v6C4,14.327,4.673,15,5.5,15h6 c0.827,0,1.5-0.673,1.5-1.5v-3C13,10.224,12.776,10,12.5,10z"></path> <path d="M14.962,4.309c-0.051-0.122-0.148-0.22-0.271-0.271C14.63,4.013,14.565,4,14.5,4h-4 C10.224,4,10,4.224,10,4.5S10.224,5,10.5,5h2.793l-5.146,5.146c-0.195,0.195-0.195,0.512,0,0.707C8.244,10.951,8.372,11,8.5,11 s0.256-0.049,0.354-0.146L14,5.707V8.5C14,8.776,14.224,9,14.5,9S15,8.776,15,8.5v-4C15,4.435,14.987,4.37,14.962,4.309z"></path> </g> </svg>
             </a>
@@ -236,12 +255,17 @@
 </template>
 
 <script>
+import DatePicker from 'vuejs-datepicker'
+let chineseWeekDate = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
 export default {
   name: 'TaskDetail',
   props: ['username', 'taskItem'],
+  components: {DatePicker},
   data() {
     return {
       displayView: true,
+      datePickerState,
+      showCalenderTrigon: false,
     }
   },
   methods: {
@@ -249,15 +273,49 @@ export default {
       this.taskItem.taskStarred = !this.taskItem.taskStarred
     },
     emitCheckedEvent(){
-      // this.taskItem.isCompleted = !this.taskItem.isCompleted
+    // this.taskItem.isCompleted = !this.taskItem.isCompleted
       this.$emit('toggleDetailCheckbox', this.taskItem)
     },
-    formatDate(timeStamp){
-    // 传入一个时间戳 返回一个 '2018-05-20' 的时间格式
-      return new Date(timeStamp).toLocaleString().split(' ')[0].replace(/(\d+)\/(\d+)\/(\d+)/g, function(str,$1, $2, $3){
-        return $1 + '-' + (Number($2) < 10 ? '0'+$2 : $2) + '-' + (Number($3) < 10 ? '0'+$3 : $3)
-      }) 
+    toggleSubtaskCheckbox(index){
+      if(this.taskItem.subTasks[index].isCompleted) {
+      // 如果由完成改为未完成
+        this.taskItem.subTasks[index].isCompleted = false
+        this.taskItem.subTasksCompletedNumber --
+      }else{
+      // 如果由未完成改为已经完成
+        this.taskItem.subTasks[index].isCompleted = true
+        this.taskItem.subTasksCompletedNumber ++ 
+        // 将子任务的文字显示改为 div 而不是 pre
+      }
+      this.taskItem.subTasks[index].displayView = true
     },
+    deleteTask(item, index){
+      this.taskItem.subTasks.splice(index, 1)
+      if(item.isCompleted) this.taskItem.subTasksCompletedNumber--
+    },
+    formatDate(timeStamp){
+    // 传入一个时间戳 返回一个 '周二,5月15 到期' 的时间格式
+      let date = new Date(timeStamp)
+      let week = chineseWeekDate[date.getDay()]
+      let month = date.getMonth() + 1
+      let day = date.getDate()
+      return `${week},${month}月 ${day} 到期`
+    },
+  },
+  watch: {
+    taskItem(){
+    // 如果换了一个项目，关闭 date-picker 和 倒三角
+      this.$refs['task-detail-date-picker'].close()
+      this.showCalenderTrigon = false
+    }
+  }
+}
+
+let datePickerState = {
+  highlighted: {
+    dates: [ // Highlight an array of dates
+      new Date(), // 当天高亮
+    ],
   }
 }
 
@@ -277,11 +335,11 @@ textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
 .starred-wrapper{position: absolute; fill: #d74e48; right: 15px; top: -4px; z-index: 1; width: 22px; height: 49px;}
 .title-container{position: relative; z-index: 1;}
 .title{min-height: 24px; padding: 16px 50px 13px; font-size: 16px; text-align: left; line-height: 24px; font-weight: 600; border-bottom: 1px solid #ebebeb; outline: none; overflow: hidden;}
-.content-fakable .display-view{white-space: pre-wrap; word-wrap: break-word; overflow: hidden; margin-top: 1px;}
+.content-fakable .display-view{white-space: pre-wrap; word-wrap: break-word; word-break: break-all; overflow: hidden; margin-top: 1px;}
 .content-fakable .display-view span{white-space: pre-wrap; user-select: text;}
 .expandingArea{position: relative;}
 .expandingArea pre{line-height: 24px; min-height: 24px; font-size: 16px; font-weight: bold; tab-size: 1; margin-top: 1px; padding: 0; border: none;
- visibility: hidden; display: block; white-space: pre-wrap; word-wrap: break-word; word-break: break-all;}
+ visibility: hidden; display: block; white-space: pre-wrap; word-wrap: break-word; word-break: break-all;font-family: 'Avenir', Helvetica, Arial, sans-serif;}
 .expandingArea textarea{line-height: 24px; font-size: 16px; 
   overflow: hidden; position: absolute; top: -1px; left: 0; width: 100%; height: 100%;
   font-weight: bold; tab-size: 1; resize: none; color: #262626; margin-top: 1px; padding: 0; 
@@ -313,7 +371,8 @@ textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
 .section-item .section-content.top{align-self: flex-start; padding: 6px 0;}
 .subtask .section-title{color: #262626;}
 .subtask.done .display-view{text-decoration: line-through; color: #aaa;}
-.subtasks pre{line-height: 20px;}
+.subtasks pre{line-height: 20px; font-weight: normal;}
+.subtasks textarea{line-height: 20px; font-weight: normal;}
 .subtasks.hasSubtasks .plus-small{fill: #67ae2b;}
 
 .note.hasNote .section-icon svg{fill: #e29600;}

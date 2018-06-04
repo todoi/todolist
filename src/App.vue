@@ -52,11 +52,21 @@ div[tabindex]{outline: none;}
   }
 }
 
-/* 日期组件的样式 */ 
+/* 在 task 组件中日期组件的样式 */ 
 .date-picker-input{background: transparent; border: 0; display:none;}
 .date-picker-icon{display: block; width: 20px; height: 20px;}
 .date-picker-calendar{right:0;}
 .date-picker-wrapper{position: absolute; color: #000; user-select: none;}
 .vdp-datepicker__clear-button{position: absolute; top: -7px; right: -6px; color: #423e3e; width: 12px; height: 12px; line-height: 12px; text-align: center; border-radius: 50%; background: #fbfaf9;}
+
+/* 在 taskdetail 组件中日期组件的样式 */ 
+.date-picker-input-taskdetail{background: transparent; border: 0; display:none;}
+.date-picker-icon-taskdetail{position: absolute; width: 100%; height: 100%; top: 0; left: 0;}
+.date-picker-calendar-taskdetail{width:18vw; top: 90%; left: 50%; transform: translate(-50%);}
+.date-picker-wrapper-taskdetail{position: absolute; color: #000; user-select: none; top: 0; right: 40px; width: 100%; height: 100%; 
+  border-radius: 8px; }
+.calender-trigon{position: absolute; z-index: 99; width: 0; height: 0; top: 19px; left:50%; transform: translateX(-50%); border: 12px solid transparent; }
+.calender-trigon.trigon1{ border-bottom-color: #ccc; -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));}
+.calender-trigon.trigon2{ border-bottom-color: #fff ; z-index: 101; top: 20px;}
 
 </style>

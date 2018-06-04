@@ -149,7 +149,7 @@
                   </span>
                 </a>
                 <div class="taskItem-progress">
-                  <span class="taskItem-progress-bar"></span>
+                  <span class="taskItem-progress-bar" :style="item.subTasks.length && `width: ${item.subTasksCompletedNumber/item.subTasks.length*100}%`"></span>
                 </div>
               </div>
             </li>
@@ -190,7 +190,7 @@
                   </span>
                 </a>
                 <div class="taskItem-progress">
-                  <span class="taskItem-progress-bar"></span>
+                  <span class="taskItem-progress-bar" :style="item.subTasks.length && `width: ${item.subTasksCompletedNumber/item.subTasks.length*100}%`"></span>
                 </div>
               </div>
             </li>
@@ -234,7 +234,8 @@ export default {
     createDate: 1525331956726,
     deadline: 1525331976726,
     isCompleted: false,
-    subTasks: [],
+    subTasks: [{title:'份额份额', isCompleted: false, displayView: true,}, {title: 'dd', isCompleted: true, displayView: true,}, {title: 'hh', isCompleted: true, displayView:true,}],
+    subTasksCompletedNumber: 2,
   },{
     selected: false,
     title: '代码3',
@@ -246,6 +247,7 @@ export default {
     deadline: null,
     isCompleted: false,
     subTasks: [],
+    subTasksCompleteNumber: 0
   }
       ],
       actionBarTopSort:[
@@ -324,6 +326,7 @@ export default {
         deadline: null, // 到期时间
         isCompleted: false, // 是否已经完成
         subTasks: [],   // 子任务数组
+        subTasksCompleteNumber: 0, // 子任务完成的数量
       }
     },
     addTask (){
@@ -532,7 +535,9 @@ let doneTaskItems = [
     createDate: 1525331956728,
     doneDate: 1525331966728,
     dealine: null,
-    isCompleted: true
+    isCompleted: true,
+    subTasks: [],
+    subTasksCompleteNumber: 0,
   },
 ]
 
@@ -765,6 +770,9 @@ let actionBarTopMore = [
 .checkbox.checked .task-checked{display: block;}
 .taskItem.done .taskItem-titleWrapper-title{text-decoration: line-through;}
 .taskItem.done .taskItem-titleMeta-info{font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+
+.taskItem-progress{outline: 1px solid red; position: absolute; top: 0; left: 0; right: 0; height: 100%; opacity: 1; transition: all 225ms ease; pointer-events: none; filter: none;}
+.taskItem-progress-bar{background: rgba(14,145,197,0.1); display: block; height: 100%; width: 0%; transition:all 225ms ease; border-right-width: 1px; border-right-style: solid; border-right-color: rgba(14,145,197,0.2);}
 
 </style>
 
