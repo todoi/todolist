@@ -112,7 +112,7 @@
             <a class="group-header" href="/#/lists/inbox">inbox</a>
           </h2>
           <ol class="tasks">
-            <li tabindex="0" class="taskItem" draggable="true" v-for="(item, index) in taskItems" :class="{selected: item.selected}" @click="selectTaskItem($event, index)" @click.double="editTask(item)">
+            <li tabindex="0" class="taskItem" draggable="true" v-for="(item, index) in taskItems" :class="{selected: item.selected}" @click="selectTaskItem($event, index)" @dblclick="editTask(item)">
               <div class="taskItem-body">
                 <a class="taskItem-checkboxWrapper checkbox" tabindex="-1" @click.stop="toggleTaskCheck(item)">
                   <span title="标记为已完成">
@@ -125,7 +125,7 @@
                 <div class="taskItem-titleWrapper" tabindex="-1">
                   <span class="taskItem-titleWrapper-title">{{ item.title }}</span>
                 </div>
-                <span class="conversations-wrapper" :class="{hidden: item.hiddenConversation}" title="此任务已有评论" tabindex="-1">
+                <span class="conversations-wrapper" :class="{hidden: !item.comments.length}" title="此任务已有评论" tabindex="-1">
                   <svg class="conversations-small rtl-flip" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g class="outlined"> <path d="M6.26,15 C5.98,15 5.68,14.96 5.38,14.9 C5.18,14.84 5.04,14.68 5,14.48 C4.98,14.26 5.08,14.06 5.26,13.96 C5.78,13.68 6.02,13.3 6,12.8 C6,12.48 5.84,12.16 5.64,11.76 C5.36,11.18 5,10.48 5,9.5 C5,7.02 7.24,5 10,5 C12.76,5 15,7.02 15,9.5 C15,11.98 12.76,14 10,14 C9.58,14 9.16,13.96 8.76,13.86 C8.38,14.28 7.56,15 6.26,15 L6.26,15 Z M10,6 C7.8,6 6,7.56 6,9.5 C6,10.24 6.28,10.78 6.54,11.32 C6.78,11.8 7,12.26 7,12.78 C7,13.22 6.9,13.62 6.7,13.96 C7.64,13.78 8.12,13.06 8.14,13.02 C8.26,12.84 8.5,12.76 8.7,12.82 C9.14,12.94 9.56,13 10,13 C12.2,13 14,11.42 14,9.5 C14,7.56 12.2,6 10,6 L10,6 Z"></path> </g> <g class="filled"> <path d="M6.26,15 C5.98,15 5.68,14.96 5.38,14.9 C5.18,14.84 5.04,14.68 5,14.48 C4.98,14.28 5.08,14.08 5.26,13.98 C5.78,13.68 6.02,13.32 6,12.8 C6,12.5 5.84,12.16 5.64,11.78 C5.36,11.2 5,10.48 5,9.5 C5,7.02 7.24,5 10,5 C12.76,5 15,7.02 15,9.5 C15,11.98 12.76,14 10,14 C9.58,14 9.16,13.96 8.76,13.88 C8.38,14.28 7.56,15 6.26,15 L6.26,15 Z" opacity="0"></path> </g> </svg>
                 </span>
                 <span class="attachment-wrapper" :class="{hidden: item.hiddenAttachment}" title="此任务带有附件" tabindex="-1">
@@ -137,7 +137,8 @@
                   :class="item.deadline ? (new Date().getTime() > item.deadline && 'overdue')  : 'hidden' ">
                     {{formatDate(item.deadline)}}
                 </span>
-                <span class="recurrence-wrapper" :class="{hidden: item.hiddenRecurrence}" title="Recurring to-do" tabindex="-1">
+                <!-- 暂时没有实现 -->
+                <span class="recurrence-wrapper hidden" title="Recurring to-do" tabindex="-1">
                   <svg class="recurrence" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="recurrence"> <path d="M17.5193115,10 C17.2393115,10 16.9993115,10.2 16.9793115,10.46 C16.7393115,14.12 13.6793115,17 10.0193115,17 C6.15931146,17 3.01931146,13.86 3.01931146,10 C3.01931146,6.14 6.15931146,3 10.0193115,3 C13.3393115,3 15.2593115,5.48 16.3993115,6.98 C16.4193115,6.98 16.4193115,7 16.4193115,7 L12.9793115,7 C12.7193115,7 12.4793115,7.22 12.4793115,7.5 C12.4793115,7.78 12.7193115,8 12.9793115,8 C17.8393115,8 17.5593115,8.02 17.6793115,7.96 C17.8593115,7.88 17.9793115,7.7 17.9793115,7.5 L17.9793115,2.5 C17.9793115,2.22 17.7593115,2 17.4793115,2 C17.2193115,2 16.9793115,2.22 16.9793115,2.5 L16.9793115,6.08 C15.7793115,4.52 13.6193115,2 10.0193115,2 C5.59931146,2 2.01931146,5.58 2.01931146,10 C2.01931146,14.42 5.59931146,18 10.0193115,18 C14.1993115,18 17.6993115,14.72 17.9793115,10.54 C17.9993115,10.26 17.7993115,10.02 17.5193115,10 L17.5193115,10 Z M9.47931146,5 C9.21931146,5 8.97931146,5.22 8.97931146,5.5 L8.97931146,10.5 C8.97931146,10.78 9.21931146,11 9.47931146,11 L13.4793115,11 C13.7593115,11 13.9793115,10.78 13.9793115,10.5 C13.9793115,10.22 13.7593115,10 13.4793115,10 L9.97931146,10 L9.97931146,5.5 C9.97931146,5.22 9.75931146,5 9.47931146,5 L9.47931146,5 Z" id="f"></path> </g> </g> </svg>
                 </span>
                 <a class="taskItem-star" tabindex="-1" @click.stop="toggleTaskStarred(index)">
@@ -158,7 +159,8 @@
             <a href="/#/lists/342865566" class="group-header" @click="toggleDoneTaskItems">显示已完成任务</a>
           </h2>
           <ol class="tasks" :class="{hidden: this.isShowDoneItems}">
-            <li tabindex="0" class="taskItem done" draggable="true" v-for="(item, index) in doneTaskItems" :class="{selected: item.selected}" @click="selectTaskItem($event, index, true)" @click.double="editTask(item)">
+            <!-- 暂不实现拖动的功能 -->
+            <li tabindex="0" class="taskItem done" draggable="true" v-for="(item, index) in doneTaskItems" :class="{selected: item.selected}" @click="selectTaskItem($event, index, true)" @dblclick="editTask(item)">
               <div class="taskItem-body">
                 <a class="taskItem-checkboxWrapper checkbox checked" tabindex="-1" @click.stop="toggleTaskCheck(item)">
                   <span title="标记为已完成">
@@ -205,7 +207,7 @@
     </div>
 
     <!-- 编辑任务 -->
-    <task-detail :username="username" v-show="showDetail" :taskItem="editItem" @toggleDetailCheckbox="toggleTaskCheck"></task-detail>
+    <task-detail :username="username" v-show="showDetail" :taskItem="editItem" @toggleDetailCheckbox="toggleTaskCheck" @close="showDetail = false" @delete="deleteTask"></task-detail>
   </div>
 </template>
 
@@ -227,27 +229,28 @@ export default {
   {
     selected: false,
     title: '码代码1',
-    hiddenConversation: false,
-    hiddenAttachment: true,
-    hiddenRecurrence: true,
     taskStarred: false,
     createDate: 1525331956726,
     deadline: 1525331976726,
     isCompleted: false,
     subTasks: [{title:'份额份额', isCompleted: false, displayView: true,}, {title: 'dd', isCompleted: true, displayView: true,}, {title: 'hh', isCompleted: true, displayView:true,}],
     subTasksCompletedNumber: 2,
+    note: {content: 'jfieji', displayView: true},
+    comments:[
+      {content:'fjidjifedf', username: 'todoi', createDate: 1525332096726, imgSrc: '//via.placeholder.com/50x50'},
+      {content:'fjidjifedfdddddddd', username: 'todoi', createDate: 1525343096726, imgSrc: '//via.placeholder.com/50x50'}
+    ]
   },{
     selected: false,
     title: '代码3',
-    hiddenConversation: false,
-    hiddenAttachment: false,
-    hiddenRecurrence: false,
     taskStarred: true,
     createDate: 1525331956727,
     deadline: null,
     isCompleted: false,
     subTasks: [],
-    subTasksCompleteNumber: 0
+    subTasksCompleteNumber: 0,
+    note: {content: '', displayView: true},
+    comments: [],
   }
       ],
       actionBarTopSort:[
@@ -318,15 +321,14 @@ export default {
       return {
         selected: false, // 用于设置被选中时的样式
         title: '',
-        hiddenConversation: true,  // 是否有评论 没有就隐藏
-        hiddenAttachment: true,  // 是否有附件 没有就隐藏
-        hiddenRecurrence: true,  // 是否设置了到期日 没有就隐藏
         taskStarred: false,  // 是否加了星星
         createDate: null, // 创建的时间
         deadline: null, // 到期时间
         isCompleted: false, // 是否已经完成
         subTasks: [],   // 子任务数组
         subTasksCompleteNumber: 0, // 子任务完成的数量
+        note: {content: '', displayView: true},  // 备注
+        comments: [], // 评论
       }
     },
     addTask (){
@@ -483,6 +485,14 @@ export default {
       this.showDetail = true
       this.editItem = item
     },
+    deleteTask(item){
+      if(item.isCompleted){
+        this.doneTaskItems.splice(this.doneTaskItems.indexOf(item), 1)
+      }else{
+        this.taskItems.splice(this.taskItems.indexOf(item), 1)
+      }
+      this.showDetail = false
+    },
     formatDate(timeStamp){
     // 传入一个时间戳 返回一个 '2018-05-20' 的时间格式
       return new Date(timeStamp).toLocaleString().split(' ')[0].replace(/(\d+)\/(\d+)\/(\d+)/g, function(str,$1, $2, $3){
@@ -528,9 +538,6 @@ let doneTaskItems = [
   {
     selected: false,
     title: '码代码2',
-    hiddenConversation: false,
-    hiddenAttachment: true,
-    hiddenRecurrence: true,
     taskStarred: false,
     createDate: 1525331956728,
     doneDate: 1525331966728,
@@ -538,6 +545,8 @@ let doneTaskItems = [
     isCompleted: true,
     subTasks: [],
     subTasksCompleteNumber: 0,
+    note: {content: '', displayView: true},
+    comment: [],
   },
 ]
 
