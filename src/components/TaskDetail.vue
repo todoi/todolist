@@ -172,8 +172,8 @@
           </div>
         </div>
 
-        <div class="section section-files" tabindex="0">
-          <div class="audio-recorder hidden">
+        <div class="section section-files" tabindex="0" :class="{hasFiles: taskItem.fileList.length}">
+          <!-- <div class="audio-recorder hidden">
             <div class="audio-recorder-container">
               <audio></audio>
               <a class="start-recording-audio" tabindex="0" title="开始/暂停录音"><span class="icon-file record-audio"></span></a>
@@ -182,24 +182,25 @@
               <a class="clear-recorded-audio" tabindex="0" title="清除录音"><span class="icon-file clear-audio"></span></a>
               <a class="upload-recorded-audio disabled" tabindex="0" title="上传录音"><span class="icon-file upload-audio"></span></a>
             </div>
-          </div>
-          <div class="section-item files-add">
+          </div> -->
+          <div class="section-item files-add" @click="triggerUpload">
             <div class="section-icon add-file" tabindex="0">
               <svg class="clip" width="20" height="20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <g> <path id="XMLID_2_" d="M7,17c-1.335,0-2.591-0.521-3.536-1.465S2,13.336,2,12c0-1.335,0.52-2.591,1.464-3.536l5.312-5.312 c0.195-0.195,0.512-0.195,0.707,0s0.195,0.512,0,0.707L4.171,9.171C3.416,9.927,3,10.932,3,12s0.416,2.073,1.171,2.828 c1.511,1.512,4.146,1.512,5.657,0l6.441-6.441c0.473-0.472,0.732-1.1,0.732-1.768c0-0.668-0.26-1.296-0.732-1.768 c-0.945-0.945-2.592-0.943-3.535,0l-6.441,6.441c-0.39,0.39-0.39,1.024,0,1.414c0.378,0.377,1.036,0.377,1.414,0l4.562-4.562 c0.195-0.195,0.512-0.195,0.707,0s0.195,0.512,0,0.707l-4.562,4.562c-0.755,0.756-2.073,0.756-2.828,0 c-0.78-0.779-0.78-2.049,0-2.828l6.441-6.441c1.32-1.321,3.627-1.323,4.949,0c0.661,0.661,1.025,1.54,1.025,2.475 s-0.364,1.814-1.025,2.475l-6.441,6.441C9.591,16.479,8.335,17,7,17z"></path> </g> </svg>
             </div>
             <div class="section-content">
               <div class="section-title files-add-label">
                 <span>添加一个文件</span>
-                <input type="file" mutiple style="display:none;">
               </div>
             </div>
-            <div class="section-attachments">
+            <!-- 录音功能暂不实现 -->
+            <!-- <div class="section-attachments">
               <span class="add-sound" tabindex="0" title="添加录音">
                 <svg class="speech" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill-rule="evenodd"> <g id="speech"> <path d="M10,13 C11.92,13 13.5,11.42 13.5,9.5 L13.5,5.5 C13.5,3.58 11.92,2 10,2 C8.08,2 6.5,3.58 6.5,5.5 L6.5,9.5 C6.5,11.42 8.08,13 10,13 L10,13 Z M7.5,5.5 C7.5,4.12 8.62,3 10,3 C11.38,3 12.5,4.12 12.5,5.5 L12.5,9.5 C12.5,10.88 11.38,12 10,12 C8.62,12 7.5,10.88 7.5,9.5 L7.5,5.5 Z M15.5,8.5 C15.5,8.22 15.28,8 15,8 C14.72,8 14.5,8.22 14.5,8.5 L14.5,9.5 C14.5,11.98 12.48,14 10,14 C7.52,14 5.5,11.98 5.5,9.5 L5.5,8.5 C5.5,8.22 5.28,8 5,8 C4.72,8 4.5,8.22 4.5,8.5 L4.5,9.5 C4.5,12.36 6.7,14.72 9.5,14.98 L9.5,17 L6,17 C5.72,17 5.5,17.22 5.5,17.5 C5.5,17.78 5.72,18 6,18 L14,18 C14.28,18 14.5,17.78 14.5,17.5 C14.5,17.22 14.28,17 14,17 L10.5,17 L10.5,14.98 C13.3,14.72 15.5,12.36 15.5,9.5 L15.5,8.5 Z" id="O"></path> </g> </g> </svg>
               </span>
-            </div>
+            </div> -->
           </div>
-          <ul class="files-list"></ul>
+          <!-- <ul class="files-list"></ul> -->
+          <upload-file ref="fileList" :fileList="taskItem.fileList"></upload-file>
         </div>
 
         <div class="comments-main has-comments">
@@ -260,11 +261,12 @@
 
 <script>
 import DatePicker from 'vuejs-datepicker'
+import UploadFile from './UploadFile.vue'
 let chineseWeekDate = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
 export default {
   name: 'TaskDetail',
   props: ['username', 'taskItem'],
-  components: {DatePicker},
+  components: {DatePicker, UploadFile},
   data() {
     return {
       displayView: true,
@@ -366,6 +368,9 @@ export default {
     createCommentTemplate(){
       return {content:'', username: this.username, imgSrc: '//via.placeholder.com/50x50', createDate: null}
     },
+    triggerUpload(){
+      this.$refs.fileList.$refs.select.click()
+    },
   },
   watch: {
     taskItem(){
@@ -427,6 +432,7 @@ textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
 .section-item.date.overdue .reminder, .section-item.date.overdue .date{fill: #b3312d;}
 .section-item.date .reminder, .section-item.date .date{fill: #328ad6;}
 .section-item .section-description{font-size: 12px;}
+.section-files.hasFiles .section-icon svg{fill: #63b4be;}
 
 .subtasks a{color: #328ad6;}
 .subtasks .section-icon .task-check{stroke: #67ae2b;}
