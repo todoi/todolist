@@ -224,7 +224,7 @@ export default {
       // show: true, // 用于显示date-picker
       // date: '', // date-picker 中 date 双向绑定
       datePickerState,
-      showDetail: false,
+      showDetail: false, // 打开任务编辑区域
       taskItems: [
   {
     selected: false,

@@ -76,7 +76,7 @@ export default {
   name: 'TodoList',
   data() {
     return {
-      showPage: 'todolist',
+      showPage: 'homePage',
       hidePassword: true,
       login: {
         username: 'todoi',
@@ -224,6 +224,26 @@ export default {
     },
     innerMethods() { //是被其他函数使用的函数，不是直接与DOM 中的事件绑定的
       return {
+        getAvatarSrc(username){
+          let letter = username.trim().slice(0,1)
+          let canvas = document.createElement('canvas')
+          let context = canvas.getContext('2d')
+          let dataSrc
+
+          canvas.width = 50
+          canvas.height = 50
+          context.fillStyle= '#addb80' //背景色
+          context.fillRect(0, 0, 50, 50)
+
+          context.font = '20px sans-serif'
+          context.fillStyle = '#fff' //文字颜色
+          context.textAlign = 'center' // 水平居中
+          context.textBaseline = 'middle' // 垂直居中
+          context.fillText('t', 25, 25)
+
+          dataSrc = canvas.toDataURL()
+          return dataSrc
+        },
         lazyLoad: function(inputObject, callback, delay) {
           if (inputObject.timer) {
             window.clearTimeout(inputObject.timer)
@@ -300,6 +320,7 @@ export default {
           var username = new UserName();
           username.set('username', attributes.username);
           username.set('email', attributes.email);
+          // username.set('imgSrc', attributes.imgSrc);
           username.save().then(function(results) {
             // console.log(results)
           }, function(error) {
