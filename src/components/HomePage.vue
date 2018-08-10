@@ -1,12 +1,14 @@
 <template>
-  <section id="home-page" style="display: ;">
+  <div id="home-page">
     <div class="topbar-wrapper">
       <div class="topbar clearfix">
         <span class="logo-title"><i class="light-yellow">to</i><i class="light-green">to</i><i class="light-blue">do</i></span>
-        <label class="topbar-label topbar-login">
-          <input type="radio" name="sign-type" value="login" @click="passPageName('login')">登录</label>
-        <label class="topbar-label topbar-signup">
-          <input type="radio" name="sign-type" value="signup" @click="passPageName('signup')">注册</label>
+        <label class="topbar-label">
+          <a class="btn-link topbar-login" href="login"><input type="radio" name="sign-type" value="login">登录</a>
+        </label>
+        <label class="topbar-label">
+          <a class="btn-link topbar-signup" href="signup"><input type="radio" name="sign-type" value="signup">注册</a>
+        </label>
       </div>
     </div>
     <div class="main-wrapper">
@@ -22,20 +24,11 @@
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 <script>
 export default {
-  name: 'HomePage',
-  date (){
-    return {
-    }
-  },
-  methods: {
-    passPageName: function (pageName){
-        this.$emit('change-page', pageName)
-    }
-  }
+  name: 'HomePage'
 }
 
 </script>
@@ -48,8 +41,9 @@ i{font-style: normal;}
 .light-blue{color: #B1E1E5;}
 .light-green{color: #79B913;}
 .light-yellow{color: #B7B53E;}
-.topbar-label {float: right; line-height: 60px;}
-.topbar-label>input {width: 0; }
+.topbar-label{float: right; line-height: 60px}
+.btn-link {display: inline-block;}
+.topbar-label input {width: 0; }
 .topbar-login {padding: 0 24px; color: #3a3a3a; font-weight: 600; }
 .topbar-login:hover {background: #f5f5f5; }
 .topbar-signup {padding: 0 50px; line-height: 40px; margin-top: 10px; -webkit-font-smoothing: antialiased; border-radius: 4px; transition: all 0.2s ease; color: #fff; background: #52bad5; }

@@ -1,10 +1,10 @@
 <template>
-  <section id="todo-page">
+  <div id="todo-page">
     <div class="todo-page-inner">
       <lists-navigation :username="username"></lists-navigation>
       <task class="tasks" :username="username"></task>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>

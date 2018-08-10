@@ -1,44 +1,3 @@
-<template>
-  <div class="pages">
-    <section>
-      <home-page v-show="showPage === 'homePage'" v-on:change-page="changePage"></home-page>
-    </section>
-    <section class="sign-page" v-show="showPage === 'login' || showPage === 'signup'">
-      <sign-up :showPage="showPage"></sign-up>
-      <sign-in :showPage="showPage"></sign-in>
-    </section>
-    <section>
-      <todo-page v-show="showPage === 'todolist'" :username="login.username"></todo-page>
-    </section>
-  </div>
-</template>
-<script>
-import HomePage from './components/HomePage'
-import TodoPage from './components/TodoPage'
-import SignUp from './components/SignUp'
-import SignIn from './components/SignIn'
-
-
-export default {
-  name: 'App',
-  components: { HomePage, TodoPage, SignUp, SignIn },
-  data () {
-    return {
-      showPage: 'homePage',
-      login: {
-        username: 'todoi'
-      }
-    }
-  },
-  methods: {
-    changePage: function(pageName) {
-      this.showPage = pageName
-    }
-  }
-}
-</script>
-
-<style>
 html{ font-family: "Helvetica Neue",Arial,Helvetica,sans-serif; font-size: 16px;}
 *{ margin: 0; padding: 0; box-sizing: border-box; }
 :before, :after{ box-sizing: border-box; }
@@ -99,4 +58,3 @@ div[tabindex]{outline: none;}
 .calender-trigon.trigon1{ border-bottom-color: #ccc; -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));}
 .calender-trigon.trigon2{ border-bottom-color: #fff ; z-index: 101; top: 20px;}
 
-</style>
