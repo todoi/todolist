@@ -1,69 +1,102 @@
 <template>
   <div class="login sign-type">
     <a href="/" class="back-home">返回主页</a>
-    <h3>reset password</h3>
+    <div class="reset-successful" v-if="isSuccess">
+      <h3>Check your email</h3>
+      <svg width="65" height="64" viewBox="0 0 31 31" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="none" fill-rule="evenodd"><path d="M12.902 21.79l-4.965-4.926c-.355-.35-.357-.925-.006-1.28.353-.355.926-.357 1.282-.005l3.702 3.672 8.394-8.182c.36-.35.93-.342 1.28.016.348.358.34.932-.017 1.28l-9.668 9.425" fill="#80bb35"></path><path d="M29.826 15.663c0 7.823-6.34 14.163-14.163 14.163-7.822 0-14.163-6.34-14.163-14.163C1.5 7.843 7.84 1.5 15.663 1.5c3.804 0 7.258 1.5 9.802 3.94 2.687 2.578 4.36 6.205 4.36 10.223z" stroke="#80bb35"></path></g></svg>
+      <p class="reset-successful-message">you will receive a password recovery link at your email address in a few minutes.</p>
+    </div>
+    <div v-else>
+      <h3>reset password</h3>
+      <p 
+        class="clearfix" 
+        :class="emailError ? 'login-incorrect-visible' : 'login-incorrect-hidden'"
+        >
+        {{ errorMessage }}
+        <span 
+          class="btn-close-error" 
+          @click="close()">
+          <svg aria-hidden="true" class="octicon octicon-x" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48z"></path></svg>
+        </span>
+      </p>
 
-    <form>
-      <div class="field-email relative">
-        <label 
-          for="signup-email" 
-          class="label-name block-tag" 
-          :class="{'label-signup-error': inputStatus === 'error'}"
-        >Email address</label>
-        <input 
+      <form @submit.prevent="sendEmail()">
+        <div class="field-email relative">
+          <label 
+            for="signup-email" 
+            class="label-name block-tag" 
+            >Email address</label>
+          <input 
           name="signup-email" 
           id="signup-email" 
           type="text" 
           placeholder="you@example.com" 
           class="page-sign-input input-focus" 
-          :class="classEmailAutocheck" 
           v-model="content" 
-          @input="validateError('email')"
+          @input="emailError = false"
           required >
-        <span 
-          class="signup-error-message" 
-          v-show="inputStatus === 'error'"
-        >{{ getEmailErrorMs }}</span>
-      </div>
+        </div>
 
-      <button 
-        type="submit" 
-        class="btn-login block-tag" 
-        :class="submitClass" 
-        @click="sendEmail()"
-      >
-      SEND RESET LINK
-      </button>
+        <button 
+          type="submit" 
+          class="btn-login block-tag" 
+          :class="submitClass" 
+          >
+          {{ btnContent }}
+        </button>
+      </form>
+    </div>
 
-      <div class="field-password-footer">
-        <a class="span-underline" href="/login">Back to login</a>
-      </div>
-    </form>
+    <div class="field-password-footer">
+      <a class="span-underline" href="/login">Back to login</a>
+    </div>
   </div>
 </template>
 
 <script>
+  import AV from '../lib/leancloud.js'
   export default {
     name: 'SignIn',
     data () {
       return {
-        inputStatus: false,
-        classEmailAutocheck: false,
+        isSuccess: false,
         content: '',
         submitClass: '',
-      }
-    },
-    computed: {
-      getEmailErrorMs () {
-        return this.content
+        btnContent: 'SEND RESET LINK',
+        errorMessage: '',
+        emailError: false
       }
     },
     methods: {
-      sendEmail () {
-        return ''
+      switchSubmitStatus (type) { //改变按钮为等待状态
+        if (type === 'loading') {
+          this.submitClass = 'btn-loading'
+          this.btnContent = 'Please Wait ...'
+        } else if (type === 'successful') {
+          this.submitClass = ''
+          this.btnContent = 'successful'
+        } else if (type === 'again') {
+          this.submitClass = ''
+          this.btnContent = 'Try Again'
+        } else {
+          submitClass = '',
+          btnContent = 'SEND RESET LINK'
+        }
       },
-      validateError () {
-        return ''
+      sendEmail () {
+        this.switchSubmitStatus('loading')
+        AV.User.requestPasswordReset(this.content)
+          .then((success) => {
+            this.switchSubmitStatus('successful')
+            this.isSuccess = true
+          }, (error) => {
+            this.emailError = true
+            this.errorMessage = error.rawMessage
+            this.switchSubmitStatus('again')
+          });
+      },
+      close() {
+        this.emailError = false
       }
     }
   }
@@ -124,6 +157,19 @@
   left: 16px;
   top: 16px;
   color: rgba(0, 0, 0, 0.6);
+}
+
+.reset-successful {
+  text-align: center;
+}
+
+.reset-successful-message {
+  text-align: left;
+  line-height: 1.5;
+  font-size: 0.875em;
+  color: #4a4a4a;
+  margin-top: 24px;
+  margin-bottom: 24px;
 }
 
 .back-home::before {
@@ -225,7 +271,7 @@ input::-webkit-input-placeholder {
   height: 18px;
 }
 
-.login-incorrect {
+.login-incorrect-visible {
   position: relative;
   padding: 15px 20px;
   margin-bottom: 20px;
@@ -234,6 +280,14 @@ input::-webkit-input-placeholder {
   border-radius: 5px;
   border: 1px solid rgba(27, 31, 35, 0.15);
   background-color: #ffdce0;
+  visibility: visible;
+  opacity: 1;
+  transition: visible 0s, opacity 0.5s linear ;
+}
+
+.login-incorrect-hidden{
+  visibility: hidden;
+  opacity: 0;
 }
 
 .btn-close-error {
@@ -247,66 +301,6 @@ input::-webkit-input-placeholder {
   vertical-align: text-bottom;
   fill: currentcolor;
   opacity: 0.6;
-}
-
-.is-autocheck-successful {
-  padding-right: 30px;
-  background: url('../assets/images/success.png') no-repeat right 8px center;
-  background-size: 16px 16px;
-}
-
-.is-autocheck-loading {
-  padding-right: 30px;
-  background-image: url('../assets/images/check-loading.gif');
-  background-size: 16px 16px;
-  background-position: right 8px center;
-  background-repeat: no-repeat;
-}
-
-.is-autocheck-errored {
-  padding-right: 30px;
-  border-color: #E75B41;
-  background: url('../assets/images/error.png') no-repeat right 8px center;
-  background-size: 16px 16px;
-}
-
-.signup-error-message {
-  position: absolute;
-  z-index: 1;
-  top: 88px;
-  max-width: 400px;
-  padding: 6px 8px;
-  font-size: 13px;
-  color: #86181d;
-  border: 1px solid;
-  border-radius: 3px;
-  background-color: #ffdce0;
-  border-color: #cea0a5;
-}
-
-.signup-error-message:before {
-  position: absolute;
-  width: 0;
-  height: 0;
-  bottom: 100%;
-  left: 10px;
-  pointer-events: none;
-  content: " ";
-  border: 6px solid transparent;
-  margin-left: -1px;
-  border-bottom-color: #cea0a5;
-}
-
-.signup-error-message:after {
-  position: absolute;
-  width: 0;
-  height: 0;
-  bottom: 100%;
-  left: 10px;
-  pointer-events: none;
-  content: " ";
-  border: 5px solid transparent;
-  border-bottom-color: #ffdce0;
 }
 
 .label-signup-error {
