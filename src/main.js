@@ -8,6 +8,7 @@ import HomePage from './components/HomePage'
 import TodoPage from './components/TodoPage'
 import SignUp from './components/SignUp'
 import SignIn from './components/SignIn'
+import Xyz from './components/ResetPassword'
 
 require('./assets/css/fonts.css')
 require('./assets/css/reset.css')
@@ -18,12 +19,14 @@ const Home = { components: {HomePage}, template: '<HomePage />' }
 const Todo = { components: {TodoPage}, template: '<TodoPage />' }
 const Signup = { components: {SignUp}, template: '<SignUp />' }
 const Signin = { components: {SignIn}, template: '<SignIn />' }
+const xyz = { components: {Xyz}, template: '<Xyz />' }
 
 const routes = {
   '/': Home,
   '/signup': Signup,
   '/login': Signin,
-  '/todopage': TodoPage
+  '/todopage': TodoPage,
+  '/p/reset': xyz
 }
 
 

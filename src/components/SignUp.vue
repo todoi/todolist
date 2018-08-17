@@ -1,9 +1,10 @@
 <template>
   <div class="signup sign-type">
+    <a href="/" class="back-home">返回主页</a>
     <h3>sign up</h3>
-    <p class="signtype-tip">Already have a TodoList account?<a class="span-underline" href="login">Log in here</a></p>
+    <p class="signtype-tip">Already have a TodoList account?<a class="span-underline" href="/login">Log in here</a></p>
 
-    <form @submit.prevent="btnSubmit()" >
+    <form @submit.prevent="signUp()" >
       <div class="field-username relative">
         <label 
           class="label-name block-tag" 
@@ -78,8 +79,8 @@
           placeholder="Create a password" 
           class="page-sign-input input-focus" 
           :class="classPasswordAutocheck" 
-          v-model="password.content" 
           :type="hidePassword ? 'password' : 'text'" 
+          v-model="password.content" 
           @input="validateError('password')"
           required
         >
@@ -230,7 +231,7 @@
           btnContent = 'Sign up for TodoList'
         }
       },
-      btnSubmit () {
+      signUp () {
         this.switchSubmitStatus('loading')
         window.setTimeout(() => { //因为点击事件先触发，而验证用户输入需要时间，所以要延迟500ms 等验证结果
           if (this.alertMessage()){
@@ -244,13 +245,25 @@
           user.signUp().then((loginedUser) => {
             // console.log(loginedUser);
             alert('注册成功')
-            switchSubmitStatus('successful')
-            this.innerMethods().updateUserAndEmailStore(loginedUser.attributes)
+            this.switchSubmitStatus('successful')
+            this.updateUserAndEmailStore(loginedUser.attributes)
+            window.location.href = '/login'
           }, (error) => {
-            console.dir(error.code)
+            alert(getErrorMessages(error.code))
             switchSubmitStatus('again')
           });
         }, 500)
+      },
+      updateUserAndEmailStore ({username, email}) {
+        var Store = AV.Object.extend('UsernameAndEmail');
+        var store = new Store();
+        store.set('username', username);
+        store.set('email', email);
+        store.save().then((results) => {
+          // console.log(results)
+        }, function(error) {
+          console.dir(error)
+        });
       },
       alertMessage () {
         let message = ''
@@ -259,22 +272,6 @@
         if (this.password.errorCode) message += '密码填写错误'
         message && alert(message)
         return message ? true : false
-      },
-      innerMethods() { //是被其他函数使用的函数，不是直接与DOM 中的事件绑定的
-        return {
-          updateUserAndEmailStore: function(attributes) {
-            var UserName = AV.Object.extend('UsernameAndEmail');
-            var username = new UserName();
-            username.set('username', attributes.username);
-            username.set('email', attributes.email);
-            // username.set('imgSrc', attributes.imgSrc);
-            username.save().then(function(results) {
-              // console.log(results)
-            }, function(error) {
-              console.dir(error)
-            });
-          }
-        }
       }
     }
   }
@@ -297,11 +294,15 @@
 
 .span-underline {
   margin-left: 6px;
-  border-bottom: 1px solid;
   vertical-align: baseline;
   color: #237D93;
   cursor: pointer;
   user-select: none;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.span-underline:hover {
+  color: #237D93;
 }
 
 .hide {
@@ -328,6 +329,25 @@
   padding-left: 55px;
 }
 
+.back-home {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.back-home::before {
+  content: '< ';
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.back-home:hover {
+  color: #237D93;
+}
+
+.back-home:hover::before {
+  color: #237D93;
+}
 
 .sign-type {
   max-width: 500px;
@@ -447,55 +467,6 @@ input::-webkit-input-placeholder {
   display: flex;
   align-items: center;
   justify-content: space-around;
-}
-
-.label-checkbox-remember {
-  cursor: pointer;
-  line-height: 24px;
-  font-weight: 600;
-  user-select: none;
-}
-
-.checkbox-remember {
-  width: 24px;
-  height: 24px;
-  margin-right: 6px;
-  cursor: pointer;
-  vertical-align: top;
-  border: 0;
-  outline: 0 none;
-  -webkit-appearance: none;
-  overflow: hidden;
-  background: url('../assets/images/checkmarks-sprite.png') no-repeat 0 0;
-  background-size: 24px 384px;
-}
-
-.checkbox-remember-initial {
-  background-position: 0 0;
-}
-
-.checkbox-remember-hover {
-  background-position: 0 -24px;
-}
-
-.checkbox-remember-checked {
-  background-position: 0 -144px;
-}
-
-.checkbox-remember-focused {
-  background-position: 0 -72px;
-}
-
-.checkbox-remember-checked-focused {
-  background-position: 0 -96px;
-}
-
-.checkbox-remember-checked-hover {
-  background-position: 0 -120px;
-}
-
-.checkbox-remember-checked-hover-focused {
-  background-position: 0 -120px;
 }
 
 .field-password-footer .span-underline {
