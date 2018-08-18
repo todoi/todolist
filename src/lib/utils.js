@@ -1,7 +1,7 @@
 import AV from './leancloud'
 export default {
   getAvatarSrc(username){
-    let letter = username.trim().slice(0,1)
+    let letter = username.trim().slice(0,1).toUpperCase()
     let canvas = document.createElement('canvas')
     let context = canvas.getContext('2d')
     let dataSrc
@@ -11,11 +11,11 @@ export default {
     context.fillStyle= '#addb80' //背景色
     context.fillRect(0, 0, 50, 50)
 
-    context.font = '20px sans-serif'
+    context.font = '25px sans-serif'
     context.fillStyle = '#fff' //文字颜色
     context.textAlign = 'center' // 水平居中
     context.textBaseline = 'middle' // 垂直居中
-    context.fillText('t', 25, 25)
+    context.fillText(letter, 25, 25)
 
     dataSrc = canvas.toDataURL()
     return dataSrc
@@ -73,5 +73,25 @@ export default {
       }
     }
     return errorCode
+  },
+  getAVUser (user) {
+    let {id, attributes: { username }} = user || AV.User.current() || { attributes: {} }
+    return {id, username}
+  },
+  goTodoPage () {
+    let currentUser = this.getAVUser()
+    if (currentUser.id) {
+      window.location.href = '/todopage'
+    }
+  },
+  goHomePage () {
+    let currentUser = this.getAVUser()
+    if (!currentUser.id) {
+      window.location.href = '/'
+    }
+  },
+  logOut () {
+    AV.User.logOut()
+    window.location.href = '/'
   },
 }

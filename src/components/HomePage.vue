@@ -27,8 +27,12 @@
   </div>
 </template>
 <script>
+import utils from '../lib/utils'
 export default {
-  name: 'HomePage'
+  name: 'HomePage',
+  created () {
+    utils.goTodoPage()
+  }
 }
 
 </script>

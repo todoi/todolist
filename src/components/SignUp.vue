@@ -109,6 +109,9 @@
 
   export default {
     name: 'Aba',
+    created () {
+      utils.goTodoPage()
+    },
     props: ['showPage'],
     data () {
       return {

@@ -75,8 +75,13 @@
 
 <script>
   import AV from '../lib/leancloud.js'
+  import utils from '../lib/utils'
+
   export default {
     name: 'SignIn',
+    created () {
+      utils.goTodoPage()
+    },
     data () {
       return {
         hidePassword: true,
@@ -111,7 +116,7 @@
         this.switchSubmitStatus('loading')
         AV.User.logIn(this.username, this.password).then((loginedUser) => {
           this.switchSubmitStatus('successful')
-          window.location.href = '/todolist'
+          window.location.href = '/todopage'
         }, (error) => {
           this.errorMessage = error.rawMessage 
           // 'Incorrect username or password.'
