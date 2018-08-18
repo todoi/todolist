@@ -2,7 +2,7 @@
   <div id="todo-page">
     <lists-navigation></lists-navigation>
     <Task class="tasks"></Task>
-    <button @click="logOut()">登出</button>
+    <button @click="logOut()" style="margin-top: 50px;">登出</button>
   </div>
 </template>
 
