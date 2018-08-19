@@ -77,8 +77,8 @@
           <!-- invisible transparent -->
           <div class="addTask-meta" :class="{'invisible transparent': hiddenAllAddTaskMeta}">
             <a class="addTask-meta-star float-right" title="星标任务" :class="{hidden: addTaskData.hiddenAddTaskMeta.star}" @click="toggleNewTaskStarred">
-              <svg class="full-starred" width="20px" height="20px" v-if="addTaskData.starred">
-                <use xlink:href="#icon-full-starred"></use>
+              <svg class="starred-full" width="20px" height="20px" v-if="addTaskData.starred">
+                <use xlink:href="#icon-starred-full"></use>
               </svg>
               <svg class="starred" width="20px" height="20px" v-else>
                 <use xlink:href="#icon-starred"></use>
@@ -187,12 +187,12 @@
                 <a class="taskItem-star" tabindex="-1" @click.stop="toggleTaskStarred(index)">
                   <span class="star-wrapper" :class="{hidden: item.taskStarred}" title="标记为星标">
                     <svg width="18px" height="18px">
-                      <use xlink:href="#icon-star-small"></use>
+                      <use xlink:href="#icon-star-taskItem"></use>
                     </svg>
                   </span>
                   <span class="starred-wrapper" :class="{hidden: !item.taskStarred}" title="移除星标">
                     <svg width="22px" height="44px">
-                      <use xlink:href="#icon-starred-small"></use>
+                      <use xlink:href="#icon-starred-taskItem"></use>
                     </svg>
                   </span>
                 </a>
@@ -244,12 +244,12 @@
                 <a class="taskItem-star" tabindex="-1" @click.stop="toggleTaskStarred(index, true)">
                   <span class="star-wrapper" :class="{hidden: item.taskStarred}" title="标记为星标">
                     <svg width="18px" height="18px">
-                      <use xlink:href="#icon-star-small"></use>
+                      <use xlink:href="#icon-star-taskItem"></use>
                     </svg>
                   </span>
                   <span class="starred-wrapper" :class="{hidden: !item.taskStarred}" title="移除星标">
                     <svg width="22px" height="44px">
-                      <use xlink:href="#icon-starred-small"></use>
+                      <use xlink:href="#icon-starred-taskItem"></use>
                     </svg>
                   </span>
                 </a>
@@ -288,7 +288,7 @@ export default {
       // show: true, // 用于显示date-picker
       // date: '', // date-picker 中 date 双向绑定
       datePickerState,
-      showDetail: false, // 打开任务编辑区域
+      showDetail: true, // 打开任务编辑区域
       taskItems: [
   {
     selected: false,
@@ -721,7 +721,7 @@ let actionBarTopMore = [
 .addTask-meta > .addTask-meta-star{margin-right: 9px;}
 
 .addTask-meta-star, .addTask-meta-assign, .addTask-meta-date{opacity: 0.7; color: #fff;}
-.addTask-meta-star .full-starred{opacity: 1; filter:none;}
+.addTask-meta-star .starred-full {opacity: 1; filter:none;}
 .addTask-meta svg{fill: #fff;}
 .addTask-meta-star.starred svg path:last-child{opacity: 1; filter: none;}
 
