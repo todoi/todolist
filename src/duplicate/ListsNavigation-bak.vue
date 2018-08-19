@@ -1,135 +1,106 @@
 <template>
-  <div id="lists-nav" v-bind:class="isCollapsed">
-    <div class="lists-inner" tabindex="0">
-      <div class="search-toolbar">
-        <a class="toggle-icon" tabindex="0" title="toggle-slidebar" v-on:click="collapse">
-          <svg class="list-toggle" width="20px" height="20px">
-            <use xlink:href="#icon-list-toggle"></use>
+  <div>
+    <div class="user-toolbar">
+      <a class="user" tabindex="0">
+        <span class="user-avatar">
+          <img :src="getAvatarSrc" alt="" class="avatar medium">
+        </span>
+        <span class="user-name">{{ user.username }}</span>
+        <span class="user-arrow">
+          <svg width="20px" height="20px">
+            <use xlink:href="#icon-down-arrow"></use>
           </svg>
+        </span>
+        <div id="sync">
+          <span class="offline-wrapper hidden">
+            <svg class="offline" width="20px" height="20px" >
+              <use xlink:href="#icon-offline"></use>
+            </svg>
+          </span>
+          <span class="syncing-wrapper hidden">
+            <svg class="sync" width="20px" height="20px" >
+              <use xlink:href="#icon-sync"></use>
+            </svg>
+          </span>
+        </div>
+      </a>
+      <!-- 这两个功能被砍掉了 -->
+      <div class="stream-counts hidden">
+        <!-- 有设置提醒的任务 -->
+        <a class="activities-count">
+          <svg class="bell" width="20px" height="20px">
+            <use xlink:href="#icon-bell"></use>
+          </svg>
+          <span class="count hidden">10</span>
         </a>
-
-        <div class="search-input-wrapper">
-          <input class="search-input chromeless" type="text" v-model="searchText" ref="search" @click="changeSearchIcon($event)">
-        </div>
-
-        <div class="search-icon-wrapper">
-          <label class="search-icon" v-if="searchIcon === 'searchingIcon'">
-            <svg class="search rtl-flip" width="20px" height="20px">
-              <use xlink:href="#icon-search"></use>
-            </svg>
-            <input type="radio" class="hidden" name="search-icon" value="stopSearchingIcon" v-model="searchIcon">
-          </label>
-          <label class="search-stop-icon" v-else>
-            <svg width="20px" height="20px">
-              <use xlink:href="#icon-search-stop"></use>
-            </svg>
-            <input type="radio" class="hidden" name="search-icon" value="searchingIcon" v-model="searchIcon">
-          </label>
-        </div>
+        <!-- 被评论过的 -->
+        <a class="conversations-count">
+          <svg class="conversations rtl-flip" width="20px" height="20px" >
+            <use xlink:href="#icon-conversations"></use>
+          </svg>
+          <span class="count hidden">0</span>
+        </a>
       </div>
+    </div>
 
-      <div class="user-toolbar">
-        <a class="user" tabindex="0">
-          <span class="user-avatar">
-            <img :src="getAvatarSrc" alt="" class="avatar medium">
-          </span>
-          <span class="user-name">{{ user.username }}</span>
-          <span class="user-arrow">
-            <svg width="20px" height="20px">
-              <use xlink:href="#icon-down-arrow"></use>
-            </svg>
-          </span>
-          <div id="sync">
-            <span class="offline-wrapper hidden">
-              <svg class="offline" width="20px" height="20px" >
-                <use xlink:href="#icon-offline"></use>
+    <div class="lists-scroll">
+      <ul class="filters-collection">
+        <li v-for="(item, index) in filtersCollection" class="sidebar-item" v-bind:tabindex="item.isAnimateUp ? -1 : 0" v-bind:class="{'animate-up': item.isAnimateUp, active: item.active, overdue: item.overdue}" @click="selectItem($event, index, 'filters')">
+          <a v-bind:href="'#/lists/' + item.className">
+            <span class="list-icon" :title="item.title">
+
+              <svg :class="item.className" width="20px" height="20px">
+                <use :xlink:href="`#icon-${item.className}`"></use>
+              </svg>
+
+            </span>
+            <span class="title">{{item.title}}</span>
+            <span class="overdue-count">{{item.overdueCount}}</span>
+            <span class="count">{{item.count}}</span>
+            <span class="list-options" title="清单选项">
+              <svg class="options rtl-flip" width="20px" height="20px">
+                <use xlink:href="#icon-options"></use>
               </svg>
             </span>
-            <span class="syncing-wrapper hidden">
-              <svg class="sync" width="20px" height="20px" >
-                <use xlink:href="#icon-sync"></use>
+          </a>
+        </li>
+      </ul>
+
+      <ul class="lists-collection">
+        <li v-for="(item, index) in listsCollection" class="sidebar-item owner list draggable" :class="{active: item.active}" @click="selectItem($event, index, 'lists')">
+          <a v-bind:href="item.href">
+            <span class="list-icon" :title="item.title">
+              <svg class="list rtl-flip" width="20px" height="20px">
+                <use xlink:href="#icon-list"></use>
               </svg>
             </span>
-          </div>
-        </a>
-        <!-- 这两个功能被砍掉了 -->
-        <div class="stream-counts hidden">
-          <!-- 有设置提醒的任务 -->
-          <a class="activities-count">
-            <svg class="bell" width="20px" height="20px">
-              <use xlink:href="#icon-bell"></use>
-            </svg>
-            <span class="count hidden">10</span>
+            <span class="title">{{item.title}}</span>
+            <span class="overdue-count">{{item.overdueCount}}</span>
+            <span class="count">{{item.count}}</span>
+            <span class="list-options" title="清单选项">
+              <svg class="options rtl-flip" width="20px" height="20px">
+                <use xlink:href="#icon-options"></use>
+              </svg>
+            </span>
           </a>
-          <!-- 被评论过的 -->
-          <a class="conversations-count">
-            <svg class="conversations rtl-flip" width="20px" height="20px" >
-              <use xlink:href="#icon-conversations"></use>
-            </svg>
-            <span class="count hidden">0</span>
-          </a>
-        </div>
-      </div>
+        </li>
+      </ul>
 
-      <div class="lists-scroll">
-        <ul class="filters-collection">
-          <li v-for="(item, index) in filtersCollection" class="sidebar-item" v-bind:tabindex="item.isAnimateUp ? -1 : 0" v-bind:class="{'animate-up': item.isAnimateUp, active: item.active, overdue: item.overdue}" @click="selectItem($event, index, 'filters')">
-            <a v-bind:href="'#/lists/' + item.className">
-              <span class="list-icon" :title="item.title">
-
-                <svg :class="item.className" width="20px" height="20px">
-                  <use :xlink:href="`#icon-${item.className}`"></use>
-                </svg>
-
-              </span>
-              <span class="title">{{item.title}}</span>
-              <span class="overdue-count">{{item.overdueCount}}</span>
-              <span class="count">{{item.count}}</span>
-              <span class="list-options" title="清单选项">
-                <svg class="options rtl-flip" width="20px" height="20px">
-                  <use xlink:href="#icon-options"></use>
-                </svg>
-              </span>
-            </a>
-          </li>
-        </ul>
-
-        <ul class="lists-collection">
-          <li v-for="(item, index) in listsCollection" class="sidebar-item owner list draggable" :class="{active: item.active}" @click="selectItem($event, index, 'lists')">
-            <a v-bind:href="item.href">
-              <span class="list-icon" :title="item.title">
-                <svg class="list rtl-flip" width="20px" height="20px">
-                  <use xlink:href="#icon-list"></use>
-                </svg>
-              </span>
-              <span class="title">{{item.title}}</span>
-              <span class="overdue-count">{{item.overdueCount}}</span>
-              <span class="count">{{item.count}}</span>
-              <span class="list-options" title="清单选项">
-                <svg class="options rtl-flip" width="20px" height="20px">
-                  <use xlink:href="#icon-options"></use>
-                </svg>
-              </span>
-            </a>
-          </li>
-        </ul>
-
-        <a class="more-button" v-on:click="collapse">
-          <svg class="more-vertical" width="20px" height="20px">
-            <use xlink:href="#icon-more-vertical"></use>
+      <a class="more-button" v-on:click="collapse">
+        <svg class="more-vertical" width="20px" height="20px">
+          <use xlink:href="#icon-more-vertical"></use>
+        </svg>
+      </a>
+    </div>
+    <div class="sidebar-actions">
+      <a class="sidebar-actions-addList">
+        <span class="sidebar-actions-icon">
+          <svg class="plus-small" width="20px" height="20px">
+            <use xlink:href="#icon-plus-small"></use>
           </svg>
-        </a>
-      </div>
-      <div class="sidebar-actions">
-        <a class="sidebar-actions-addList">
-          <span class="sidebar-actions-icon">
-            <svg class="plus-small" width="20px" height="20px">
-              <use xlink:href="#icon-plus-small"></use>
-            </svg>
-          </span>
-          <span class="sidebar-actions-label">创建清单</span>
-        </a>
-      </div>
+        </span>
+        <span class="sidebar-actions-label">创建清单</span>
+      </a>
     </div>
   </div>
 </template>
@@ -149,9 +120,6 @@ export default {
   },
   data() {
     return {
-      searchIcon: 'searchingIcon',
-      searchText: '',
-      isCollapsed: '',
       filtersCollection: [
         {
           isAnimateUp: false,  //是否隐藏
@@ -231,21 +199,9 @@ export default {
       ],
     }
   },
-  watch: {
-    searchIcon: function(){
-      if (this.searchIcon === 'stopSearchingIcon'){
-        this.$refs.search.focus()
-      }else{
-        this.searchText = ''
-      }
-    },
-  },
   methods: {
-    changeSearchIcon: function($event){
-      this.searchIcon = 'stopSearchingIcon'
-    },
-    collapse: function (){
-      this.isCollapsed = this.isCollapsed ? '' : 'collapsed'
+    collapse () {
+      this.$emit('collapse')
     },
     selectItem: function($event, index, listArea){
       this.filtersCollection.forEach(function(item, index){item.active = false})
@@ -263,21 +219,10 @@ export default {
 </script>
 <style scoped>
 *{box-sizing: content-box;}
-#lists-nav :focus{outline: none;}
 
-#lists-nav{width: 280px; background: #f7f7f7; z-index: 3; overflow: hidden; transition: width 100ms ease; user-select: none;}
-#lists-nav.collapsed{width: 42px; flex-basis: 42px;}
 #lists-nav.collapsed #sync, #lists-nav.collapsed .count, #lists-nav.collapsed .folder-arrow, #lists-nav.collapsed .folder-option, #lists-nav.collapsed .lists-collection, #lists-nav.collapsed .new-list-dropzone, #lists-nav.collapsed .options, #lists-nav.collapsed .overdue-count, #lists-nav.collapsed .sidebar-actions-label, #lists-nav.collapsed .stream-counts, #lists-nav.collapsed .tagCloud, #lists-nav.collapsed .title, #lists-nav.collapsed .user-arrow, #lists-nav.collapsed .user-name, #lists-nav.collapsed .foldersGuide {
     display: none;
 }
-
-.lists-inner{display: flex;position: relative; flex-direction: column; height: 100vh;}
-.search-toolbar{height: 45px; background: #0c7fad; display: flex;}
-.list-toggle{width: 20px; height: 20px; fill: #fff; padding: 13px 11px 12px 11px; flex-shrink:0; box-sizing: content-box;}
-.search-input-wrapper{flex:1;}
-.search-input{width: 100%; box-sizing: border-box; transition: all 0.15s ease-in-out;}
-.search-icon-wrapper{width: 20px; height: 20px; fill:#fff; padding: 13px 11px 12px 11px; flex-shrink: 0; box-sizing: content-box;}
-.search-input{font-size: 18px; color: #fff; height: 45px; -webkit-app-regionter:cover no-repeat;}
 
 .user-toolbar{height: 45px; display: box; display: flex; -webkit-box-align: center; align-items: center; padding-top: 2px; padding-bottom: 4px;}
 .user-toolbar svg{fill: #737272;}
