@@ -1,9 +1,11 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
+import collections  from './modules/collections'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  strict: process.env.NODE_ENV !== 'production',
   state: {
     user: {
       username: '',
@@ -14,5 +16,8 @@ export default new Vuex.Store({
     setUser (state, user) {
       state.user = user
     } 
+  },
+  modules: {
+    collections,
   }
 })
