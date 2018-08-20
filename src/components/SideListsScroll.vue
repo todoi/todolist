@@ -31,6 +31,9 @@ export default {
     },
     listsCollection () {
       return this.$store.state.collections.listsCollection 
+    },
+    getCurrentCollection () {
+      return this.$store.getters.getCurrentCollection 
     }
   },
   methods: {
@@ -38,14 +41,7 @@ export default {
       this.$emit('collapse')
     },
     selectItem: function({index, listArea}){
-      this.filtersCollection.forEach(function(item, index){item.active = false})
-      this.listsCollection.forEach(function(item, index){item.active = false})
-      if(listArea === 'filters'){
-        this.filtersCollection[index]['active'] = 'true'
-      }
-      if(listArea === 'lists'){
-        this.listsCollection[index]['active'] = 'true'
-      }
+      this.$store.commit('switchCollection', {index, listArea})
     },
   }
 }

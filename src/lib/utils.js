@@ -75,8 +75,8 @@ export default {
     return errorCode
   },
   getAVUser (user) {
-    let {id, attributes: { username }} = user || AV.User.current() || { attributes: {} }
-    return {id, username}
+    let {id, attributes: { username, email }} = user || AV.User.current() || { attributes: {} }
+    return {id, username, email}
   },
   goTodoPage () {
     let currentUser = this.getAVUser()

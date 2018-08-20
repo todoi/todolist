@@ -1,10 +1,11 @@
 <template>
   <div class="user-toolbar">
+    <Popover />
     <a class="user" tabindex="0">
       <span class="user-avatar">
         <img 
-          alt=""
           class="avatar medium"
+          :title="user.username"
           :src="getAvatarSrc" >
       </span>
       <span class="user-name">{{ user.username }}</span>
@@ -48,9 +49,11 @@
 
 <script>
 import utils from '../lib/utils'
+import Popover from './Popover'
 
 export default {
   name: 'SideUserToolbar',
+  components: { Popover },
   data () {
     return {}
   },
@@ -72,7 +75,7 @@ export default {
     display: none;
 }
 
-.user-toolbar{height: 45px; display: box; display: flex; -webkit-box-align: center; align-items: center; padding-top: 2px; padding-bottom: 4px;}
+.user-toolbar{height: 45px; display: flex; -webkit-box-align: center; align-items: center; padding-top: 2px; padding-bottom: 4px;}
 .user-toolbar svg{fill: #737272;}
 .user{height: 45px; display: flex; align-items: center; flex-basis: 42px; flex-shrink: 0; flex-grow: 1; overflow: hidden;}
 .user-avatar{ padding: 0 5px; flex-shrink: 0;}

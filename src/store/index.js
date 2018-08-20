@@ -8,8 +8,9 @@ export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   state: {
     user: {
+      id: '',
       username: '',
-      id: ''
+      email: ''
     }
   },
   mutations: {

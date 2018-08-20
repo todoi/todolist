@@ -71,5 +71,28 @@ export default {
     ],
 
   },
-  mutations: {}
+  getters: {
+    getCurrentCollection (state) {
+     let collection =  state.filtersCollection.find((item, index) => {
+        return item.active
+      })
+      if (collection) { return collection } 
+      collection = state.listsCollection.find((item, index) => {
+        return item.active
+      })
+      return collection
+    }
+  },
+  mutations: {
+    switchCollection (state, {index, listArea}) {
+      state.filtersCollection.forEach(function(item, index){item.active = false})
+      state.listsCollection.forEach(function(item, index){item.active = false})
+      if(listArea === 'filters'){
+        state.filtersCollection[index]['active'] = 'true'
+      }
+      if(listArea === 'lists'){
+        state.listsCollection[index]['active'] = 'true'
+      }
+    }
+  }
 }
