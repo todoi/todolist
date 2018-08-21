@@ -11,12 +11,12 @@ export default new Vuex.Store({
       id: '',
       username: '',
       email: ''
-    }
+    },
   },
   mutations: {
     setUser (state, user) {
       state.user = user
-    } 
+    },
   },
   modules: {
     collections,

@@ -4,12 +4,16 @@
       <div id="lists-nav" :class="{'collapsed': isCollapsed}">
         <div class="lists-inner" tabindex="0">
           <SideSearchToolbar @collapse="isCollapsed = !isCollapsed" />
-          <SideUserToolbar />
+          <SideUserToolbar @openPopover="openPopover"/>
           <SideListsScroll @collapse="isCollapsed = !isCollapsed" />
           <SidebarActions />
         </div>
       </div>
       <Task class="tasks"></Task>
+    </div>
+    <div class="popover-area" tabindex="-1" ref="popover" @focusout="closePopover">
+      <UserPopover v-show="currentPopover === 'user'"/>
+      <ActivityPopover v-show="currentPopover === 'activity'"/>
     </div>
   </div>
 </template>
@@ -20,6 +24,8 @@ import SideUserToolbar from './SideUserToolbar'
 import SideListsScroll from './SideListsScroll'
 import SidebarActions from './SidebarActions'
 import Task from './Task'
+import UserPopover from './UserPopover'
+import ActivityPopover from './ActivityPopover'
 
 import AV from '../lib/leancloud'
 import utils from '../lib/utils'
@@ -27,19 +33,28 @@ import icon from '../assets/icons.js'
 
 export default {
   name: 'TodoPage',
-  components: {SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, Task},
-  data (){
-    return {
-      isCollapsed: false,
-    }
-  },
+  components: {SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, Task, UserPopover, ActivityPopover},
   created () {
     this.$store.commit('setUser', utils.getAVUser())
     utils.goHomePage()
   },
+  data (){
+    return {
+      isCollapsed: false,
+      currentPopover: ''
+    }
+  },
+  computed: {
+  },
   methods: {
-    logOut () {
-      utils.logOut()
+    openPopover (type) {
+      this.currentPopover = type
+      this.$nextTick().then(() => {
+        this.$refs.popover.focus()
+      })
+    },
+    closePopover () {
+      this.currentPopover = ''
     }
   }
 }

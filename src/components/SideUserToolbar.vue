@@ -1,7 +1,6 @@
 <template>
   <div class="user-toolbar">
-    <Popover />
-    <a class="user" tabindex="0">
+    <a class="user" tabindex="0" @click="openPopover('user')">
       <span class="user-avatar">
         <img 
           class="avatar medium"
@@ -30,7 +29,7 @@
     <!-- 这两个功能被砍掉了 -->
     <div class="stream-counts">
       <!-- 有设置提醒的任务 -->
-      <a class="activities-count">
+      <a class="activities-count" @click="openPopover('activity')">
         <svg class="bell" width="20px" height="20px">
           <use xlink:href="#icon-bell"></use>
         </svg>
@@ -49,11 +48,9 @@
 
 <script>
 import utils from '../lib/utils'
-import Popover from './Popover'
 
 export default {
   name: 'SideUserToolbar',
-  components: { Popover },
   data () {
     return {}
   },
@@ -65,6 +62,11 @@ export default {
       return utils.getAvatarSrc(this.user.username)
     }
   },
+  methods: {
+    openPopover (type) {
+      this.$emit('openPopover', type)
+    }
+  }
 }
 </script>
 
