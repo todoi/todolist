@@ -23,7 +23,7 @@
     <div class="search-icon-wrapper">
       <label 
         class="search-icon" 
-        v-if="searchIcon === 'searchingIcon'"
+        v-if="searchIcon === 'search'"
       >
         <svg class="search rtl-flip" width="20px" height="20px">
           <use xlink:href="#icon-search"></use>
@@ -32,7 +32,7 @@
           type="radio" 
           class="hidden" 
           name="search-icon" 
-          value="stopSearchingIcon" 
+          value="stopSearch" 
           v-model="searchIcon">
       </label>
       <label class="search-stop-icon" v-else >
@@ -43,7 +43,7 @@
           type="radio" 
           class="hidden" 
           name="search-icon" 
-          value="searchingIcon" 
+          value="search" 
           v-model="searchIcon" >
       </label>
     </div>
@@ -55,13 +55,13 @@ export default {
   name: 'SideSearchToolbar',
   data () {
     return {
-      searchIcon: 'searchingIcon',
+      searchIcon: 'search',
       searchText: '',
     }
   },
   watch: {
     searchIcon: function(){
-      if (this.searchIcon === 'stopSearchingIcon'){
+      if (this.searchIcon === 'stopSearch'){
         this.$refs.search.focus()
       }else{
         this.searchText = ''
@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     changeSearchIcon: function($event){
-      this.searchIcon = 'stopSearchingIcon'
+      this.searchIcon = 'stopSearch'
     },
     collapse () {
       this.$emit('collapse')

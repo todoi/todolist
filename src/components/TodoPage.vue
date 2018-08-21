@@ -1,6 +1,9 @@
 <template>
   <div id="todo-page">
     <div id="main-interface">
+      <div class="dialog-wrapper">
+        <DialogListEditor />
+      </div>
       <div id="lists-nav" :class="{'collapsed': isCollapsed}">
         <div class="lists-inner" tabindex="0">
           <SideSearchToolbar @collapse="isCollapsed = !isCollapsed" />
@@ -14,11 +17,13 @@
     <div class="popover-area" tabindex="-1" ref="popover" @focusout="closePopover">
       <UserPopover v-show="currentPopover === 'user'"/>
       <ActivityPopover v-show="currentPopover === 'activity'"/>
+      <ConversationPopover v-show="currentPopover === 'conversation'"/>
     </div>
   </div>
 </template>
 
 <script>
+import DialogListEditor from './DialogListEditor'
 import SideSearchToolbar from './SideSearchToolbar'
 import SideUserToolbar from './SideUserToolbar'
 import SideListsScroll from './SideListsScroll'
@@ -26,6 +31,7 @@ import SidebarActions from './SidebarActions'
 import Task from './Task'
 import UserPopover from './UserPopover'
 import ActivityPopover from './ActivityPopover'
+import ConversationPopover from './ConversationPopover'
 
 import AV from '../lib/leancloud'
 import utils from '../lib/utils'
@@ -33,7 +39,7 @@ import icon from '../assets/icons.js'
 
 export default {
   name: 'TodoPage',
-  components: {SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, Task, UserPopover, ActivityPopover},
+  components: {DialogListEditor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, Task, UserPopover, ActivityPopover, ConversationPopover},
   created () {
     this.$store.commit('setUser', utils.getAVUser())
     utils.goHomePage()
@@ -71,5 +77,7 @@ export default {
 #lists-nav.collapsed{width: 42px; flex-basis: 42px;}
 
 .lists-inner{display: flex;position: relative; flex-direction: column; height: 100vh;}
+
+.dialog-wrapper {position: absolute; display: flex; align-items: center; width: 100%; height: 100%; z-index: 1000; background: rgba(0,0, 0, 0.4);}
 
 </style>

@@ -5,11 +5,9 @@
         <div class="clock">
           <img src="../assets/images/clock.png">
         </div>
-        <div class="message" tabindex="-1">
+        <div class="message" data-url="/#/tasks/3659895188">
           Reminder:
-          <a href="/#/tasks/3659895188" class="item">
-            ddddddddd
-          </a>
+          <a class="item">ddddddddd</a>
           <div class="info">
             <span class="event-icon reminder"></span>
             <span class="timestamp">4 months ago </span>
@@ -32,13 +30,13 @@ export default {
 </script>
 
 <style scoped>
-.activity-popover {top: 103px; left: 70px;}
+.activity-popover {top: 100px; left: 70px;}
 .activity-popover ul { padding: 5px 0; }
 .activity-popover ul li { min-height: 40px; padding: 5px; padding-left: 10px; border-bottom: 1px solid rgb(230, 230, 230); margin: 0 0 5px; line-height: 1.4em; display: flex; }
 
 .activity-popover .clock img { width: 40px; height: 40px; border-radius: 50%; }
-.activity-popover .message { flex: 1; padding: 0 4px; word-break: break-word; font-size: 13px; }
-.activity-popover .message:focus { box-shadow: 0 0 0 1px #328ad6; border-radius: 3px; }
+.activity-popover .message { flex: 1; padding: 0 4px; word-break: break-word; font-size: 13px; line-height: 18px;}
+.activity-popover .message:hover { box-shadow: 0 0 0 1px #328ad6; border-radius: 3px; }
 .activity-popover .message a { display: block; font-weight: bold; color: rgb(63, 63, 63); }
 .activity-popover .message .timestamp { color: rgb(119, 119, 119); font-size: 0.9em; vertical-align: middle; line-height: 0.9em; }
 .activity-popover .message .event-icon { display: inline-block; width: 18px; height: 18px; vertical-align:middle;

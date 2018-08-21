@@ -36,7 +36,7 @@
         <span class="count">10</span>
       </a>
       <!-- 被评论过的 -->
-      <a class="conversations-count">
+      <a class="conversations-count" @click="openPopover('conversation')">
         <svg class="conversations rtl-flip" width="20px" height="20px" >
           <use xlink:href="#icon-conversations"></use>
         </svg>
