@@ -10,7 +10,7 @@
       itemType="lists" 
       :items="listsCollection" 
       @selectItem="selectItem" 
-      @openDialogListChanger="(listId) => {$emit('openDialogListChanger', listId)}"
+      @openDialogListChanger="(payload) => {$emit('openDialogListChanger', payload)}"
       />
 
     <a 

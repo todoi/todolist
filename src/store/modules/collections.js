@@ -104,6 +104,9 @@ export default {
       }
       state.listsCollection.push(list)
     },
+    deleteList (state, { index }) {
+      state.listsCollection.splice(index, 1)
+    },
     changeListTitle (state, { index, newTitle }) {
       state.listsCollection[index].title = newTitle
     }

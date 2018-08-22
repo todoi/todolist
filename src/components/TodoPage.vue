@@ -4,21 +4,28 @@
       <div class="dialog-wrapper" v-if="currentDialog">
         <DialogListEditor
           role="changer" 
-          :title="currentDialogList.title"
           header="编辑清单"
+          :title="currentDialogList.title"
           v-if="currentDialog === 'changer'"
-          @closeDialog="currentDialog = ''"
-          @openDialogDelete="openDialogDelete"
+          @closeDialog="closeDialog"
+          @openDialogDeletor="currentDialog = 'deletor'"
           @finish="changeListTitle"
           />
 
         <DialogListEditor
           role="creator" 
-          title=""
           header="创建新清单"
+          title=""
           v-if="currentDialog === 'creator'"
-          @closeDialog="currentDialog = ''"
+          @closeDialog="closeDialog"
           @finish="createList"
+          />
+
+        <DialogListDeletor
+          :title="currentDialogList.title"
+          v-if="currentDialog === 'deletor'"
+          @closeDialog="closeDialog"
+          @submit="deleteList"
           />
       </div>
       <div id="lists-nav" :class="{'collapsed': isCollapsed}">
@@ -34,7 +41,7 @@
       </div>
       <Task class="tasks"></Task>
     </div>
-    <div class="popover-area" tabindex="-1" ref="popover" @focusout="closePopover">
+    <div class="popover-area" tabindex="-1" ref="popover" @focusout="currentPopover = ''">
       <UserPopover v-show="currentPopover === 'user'"/>
       <ActivityPopover v-show="currentPopover === 'activity'"/>
       <ConversationPopover v-show="currentPopover === 'conversation'"/>
@@ -44,6 +51,7 @@
 
 <script>
 import DialogListEditor from './DialogListEditor'
+import DialogListDeletor from './DialogListDeletor'
 import SideSearchToolbar from './SideSearchToolbar'
 import SideUserToolbar from './SideUserToolbar'
 import SideListsScroll from './SideListsScroll'
@@ -59,7 +67,7 @@ import icon from '../assets/icons.js'
 
 export default {
   name: 'TodoPage',
-  components: {DialogListEditor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, Task, UserPopover, ActivityPopover, ConversationPopover},
+  components: {DialogListEditor, DialogListDeletor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, Task, UserPopover, ActivityPopover, ConversationPopover},
   created () {
     this.$store.commit('setUser', utils.getAVUser())
     utils.goHomePage()
@@ -75,28 +83,27 @@ export default {
   computed: {
   },
   methods: {
+    closeDialog () {
+      this.currentDialog = ''
+    },
     openPopover (type) {
       this.currentPopover = type
       this.$nextTick().then(() => {
         this.$refs.popover.focus()
       })
     },
-    closePopover () {
-      this.currentPopover = ''
-    },
     changeListTitle (newTitle) {
-      this.currentDialog = ''
       let obj = Object.assign({}, this.currentDialogList, { newTitle })
       this.$store.commit('changeListTitle', obj)
     },
     createList (title) {
-      this.currentDialog = ''
       this.$store.commit('createList', title )
       this.$nextTick().then(() => {
         this.$refs.sideListsScroll.$el.scrollTop = '10000'
       })
     },
-    openDialogDelete () {
+    deleteList () {
+      this.$store.commit('deleteList', this.currentDialogList)
     },
     openDialogListChanger (payload) { 
       //payload = {listId, index, title}

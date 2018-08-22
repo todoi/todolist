@@ -34,7 +34,7 @@
             title="删除清单" 
             class="delete-list" 
             :class= "{ 'hidden': role !== 'changer' }"
-            @click="openDialogDelete"
+            @click="openDialogDeletor"
           >
             <svg class="icon-trash" width="20px" height="20px">
               <use xlink:href="#icon-trash"></use>
@@ -80,15 +80,15 @@
         this.$emit('closeDialog')
       },
       triggerFinish () {
+        this.closeDialog()
         if (!this.titleDuplicate) {
-          this.closeDialog()
           return 
         }
         this.$emit('finish', this.titleDuplicate)
       },
-      openDialogDelete () {
+      openDialogDeletor () {
         this.closeDialog()
-        this.$emit('openDialogDelete')
+        this.$emit('openDialogDeletor')
       }
     }
   }

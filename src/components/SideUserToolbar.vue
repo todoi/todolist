@@ -1,14 +1,14 @@
 <template>
   <div class="user-toolbar">
-    <a class="user" tabindex="0" @click="openPopover('user')">
-      <span class="user-avatar">
+    <a class="user" tabindex="0">
+      <span class="user-avatar" @click="openPopover('user')">
         <img 
           class="avatar medium"
           :title="user.username"
           :src="getAvatarSrc" >
       </span>
-      <span class="user-name">{{ user.username }}</span>
-      <span class="user-arrow">
+      <span class="user-name" @click="openPopover('user')">{{ user.username }}</span>
+      <span class="user-arrow" @click="openPopover('user')">
         <svg width="20px" height="20px">
           <use xlink:href="#icon-down-arrow"></use>
         </svg>
