@@ -1,15 +1,35 @@
 <template>
   <div id="todo-page">
     <div id="main-interface">
-      <div class="dialog-wrapper">
-        <DialogListEditor />
+      <div class="dialog-wrapper" v-if="currentDialog">
+        <DialogListEditor
+          role="changer" 
+          :title="currentDialogList.title"
+          header="编辑清单"
+          v-if="currentDialog === 'changer'"
+          @closeDialog="currentDialog = ''"
+          @openDialogDelete="openDialogDelete"
+          @finish="changeListTitle"
+          />
+
+        <DialogListEditor
+          role="creator" 
+          title=""
+          header="创建新清单"
+          v-if="currentDialog === 'creator'"
+          @closeDialog="currentDialog = ''"
+          @finish="createList"
+          />
       </div>
       <div id="lists-nav" :class="{'collapsed': isCollapsed}">
         <div class="lists-inner" tabindex="0">
           <SideSearchToolbar @collapse="isCollapsed = !isCollapsed" />
           <SideUserToolbar @openPopover="openPopover"/>
-          <SideListsScroll @collapse="isCollapsed = !isCollapsed" />
-          <SidebarActions />
+          <SideListsScroll 
+            ref="sideListsScroll"
+            @collapse="isCollapsed = !isCollapsed" 
+            @openDialogListChanger="openDialogListChanger"/>
+          <SidebarActions @openDialogListCreator="currentDialog = 'creator'"/>
         </div>
       </div>
       <Task class="tasks"></Task>
@@ -47,7 +67,9 @@ export default {
   data (){
     return {
       isCollapsed: false,
-      currentPopover: ''
+      currentPopover: '',
+      currentDialog: '',
+      currentDialogList: '',
     }
   },
   computed: {
@@ -61,6 +83,25 @@ export default {
     },
     closePopover () {
       this.currentPopover = ''
+    },
+    changeListTitle (newTitle) {
+      this.currentDialog = ''
+      let obj = Object.assign({}, this.currentDialogList, { newTitle })
+      this.$store.commit('changeListTitle', obj)
+    },
+    createList (title) {
+      this.currentDialog = ''
+      this.$store.commit('createList', title )
+      this.$nextTick().then(() => {
+        this.$refs.sideListsScroll.$el.scrollTop = '10000'
+      })
+    },
+    openDialogDelete () {
+    },
+    openDialogListChanger (payload) { 
+      //payload = {listId, index, title}
+      this.currentDialog = 'changer'
+      this.currentDialogList = payload
     }
   }
 }

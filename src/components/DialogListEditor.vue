@@ -1,15 +1,20 @@
 <template>
   <div class="dialog">
     <div class="header">
-      <h3>编辑清单</h3>
+      <h3>{{ header }}</h3>
       <div class="separator">
-        <input class="list-title" type="text" placeholder="清单名称" value="工作">
+        <input 
+          class="list-title" 
+          type="text" 
+          placeholder="清单名称" 
+          v-model.trim="titleDuplicate"
+          @keypress.enter="titleDuplicate && triggerFinish()">
       </div>
     </div>
 
     <div class="owner">
       <div class="owner-avatar">
-        <img src="//via.placeholder.com/50x50" alt="">
+        <img :src="getAvatarSrc" alt="" :title="user.usename">
       </div>
       <div class="owner-meta">
         <div class="owner-name">
@@ -18,29 +23,34 @@
             <span class="badge">所有者</span>
           </div>
         </div>
-        <span class="owner-email">todoi@doodf.com</span>
+        <span class="owner-email">{{ user.email }}</span>
       </div>
     </div>
 
     <div class="footer">
       <div class="clos">
         <div class="col-40">
-          <a title="删除清单" class="delete-list">
+          <a 
+            title="删除清单" 
+            class="delete-list" 
+            :class= "{ 'hidden': role !== 'changer' }"
+            @click="openDialogDelete"
+          >
             <svg class="icon-trash" width="20px" height="20px">
               <use xlink:href="#icon-trash"></use>
             </svg>
           </a>
-          <a title="复制清单" class="duplicate-list">
+          <a title="复制清单" class="duplicate-list hidden">
             <svg class="icon-duplicate-list" width="20px" height="20px">
               <use xlink:href="#icon-duplicate-list"></use>
             </svg>
           </a>
         </div>
         <div class="col-30">
-          <button class="btn-cancel">取消</button>
+          <button class="btn-cancel" @click="closeDialog()">取消</button>
         </div>
         <div class="col-30">
-          <button class="btn-finish blue disabled">完成</button>
+          <button class="btn-finish blue" :class="{'disabled': !titleDuplicate}" @click="triggerFinish">完成</button>
         </div>
       </div>
     </div>
@@ -48,8 +58,39 @@
 </template>
 
 <script>
+  import utils from '../lib/utils'
   export default {
     name: 'DialogListEditor',
+    props: [ 'title', 'role', 'header' ],
+    data () {
+      return {
+        titleDuplicate: this.title
+      }
+    },
+    computed: {
+      user () {
+        return this.$store.state.user
+      },
+      getAvatarSrc () {
+        return utils.getAvatarSrc(this.user.username)
+      },
+    },
+    methods: {
+      closeDialog () {
+        this.$emit('closeDialog')
+      },
+      triggerFinish () {
+        if (!this.titleDuplicate) {
+          this.closeDialog()
+          return 
+        }
+        this.$emit('finish', this.titleDuplicate)
+      },
+      openDialogDelete () {
+        this.closeDialog()
+        this.$emit('openDialogDelete')
+      }
+    }
   }
 </script>
 

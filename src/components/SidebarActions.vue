@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar-actions">
+  <div class="sidebar-actions" @click="$emit('openDialogListCreator')">
     <a class="sidebar-actions-addList">
       <span class="sidebar-actions-icon">
         <svg class="plus-small" width="20px" height="20px">

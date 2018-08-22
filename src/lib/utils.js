@@ -94,4 +94,8 @@ export default {
     AV.User.logOut()
     window.location.href = '/'
   },
+  createId (arg) {
+    return window.btoa(window.encodeURI(arg))
+      .replace(/[=, ?, !]/g, '') + new Date().getTime()
+  }
 }

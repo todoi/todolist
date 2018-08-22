@@ -1,19 +1,27 @@
+import utils from '../../lib/utils'
 export default {
   state: {
     filtersCollection: [
       {
         id: 'inbox',
-        isAnimateUp: false,  //是否隐藏
+        isAnimateUp: true,  //是否隐藏
         title: '收件箱',
         overdueCount: 10,  //过期任务的个数
         count: 1, // 总共的任务数量
         active: false, 
       },{
         id: 'assigned',
-        isAnimateUp: false, 
+        isAnimateUp: true, 
         title: '分配给我',
         overdueCount: 0,
         count: 1,
+        active: false,
+      },{
+        id: 'all',
+        isAnimateUp: false,
+        title: '全部',
+        overdueCount: 10,
+        count: 4,
         active: false,
       },{
         id: 'starred',
@@ -37,13 +45,6 @@ export default {
         count: 1,
         active: false,
       },{
-        id: 'all',
-        isAnimateUp: false,
-        title: '全部',
-        overdueCount: 10,
-        count: 4,
-        active: false,
-      },{
         id: 'completed',
         isAnimateUp: false,
         title: '已完成',
@@ -55,14 +56,12 @@ export default {
     listsCollection:[
       {
         id: '3429677865',
-        isAnimateUp: false,
         title: '工作',
         overdueCount: 10,
         count: 2,
         active: false,
       },{
         id: '3429676336',
-        isAnimateUp: false,
         title: '生活',
         overdueCount: 10,
         count: 1,
@@ -93,6 +92,20 @@ export default {
       if(listArea === 'lists'){
         state.listsCollection[index]['active'] = 'true'
       }
+    },
+    createList (state, title) {
+      let list = {
+        id: utils.createId(title),
+        isAnimateUp: false,
+        title,
+        overdueCount: 0,
+        count: 0,
+        active: false,
+      }
+      state.listsCollection.push(list)
+    },
+    changeListTitle (state, { index, newTitle }) {
+      state.listsCollection[index].title = newTitle
     }
   }
 }

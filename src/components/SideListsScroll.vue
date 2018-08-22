@@ -4,11 +4,15 @@
       itemType="filters" 
       :items="filtersCollection" 
       @selectItem="selectItem" />
+
     <CollectionScroll class="lists-collection" 
       isList="true"
       itemType="lists" 
       :items="listsCollection" 
-      @selectItem="selectItem" />
+      @selectItem="selectItem" 
+      @openDialogListChanger="(listId) => {$emit('openDialogListChanger', listId)}"
+      />
+
     <a 
       class="more-button" 
       @click="collapse"
