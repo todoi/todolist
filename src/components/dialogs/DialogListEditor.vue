@@ -58,7 +58,7 @@
 </template>
 
 <script>
-  import utils from '../lib/utils'
+  import utils from '../../lib/utils'
   export default {
     name: 'DialogListEditor',
     props: [ 'title', 'role', 'header' ],

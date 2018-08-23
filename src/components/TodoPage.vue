@@ -5,7 +5,7 @@
         <DialogListEditor
           role="changer" 
           header="编辑清单"
-          :title="currentDialogList.title"
+          :title="currentList.title"
           v-if="currentDialog === 'changer'"
           @closeDialog="closeDialog"
           @openDialogDeletor="currentDialog = 'deletor'"
@@ -22,7 +22,7 @@
           />
 
         <DialogListDeletor
-          :title="currentDialogList.title"
+          :title="currentList.title"
           v-if="currentDialog === 'deletor'"
           @closeDialog="closeDialog"
           @submit="deleteList"
@@ -39,7 +39,11 @@
           <SidebarActions @openDialogListCreator="currentDialog = 'creator'"/>
         </div>
       </div>
-      <Task class="tasks"></Task>
+      <div id="tasks">
+        <Task>
+          <ListToolbar />
+        </Task>
+      </div>
     </div>
     <div class="popover-area" tabindex="-1" ref="popover" @focusout="currentPopover = ''">
       <UserPopover v-show="currentPopover === 'user'"/>
@@ -50,16 +54,17 @@
 </template>
 
 <script>
-import DialogListEditor from './DialogListEditor'
-import DialogListDeletor from './DialogListDeletor'
-import SideSearchToolbar from './SideSearchToolbar'
-import SideUserToolbar from './SideUserToolbar'
-import SideListsScroll from './SideListsScroll'
-import SidebarActions from './SidebarActions'
-import Task from './Task'
-import UserPopover from './UserPopover'
-import ActivityPopover from './ActivityPopover'
-import ConversationPopover from './ConversationPopover'
+import DialogListEditor from './dialogs/DialogListEditor'
+import DialogListDeletor from './dialogs/DialogListDeletor'
+import SideSearchToolbar from './sidebar/SideSearchToolbar'
+import SideUserToolbar from './sidebar/SideUserToolbar'
+import SideListsScroll from './sidebar/SideListsScroll'
+import SidebarActions from './sidebar/SidebarActions'
+import Task from './list/Task'
+import ListToolbar from './list/ListToolbar'
+import UserPopover from './popovers/UserPopover.vue'
+import ActivityPopover from './popovers/ActivityPopover.vue'
+import ConversationPopover from './popovers/ConversationPopover.vue'
 
 import AV from '../lib/leancloud'
 import utils from '../lib/utils'
@@ -67,7 +72,7 @@ import icon from '../assets/icons.js'
 
 export default {
   name: 'TodoPage',
-  components: {DialogListEditor, DialogListDeletor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, Task, UserPopover, ActivityPopover, ConversationPopover},
+  components: {DialogListEditor, DialogListDeletor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, Task, ListToolbar, UserPopover, ActivityPopover, ConversationPopover},
   created () {
     this.$store.commit('setUser', utils.getAVUser())
     utils.goHomePage()
@@ -77,10 +82,12 @@ export default {
       isCollapsed: false,
       currentPopover: '',
       currentDialog: '',
-      currentDialogList: '',
     }
   },
   computed: {
+    currentList () {
+      return this.$store.state.collections.currentList
+    }
   },
   methods: {
     closeDialog () {
@@ -93,7 +100,7 @@ export default {
       })
     },
     changeListTitle (newTitle) {
-      let obj = Object.assign({}, this.currentDialogList, { newTitle })
+      let obj = Object.assign({}, this.currentList, { newTitle })
       this.$store.commit('changeListTitle', obj)
     },
     createList (title) {
@@ -103,12 +110,11 @@ export default {
       })
     },
     deleteList () {
-      this.$store.commit('deleteList', this.currentDialogList)
+      this.$store.commit('deleteList', this.currentList)
     },
-    openDialogListChanger (payload) { 
+    openDialogListChanger () { 
       //payload = {listId, index, title}
       this.currentDialog = 'changer'
-      this.currentDialogList = payload
     }
   }
 }
@@ -118,14 +124,14 @@ export default {
 *{box-sizing: content-box;}
 #main-interface { display: flex; }
 #main-interface:before{content:''; position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: url('../assets/images/bg.jpg') center top/ cover no-repeat; z-index: -1;}
-.tasks{overflow: hidden; flex: 1;}
 
 #lists-nav :focus{outline: none;}
 #lists-nav{width: 280px; background: #f7f7f7; z-index: 3; overflow: hidden; transition: width 100ms ease; user-select: none;}
 #lists-nav.collapsed{width: 42px; flex-basis: 42px;}
-
 .lists-inner{display: flex;position: relative; flex-direction: column; height: 100vh;}
 
 .dialog-wrapper {position: absolute; display: flex; align-items: center; width: 100%; height: 100%; z-index: 1000; background: rgba(0,0, 0, 0.4);}
+
+#tasks{height: 100vh; position: relative; display: flex; overflow: hidden; flex: 1;}
 
 </style>

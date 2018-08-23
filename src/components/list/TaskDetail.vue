@@ -504,7 +504,7 @@ textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
 .audio-recorder-container{border-radius: 3px; border: 1px solid #c9c9c9; margin:11px 0 10px;  background: #fff; text-align: center;}
 .audio-recorder-container a, .audio-recorder-container .duration{vertical-align: middle;}
 .audio-recorder-container span{display: inline-block;}
-.icon-file{background-image: url('../assets/images/files.png');}
+.icon-file{background-image: url('../../assets/images/files.png');}
 .icon-file.record-audio{width: 18px; height: 18px; background-position: -129px -162px;}
 .audio-recorder-container a{display: inline-block; width: 48px; padding: 10px 0; margin: 0 2px; font-size: 0; font-weight: bold; text-align: center;}
 .audio-recorder-container .start-recording-audio{color: #f00;}
@@ -518,7 +518,7 @@ a.disabled .upload-audio{width: 19px; height: 19px; background-position: -162px 
 
 .comments-main{position: relative;}
 .comments-main .spinner{height: 0; transition: all 250ms ease; position: relative;}
-.comments-main .dark{opacity: 0.6; margin-top: 10px; position: absolute; left: 50%; top: 0; margin-left: -10px; width: 19px; height: 19px; background: url('../assets/images/loading_black.png'); animation: rotate .8s linear infinite;}
+.comments-main .dark{opacity: 0.6; margin-top: 10px; position: absolute; left: 50%; top: 0; margin-left: -10px; width: 19px; height: 19px; background: url('../../assets/images/loading_black.png'); animation: rotate .8s linear infinite;}
 .comments-mian li{line-height: 16px;}
 .section-item.section-item-comment{padding-top: 16px;}
 .avatar.medium{width: 32px; height: 32px;}

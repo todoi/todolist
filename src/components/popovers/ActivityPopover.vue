@@ -3,7 +3,7 @@
     <ul>
       <li>
         <div class="clock">
-          <img src="../assets/images/clock.png">
+          <img src="../../assets/images/clock.png">
         </div>
         <div class="message" data-url="/#/tasks/3659895188">
           Reminder:

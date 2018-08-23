@@ -10,7 +10,7 @@
       itemType="lists" 
       :items="listsCollection" 
       @selectItem="selectItem" 
-      @openDialogListChanger="(payload) => {$emit('openDialogListChanger', payload)}"
+      @openDialogListChanger="$emit('openDialogListChanger')"
       />
 
     <a 
@@ -36,16 +36,13 @@ export default {
     listsCollection () {
       return this.$store.state.collections.listsCollection 
     },
-    getCurrentCollection () {
-      return this.$store.getters.getCurrentCollection 
-    }
   },
   methods: {
     collapse () {
       this.$emit('collapse')
     },
     selectItem: function({index, listArea}){
-      this.$store.commit('switchCollection', {index, listArea})
+      this.$store.commit('switchList', {index, listArea})
     },
   }
 }

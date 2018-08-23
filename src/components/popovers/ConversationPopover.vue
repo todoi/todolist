@@ -14,7 +14,7 @@
 import Popover from './Popover'
 
 export default {
-  name: 'ActivityPopover',
+  name: 'ConversationPopover',
   components: { Popover },
   methods: {
   }

@@ -1,6 +1,12 @@
 import utils from '../../lib/utils'
 export default {
   state: {
+    currentList: {
+      // 侧边栏选中的list
+      id: '',
+      title: '',
+      index: ''
+    },
     filtersCollection: [
       {
         id: 'inbox',
@@ -71,26 +77,19 @@ export default {
 
   },
   getters: {
-    getCurrentCollection (state) {
-     let collection =  state.filtersCollection.find((item, index) => {
-        return item.active
-      })
-      if (collection) { return collection } 
-      collection = state.listsCollection.find((item, index) => {
-        return item.active
-      })
-      return collection
-    }
   },
   mutations: {
-    switchCollection (state, {index, listArea}) {
-      state.filtersCollection.forEach(function(item, index){item.active = false})
-      state.listsCollection.forEach(function(item, index){item.active = false})
+    switchList ({filtersCollection,listsCollection, currentList}, {index, listArea}) {
+      // 选中侧边栏中的 List 
+      filtersCollection.forEach(function(item, index){item.active = false})
+      listsCollection.forEach(function(item, index){item.active = false})
       if(listArea === 'filters'){
-        state.filtersCollection[index]['active'] = 'true'
+        filtersCollection[index]['active'] = 'true'
+        Object.assign(currentList, filtersCollection[index], {index})
       }
       if(listArea === 'lists'){
-        state.listsCollection[index]['active'] = 'true'
+        listsCollection[index]['active'] = 'true'
+        Object.assign(currentList, listsCollection[index], {index})
       }
     },
     createList (state, title) {

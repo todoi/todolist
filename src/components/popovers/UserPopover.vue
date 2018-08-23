@@ -13,7 +13,7 @@
 
 <script>
 import Popover from './Popover'
-import utils from '../lib/utils'
+import utils from '../../lib/utils'
 
 export default {
   name: 'UserPopover',

@@ -27,7 +27,7 @@
         <span class="title">{{ item.title }}</span>
         <span class="overdue-count">{{ item.overdueCount }}</span>
         <span class="count">{{ item.count ? item.count : '' }}</span>
-        <span class="list-options" title="清单选项" @click="$emit('openDialogListChanger', {'listId': item.id, 'index': index, 'title': item.title})">
+        <span class="list-options" title="清单选项" @click="$emit('openDialogListChanger')">
           <svg class="options rtl-flip" width="20px" height="20px">
             <use xlink:href="#icon-options"></use>
           </svg>
