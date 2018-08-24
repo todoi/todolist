@@ -1,6 +1,8 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
+
 import collections  from './modules/collections'
+import list  from './modules/list'
 
 Vue.use(Vuex)
 
@@ -20,5 +22,6 @@ export default new Vuex.Store({
   },
   modules: {
     collections,
+    list
   }
 })
