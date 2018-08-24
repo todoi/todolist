@@ -3,12 +3,20 @@
     <h1 class="title">{{ currentList.title }}</h1>
     <div class="action-bar expanded" @mouseleave="hideActionBar">
 
-      <div class="action-bar-top" :style="`height: ${actionBarHeight}`">
+      <div 
+        class="action-bar-top" 
+        :style="`height: ${actionBarHeight}`"
+      >
         <!-- 排序列表 -->
-        <ul class="action-bar-top-sort" :class="{active: actionBarActive === 'sort'}">
-          <li tabindex="0" 
+        <ul 
+          class="action-bar-top-sort" 
+          :class="{active: actionBarActive === 'sort'}"
+        >
+          <li 
+            tabindex="0" 
             v-for="item in actionBarSort" 
-            @click="sortFn(item.fnName)">
+            @click="sortFn(item.fnName)"
+          >
             <a>
               <svg :class="item.svgClassName" width="20px" height="20px">
                 <use :xlink:href="`#icon-${item.svgClassName}`"></use>
@@ -19,10 +27,15 @@
         </ul>
 
         <!-- 更多列表 -->
-        <ul class="action-bar-top-more" :class="{active: actionBarActive === 'more'}">
-          <li tabindex="0" 
+        <ul 
+          class="action-bar-top-more" 
+          :class="{active: actionBarActive === 'more'}"
+        >
+          <li 
+            tabindex="0" 
             v-for="item in actionBarMore"
-            @click="moreFn(item.fnName)">
+            @click="moreFn(item.fnName)"
+          >
             <a>
               <svg :class="item.svgClassName" width="20px" height="20px">
                 <use :xlink:href="`#icon-${item.svgClassName}`"></use>
@@ -41,18 +54,22 @@
           <span class="tab-text">共享</span>
         </a>
 
-        <a class="tab sort-az" 
+        <a 
+          class="tab sort-az" 
           :class="{active: !actionBarActive || actionBarActive === 'sort'}"
-          @click="showActionBar('sort')">
+          @click="showActionBar('sort')"
+        >
           <svg class="sort-az" width="20px" height="20px">
             <use xlink:href="#icon-sort-az"></use>
           </svg>
           <span class="tab-text">排序</span>
         </a>
 
-        <a class="tab last-tab" 
+        <a 
+          class="tab last-tab" 
           :class="{active: !actionBarActive || actionBarActive === 'more'}"
-          @click="showActionBar('more')">
+          @click="showActionBar('more')"
+        >
           <svg class="folder-option" width="20px" height="20px">
             <use xlink:href="#icon-folder-option"></use>
           </svg>

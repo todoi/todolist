@@ -40,10 +40,17 @@
         </div>
       </div>
       <div id="tasks">
-        <Task>
+        <div class="tasks-main">
           <ListToolbar />
-        </Task>
+          <div class="tasks-scroll">
+            <AddTask/>
+            <TaskList></TaskList>
+            <NotFound class="hidden" />
+          </div>
+        </div>
       </div>
+      <!-- 编辑任务 -->
+      <TaskDetail v-show="showDetail" :taskItem="editItem" @toggleDetailCheckbox="showDetail = false" @close="showDetail = false" @delete="showDetail = false" />
     </div>
     <div class="popover-area" tabindex="-1" ref="popover" @focusout="currentPopover = ''">
       <UserPopover v-show="currentPopover === 'user'"/>
@@ -54,25 +61,34 @@
 </template>
 
 <script>
-import DialogListEditor from './dialogs/DialogListEditor'
-import DialogListDeletor from './dialogs/DialogListDeletor'
+// import vue components
 import SideSearchToolbar from './sidebar/SideSearchToolbar'
 import SideUserToolbar from './sidebar/SideUserToolbar'
 import SideListsScroll from './sidebar/SideListsScroll'
 import SidebarActions from './sidebar/SidebarActions'
-import Task from './list/Task'
+
+import TaskList from './list/TaskList'
 import ListToolbar from './list/ListToolbar'
+import AddTask from './list/AddTask'
+import NotFound from './list/NotFound'
+
+import TaskDetail from './taskEditor/TaskDetail'
+
+import DialogListEditor from './dialogs/DialogListEditor'
+import DialogListDeletor from './dialogs/DialogListDeletor'
 import UserPopover from './popovers/UserPopover.vue'
 import ActivityPopover from './popovers/ActivityPopover.vue'
 import ConversationPopover from './popovers/ConversationPopover.vue'
 
+
+// import js file
 import AV from '../lib/leancloud'
 import utils from '../lib/utils'
 import icon from '../assets/icons.js'
 
 export default {
   name: 'TodoPage',
-  components: {DialogListEditor, DialogListDeletor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, Task, ListToolbar, UserPopover, ActivityPopover, ConversationPopover},
+  components: {DialogListEditor, DialogListDeletor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, TaskList, ListToolbar, AddTask, NotFound, TaskDetail, UserPopover, ActivityPopover, ConversationPopover},
   created () {
     this.$store.commit('setUser', utils.getAVUser())
     utils.goHomePage()
@@ -82,6 +98,8 @@ export default {
       isCollapsed: false,
       currentPopover: '',
       currentDialog: '',
+      showDetail: true, // 打开任务编辑区域
+      editItem: {subTasks: [], note: {}, comments: [], fileList: []},
     }
   },
   computed: {
@@ -133,5 +151,7 @@ export default {
 .dialog-wrapper {position: absolute; display: flex; align-items: center; width: 100%; height: 100%; z-index: 1000; background: rgba(0,0, 0, 0.4);}
 
 #tasks{height: 100vh; position: relative; display: flex; overflow: hidden; flex: 1;}
+.tasks-main{height: 100vh; position: relative; display: flex; flex-direction: column; flex:1;}
+.tasks-scroll{flex: 1; padding:0 14px; overflow-y: auto; overflow-x: hidden; text-align: left;}
 
 </style>
