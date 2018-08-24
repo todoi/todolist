@@ -1,7 +1,71 @@
 <template>
   <div id="task-detail" class="animate">
-    <TaskEditorTopbar :taskItem="taskItem" />
+    <div class="topbar">
+      <a class="detail-checkbox checkbox" tabindex="0"  @click.stop="emitCheckedEvent">
+        <span title="标记为已完成">
+          <svg class="detail-check" :class="{hidden: taskItem.isCompleted}"  width="20px" height="20px">
+            <use xlink:href="#icon-detail-check"></use>
+          </svg>
+        </span>
+        <span title="标记为未完成">
+          <svg class="detail-checked" :class="{hidden: !taskItem.isCompleted}"  width="20px" height="20px">
+            <use xlink:href="#icon-detail-checked"></use>
+          </svg>
+        </span>
+      </a>
+
+      <a class="detail-star" tabindex="0" @click.stop="toggleTaskStarred">
+        <span class="star-wrapper" title="标记为星标" :class="{hidden: taskItem.taskStarred}">
+          <svg width="100%" height="100%">
+            <use xlink:href="#icon-star-detail"></use>
+          </svg>
+        </span>
+        <span class="starred-wrapper" title="移除星标" :class="{hidden: !taskItem.taskStarred}">
+          <svg width="100%" height="100%">
+            <use xlink:href="#icon-starred-detail"></use>
+          </svg>
+        </span>
+      </a>
+
+      <div class="title-container">
+        <div tabindex="0" class="title">
+          <span class="title-text">
+            <div class="content-fakable" @click="displayView = false">
+              <div class="display-view" :class="{hidden: !displayView}">
+                <span>{{ taskItem.title }}</span>
+              </div>
+              <div class="edit-view" :class="{hidden: displayView}" @focusout="displayView = true">
+                <div class="expandingArea active">
+                  <pre>{{taskItem.title}}</pre>
+                  <textarea tabindex="0" v-model="taskItem.title" @keypress.enter.prevent="displayView = true">{{taskItem.title}}</textarea>
+                </div>
+              </div>
+            </div>
+          </span>
+        </div>
+      </div>
+    </div>
+
     <div class="body" ref="body">
+      <div class="section section-item detail-assign" tabindex="0">
+        <div class="section-icon">
+          <svg class="assigned" width="20px" height="20px">
+            <use xlink:href="#icon-assigned"></use>
+          </svg>
+        </div>
+        <div class="section-content">
+          <div class="section-title">分配给</div>
+          <div class="section-edit hidden">
+            <input type="text" class="assign chromeless" placeholder="分配给">
+          </div>
+        </div>
+        <a class="section-delete" title="删除" tabindex="0">
+          <svg class="delete" width="20px" height="20px">
+            <use xlink:href="#icon-delete"></use>
+          </svg>
+        </a>
+      </div>
+
       <div class="section section-item detail-date" tabindex="0" :class="{'overdue' : taskItem.deadline && (new Date().getTime() > taskItem.deadline), date: taskItem.deadline}">
         <div class="section-icon">
           <svg class="date" width="20px" height="20px">
@@ -187,7 +251,7 @@
           <li tabindex="0" class="section-item section-item-comment active-user" v-for="(comment, index) in taskItem.comments">
             <div class="section-icon picture">
               <div class="avatar medium" :title="comment.username">
-                <img :src="getAvatarSrc">
+                <img :src="comment.imgSrc">
               </div>
             </div>
             <div class="section-content">
@@ -240,142 +304,141 @@
 </template>
 
 <script>
-import utils from '../../lib/utils'
-import DatePicker from 'vuejs-datepicker'
-import UploadFile from './UploadFile.vue'
-import TaskEditorTopbar from './TaskEditorTopbar'
-
-let chineseWeekDate = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
-export default {
-  name: 'TaskDetail',
-  components: {DatePicker, UploadFile, TaskEditorTopbar},
-  data() {
-    return {
-      datePickerState,
-      showCalenderTrigon: false,
-      newSubtask: this.createSubtaskTemplate(),
-      newComment: this.createCommentTemplate(),
-    }
-  },
-  computed: {
-    username () {
-      return this.$store.state.user.username
-    },
-    taskItem () {
-      return this.$store.getters.getSelectedTask
-    },
-    getAvatarSrc () {
-      return utils.getAvatarSrc(this.username)
-    }
-  },
-  methods: {
-    log(args){
-      return console.log.call(null, args)
-    },
-    triggerClose(){
-      this.$emit('close')
-    },
-    triggerDelete(){
-      this.$emit('delete', this.taskItem)
-    },
-    toggleTaskStarred(){
-      this.taskItem.taskStarred = !this.taskItem.taskStarred
-    },
-    toggleSubtaskCheckbox(index){
-      if(this.taskItem.subTasks[index].isCompleted) {
-        // 如果由完成改为未完成
-        this.taskItem.subTasks[index].isCompleted = false
-        // 完成数量减一
-        this.taskItem.subTasksCompletedNumber --
-      }else{
-        // 如果由未完成改为已经完成
-        this.taskItem.subTasks[index].isCompleted = true
-        // 完成数量加一
-        this.taskItem.subTasksCompletedNumber ++ 
-      }
-      // 自己的 displayView 改为true
-      this.taskItem.subTasks[index].displayView = true
-    },
-    addComment(){
-      if(this.newComment.content){
-        // 写入创建时间
-        this.newComment.createDate = new Date().getTime()
-        this.taskItem.comments.push(this.newComment)
-        // 重置 newComment
-        this.newComment = this.createCommentTemplate()
-        // 滚动条滚到底
-        this.$nextTick(function(){
-          this.$refs.body.scrollTop = this.$refs.body.scrollHeight
-        })
+  import DatePicker from 'vuejs-datepicker'
+  import UploadFile from './UploadFile.vue'
+  let chineseWeekDate = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+  export default {
+    name: 'TaskDetail',
+    components: {DatePicker, UploadFile},
+    data() {
+      return {
+        displayView: true,
+        datePickerState,
+        showCalenderTrigon: false,
+        newSubtask: this.createSubtaskTemplate(),
+        newComment: this.createCommentTemplate(),
       }
     },
-    deleteSubtask(item, index){
-      // 删除子任务
-      this.taskItem.subTasks.splice(index, 1)
-      // 完成数量减一个
-      if(item.isCompleted) this.taskItem.subTasksCompletedNumber--
-    },
-    addSubtask(){
-      // 添加子任务
-      if(this.newSubtask.title){
-        this.taskItem.subTasks.push(this.newSubtask)
-        this.newSubtask = this.createSubtaskTemplate()
+    computed: {
+      username () {
+        return this.$store.state.username
+      },
+      taskItem () {
+        return this.$store.getters.getSelectedTask
       }
     },
-    editSubtask(item, index){
-      // 编辑子任务
-      item.displayView = false
+    methods: {
+      log(args){
+        return console.log.call(null, args)
+      },
+      triggerClose(){
+        this.$emit('close')
+      },
+      triggerDelete(){
+        this.$emit('delete', this.taskItem)
+      },
+      toggleTaskStarred(){
+        this.taskItem.taskStarred = !this.taskItem.taskStarred
+      },
+      emitCheckedEvent(){
+        // this.taskItem.isCompleted = !this.taskItem.isCompleted
+        this.$emit('toggleDetailCheckbox', this.taskItem)
+      },
+      toggleSubtaskCheckbox(index){
+        if(this.taskItem.subTasks[index].isCompleted) {
+          // 如果由完成改为未完成
+          this.taskItem.subTasks[index].isCompleted = false
+          // 完成数量减一
+          this.taskItem.subTasksCompletedNumber --
+        }else{
+          // 如果由未完成改为已经完成
+          this.taskItem.subTasks[index].isCompleted = true
+          // 完成数量加一
+          this.taskItem.subTasksCompletedNumber ++ 
+        }
+        // 自己的 displayView 改为true
+        this.taskItem.subTasks[index].displayView = true
+      },
+      addComment(){
+        if(this.newComment.content){
+          // 写入创建时间
+          this.newComment.createDate = new Date().getTime()
+          this.taskItem.comments.push(this.newComment)
+          // 重置 newComment
+          this.newComment = this.createCommentTemplate()
+          // 滚动条滚到底
+          this.$nextTick(function(){
+            this.$refs.body.scrollTop = this.$refs.body.scrollHeight
+          })
+        }
+      },
+      deleteSubtask(item, index){
+        // 删除子任务
+        this.taskItem.subTasks.splice(index, 1)
+        // 完成数量减一个
+        if(item.isCompleted) this.taskItem.subTasksCompletedNumber--
+      },
+      addSubtask(){
+        // 添加子任务
+        if(this.newSubtask.title){
+          this.taskItem.subTasks.push(this.newSubtask)
+          this.newSubtask = this.createSubtaskTemplate()
+        }
+      },
+      editSubtask(item, index){
+        // 编辑子任务
+        item.displayView = false
+      },
+      formatDate(timeStamp){
+        // 传入一个时间戳 返回一个 '周二,5月15 到期' 的时间格式
+        let date = new Date(timeStamp)
+        let week = chineseWeekDate[date.getDay()]
+        let month = date.getMonth() + 1
+        let day = date.getDate()
+        return `${week}，${month}月${day} `
+      },
+      showTime(createDate){
+        // 输入一个 完成的任务对象
+        // 输出新的时间 和 旧的时间之间的间隔
+        let newDate = new Date().getTime()
+        let delta = Math.ceil((newDate - createDate)/1000)
+        let days, hours, minutes, result //, seconds
+        days = Math.floor(delta / (60*60*24))
+        hours = Math.floor(delta / (60*60)) % 24
+        minutes = Math.floor(delta / 60) % 60
+        // seconds = delta % 60
+        result = '几秒钟'
+        if(minutes) result = `${minutes} 分钟`
+        if(hours) result = `${hours} 小时`
+        if(days) result = `${days} 天`
+        return `${result} 之前`
+      },
+      createSubtaskTemplate(){
+        return {title:'', isCompleted: false, displayView: true,}
+      },
+      createCommentTemplate(){
+        return {content:'', username: this.username, imgSrc: '//via.placeholder.com/50x50', createDate: null}
+      },
+      triggerUpload(){
+        this.$refs.fileList.$refs.select.click()
+      },
     },
-    formatDate(timeStamp){
-      // 传入一个时间戳 返回一个 '周二,5月15 到期' 的时间格式
-      let date = new Date(timeStamp)
-      let week = chineseWeekDate[date.getDay()]
-      let month = date.getMonth() + 1
-      let day = date.getDate()
-      return `${week}，${month}月${day} `
-    },
-    showTime(createDate){
-      // 输入一个 完成的任务对象
-      // 输出新的时间 和 旧的时间之间的间隔
-      let newDate = new Date().getTime()
-      let delta = Math.ceil((newDate - createDate)/1000)
-      let days, hours, minutes, result //, seconds
-      days = Math.floor(delta / (60*60*24))
-      hours = Math.floor(delta / (60*60)) % 24
-      minutes = Math.floor(delta / 60) % 60
-      // seconds = delta % 60
-      result = '几秒钟'
-      if(minutes) result = `${minutes} 分钟`
-      if(hours) result = `${hours} 小时`
-      if(days) result = `${days} 天`
-      return `${result} 之前`
-    },
-    createSubtaskTemplate(){
-      return {title:'', isCompleted: false, displayView: true,}
-    },
-    createCommentTemplate(){
-      return {content:'', username: this.username, createDate: null}
-    },
-    triggerUpload(){
-      this.$refs.fileList.$refs.select.click()
-    },
-  },
-  watch: {
-    taskItem(){
-      // 如果换了一个项目，关闭 date-picker 和 倒三角
-      this.$refs['task-detail-date-picker'].close()
-      this.showCalenderTrigon = false
+    watch: {
+      taskItem(){
+        // 如果换了一个项目，关闭 date-picker 和 倒三角
+        this.$refs['task-detail-date-picker'].close()
+        this.showCalenderTrigon = false
+      }
     }
   }
-}
 
-let datePickerState = {
-  highlighted: {
-    dates: [ // Highlight an array of dates
-      new Date(), // 当天高亮
-    ],
+  let datePickerState = {
+    highlighted: {
+      dates: [ // Highlight an array of dates
+        new Date(), // 当天高亮
+      ],
+    }
   }
-}
 
 </script>
 <style scoped>
@@ -384,6 +447,15 @@ let datePickerState = {
 textarea{outline: none; background: transparent; font-weight: 500; line-height: 20px;}
 textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
 
+.topbar{min-height: 55px; position: relative;}
+.detail-checkbox{position: absolute; left: 18px; top: 18px; z-index: 3;}
+.checkbox .detail-check{stroke: rgba(0, 0, 0, 0.35);}
+.checkbox .detail-checked{fill: rgba(0, 0, 0, 0.35);}
+.detail-star{position: absolute; top: 0; right: 0; z-index: 2;}
+.star-wrapper{position: absolute; fill: rgba(0, 0, 0, 0.3); right: 15px; top: -4px; z-index: 1; width: 22px; height: 49px;}
+.starred-wrapper{position: absolute; fill: #d74e48; right: 15px; top: -4px; z-index: 1; width: 22px; height: 49px;}
+.title-container{position: relative; z-index: 1;}
+.title{min-height: 24px; padding: 16px 50px 13px; font-size: 16px; text-align: left; line-height: 24px; font-weight: 600; border-bottom: 1px solid #ebebeb; outline: none; overflow: hidden;}
 .content-fakable .display-view{white-space: pre-wrap; word-wrap: break-word; word-break: break-all; overflow: hidden; margin-top: 1px;}
 .content-fakable .display-view span{white-space: pre-wrap; user-select: text;}
 .expandingArea{position: relative;}

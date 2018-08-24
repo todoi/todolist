@@ -24,12 +24,10 @@ export default {
             content:'fjidjifedf', 
             username: 'todoi', 
             createDate: 1525332096726, 
-            imgSrc: '//via.placeholder.com/50x50'},
-          {
+          },{
             content:'fjidjifedfdddddddd', 
             username: 'todoi', 
             createDate: 1525343096726, 
-            imgSrc: '//via.placeholder.com/50x50'
           }
         ],
         fileList:[ 
@@ -39,7 +37,6 @@ export default {
             uploadDate: 1525331956728, 
             fileSrc: '//via.placeholder.com/50x50', 
             creatorName: 'todoi', 
-            creatorAvatar: '//via.placeholder.com/50x50', 
           },
         ],
       },{
@@ -63,7 +60,7 @@ export default {
         taskStarred: false,
         createDate: 1525331956728,
         doneDate: 1525331966728,
-        dealine: null,
+        deadline: null,
         isCompleted: true,
         subTasks: [],
         subTasksCompletedNumber: 0,
@@ -83,7 +80,9 @@ export default {
   },
   mutations: {
     // 用户在未完成 item 的checkbox 上点击
-    checkTask ({ taskItems, doneTaskItems }, { index }) {
+    checkTask ({ currentTask, taskItems, doneTaskItems }, { index }) {
+      // 得到 push 之前的 length
+      let length = doneTaskItems.length
       let item = taskItems[index]
       taskItems.splice(index, 1)
       // 重置为 已经完成
@@ -91,9 +90,16 @@ export default {
       // 完成时间为当前时间
       item.doneDate = new Date().getTime()
       doneTaskItems.push(item)
+      // 更新 currentTask 
+      if (!currentTask.isDoneItem && index < currentTask.index) {
+        currentTask.index --
+      } else if(!currentTask.isDoneItem && index === currentTask.index) {
+        Object.assign(currentTask, {index: length, isDoneItem: true})
+      }
     },
     // 用户在已经完成 item 的checkbox 上点击
-    restoreTask ({ taskItems, doneTaskItems }, { index }) {
+    restoreTask ({ currentTask, taskItems, doneTaskItems }, { index }) {
+      let length = taskItems.length
       let item = doneTaskItems[index]
       doneTaskItems.splice(index, 1)
       // 重置为 未完成
@@ -101,6 +107,11 @@ export default {
       // 完成时间重置为 null
       item.doneDate = 0
       taskItems.push(item)
+      if (currentTask.isDoneItem && index < currentTask.index) {
+        currentTask.index --
+      } else if(currentTask.isDoneItem && index === currentTask.index) {
+        Object.assign(currentTask, {index: length, isDoneItem: false})
+      }
     },
     // 切换星标
     toggleTaskStar ({ taskItems, doneTaskItems }, {index, isDoneItem}){
@@ -116,5 +127,12 @@ export default {
       isDoneItem ? doneTaskItems[index].selected = true : taskItems[index].selected = true
       Object.assign(currentTask, { index, isDoneItem })
     },
+    changeTaskTitle ({ currentTask: { index, isDoneItem }, taskItems, doneTaskItems }, title) {
+      if (isDoneItem) {
+        doneTaskItems[index].title = title
+      } else {
+        taskItems[index].title = title
+      }
+    }
   }
 }
