@@ -97,5 +97,21 @@ export default {
   createId (arg) {
     return window.btoa(window.encodeURI(arg))
       .replace(/[=, ?, !]/g, '') + new Date().getTime()
+  },
+  // 输入一个 完成的任务对象
+  // 输出新的时间 和 旧的时间之间的间隔
+  showDuration (timeStamp) {
+    let newDate = new Date().getTime()
+    let delta = Math.ceil((newDate - timeStamp)/1000)
+    let days, hours, minutes, result //, seconds
+    days = Math.floor(delta / (60*60*24))
+    hours = Math.floor(delta / (60*60)) % 24
+    minutes = Math.floor(delta / 60) % 60
+    // seconds = delta % 60
+    result = '几秒钟'
+    if(minutes) result = `${minutes}分钟`
+    if(hours) result = `${hours}小时`
+    if(days) result = `${days}天`
+    return result
   }
 }

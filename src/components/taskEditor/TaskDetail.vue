@@ -309,7 +309,6 @@
   let chineseWeekDate = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
   export default {
     name: 'TaskDetail',
-    props: ['username', 'taskItem'],
     components: {DatePicker, UploadFile},
     data() {
       return {
@@ -318,6 +317,14 @@
         showCalenderTrigon: false,
         newSubtask: this.createSubtaskTemplate(),
         newComment: this.createCommentTemplate(),
+      }
+    },
+    computed: {
+      username () {
+        return this.$store.state.username
+      },
+      taskItem () {
+        return this.$store.getters.getSelectedTask
       }
     },
     methods: {

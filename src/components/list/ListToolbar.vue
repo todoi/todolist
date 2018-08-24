@@ -100,7 +100,19 @@ export default {
     },
     actionBarSort () {
       return obj.actionBarSort
-    }
+    },
+    deadlineSortClass(){
+    // 用于更新排序下拉框中 到期日排序的 选项是否可以用
+      let result = 0
+      for(let item of this.taskItems){
+        if(item.deadline){
+          // 如果有一个task 有设置deadline 那么就可以使用 到期日 排序
+          result = 1
+          break
+        }
+      }
+      return result ? '' : 'disabled'
+    },
   },
   methods: {
     showShareActions () {

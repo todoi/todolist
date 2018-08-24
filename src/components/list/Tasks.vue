@@ -7,14 +7,14 @@
       v-for="(item, index) in items" 
       :class="{selected: item.selected, done: isDoneItem}" 
       @click="$emit('selectTaskItem', {index, isDoneItem})" 
-      @dblclick="$emit('editTask', {index, item})"
+      @dblclick="$emit('openTaskEditor')"
     >
       <div class="taskItem-body">
 
         <a 
           class="taskItem-checkboxWrapper checkbox" 
           tabindex="-1" 
-          @click.stop="$emit('toggleTaskCheck', {index, item})"
+          @click.stop="$emit('triggerCheckEvent', {index, item})"
         >
           <span title="标记为已完成">
             <svg class="task-check" :class="{hidden: item.isCompleted}" width="20px" height="20px">
@@ -33,7 +33,7 @@
           <div 
             class="taskItem-titleMeta-info" 
             :class="{ hidden: !isDoneItem }"
-          >{{ item.deltaTime }} 由 {{ 'username' }}</div>
+          >{{ getDeltaTime(item.doneDate) }} 由 {{ username }}</div>
         </div>
 
         <span 
@@ -72,7 +72,7 @@
         <a 
           class="taskItem-star" 
           tabindex="-1" 
-          @click.stop="$emit('toggleTaskStarred', { index, isDoneItem })"
+          @click.stop="$emit('toggleTaskStar', { index, isDoneItem })"
         >
           <span 
             title="标记为星标"
@@ -106,15 +106,18 @@
 </template>
 
 <script>
+import utils from '../../lib/utils'
 export default {
   name: 'Tasks',
   props: [ 'isDoneItem', 'items' ],
-  data () {
-    return {}
+  computed: {
+    username () {
+      return this.$store.state.user.username
+    }
   },
   methods: {
     // 传入一个时间戳 返回一个 '2018-05-20' 的时间格式
-    formatDate(timeStamp){
+    formatDate (timeStamp){
       return new Date(timeStamp)
         .toLocaleString()
         .split(' ')[0]
@@ -122,6 +125,10 @@ export default {
           return $1 + '-' + (Number($2) < 10 ? '0'+$2 : $2) + '-' + (Number($3) < 10 ? '0'+$3 : $3)
         }) 
     },
+    // 更新距离时间
+    getDeltaTime (doneDate) {
+      return utils.showDuration(doneDate) + '之前'
+    }
   }
 }
 </script>

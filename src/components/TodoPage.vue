@@ -43,14 +43,16 @@
         <div class="tasks-main">
           <ListToolbar />
           <div class="tasks-scroll">
-            <AddTask/>
-            <TaskList></TaskList>
+            <AddTask />
+            <TaskList @openTaskEditor="openTaskEditor"/>
             <NotFound class="hidden" />
           </div>
         </div>
       </div>
+
       <!-- 编辑任务 -->
-      <TaskDetail v-show="showDetail" :taskItem="editItem" @toggleDetailCheckbox="showDetail = false" @close="showDetail = false" @delete="showDetail = false" />
+      <TaskDetail v-show="showTaskEditor" @toggleDetailCheckbox="showTaskEditor = false" @close="showTaskEditor = false" @delete="showTaskEditor = false" />
+
     </div>
     <div class="popover-area" tabindex="-1" ref="popover" @focusout="currentPopover = ''">
       <UserPopover v-show="currentPopover === 'user'"/>
@@ -98,8 +100,7 @@ export default {
       isCollapsed: false,
       currentPopover: '',
       currentDialog: '',
-      showDetail: true, // 打开任务编辑区域
-      editItem: {subTasks: [], note: {}, comments: [], fileList: []},
+      showTaskEditor: true, // 打开任务编辑区域
     }
   },
   computed: {
@@ -133,7 +134,11 @@ export default {
     openDialogListChanger () { 
       //payload = {listId, index, title}
       this.currentDialog = 'changer'
-    }
+    },
+    // 打开任务编辑的区域
+    openTaskEditor(){
+      this.showTaskEditor = true
+    },
   }
 }
 
