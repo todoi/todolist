@@ -38,7 +38,7 @@
     <div class="title-container">
       <div tabindex="0" class="title">
         <span class="title-text">
-          <div class="content-fakable" @click="enableTextEditor">
+          <div class="content-fakable" @click="openTextEditor">
 
             <div class="display-view" :class="{hidden: !displayView}">
               <span>{{ taskItem.title }}</span>
@@ -100,7 +100,7 @@ export default {
         this.$store.commit('changeTaskTitle', this.title)
       }
     },
-    enableTextEditor () {
+    openTextEditor () {
       this.displayView = false
       this.title = this.taskItem.title
     }
@@ -118,6 +118,9 @@ export default {
 .starred-wrapper{position: absolute; fill: #d74e48; right: 15px; top: -4px; z-index: 1; width: 22px; height: 49px;}
 .title-container{position: relative; z-index: 1;}
 .title{min-height: 24px; padding: 16px 50px 13px; font-size: 16px; text-align: left; line-height: 24px; font-weight: 600; border-bottom: 1px solid #ebebeb; outline: none; overflow: hidden;}
+
+textarea{outline: none; background: transparent; font-weight: 500; line-height: 20px;}
+textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
 .content-fakable .display-view{white-space: pre-wrap; word-wrap: break-word; word-break: break-all; overflow: hidden; margin-top: 1px;}
 .content-fakable .display-view span{white-space: pre-wrap; user-select: text;}
 .expandingArea{position: relative;}

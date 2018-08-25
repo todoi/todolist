@@ -12,11 +12,7 @@ export default {
         createDate: 1525331956726,
         deadline: 1525331976726,
         isCompleted: false,
-        subTasks: [
-          {title:'份额份额', isCompleted: false, displayView: true,}, 
-          {title: 'dd', isCompleted: true, displayView: true,}, 
-          {title: 'hh', isCompleted: true, displayView:true,}
-        ],
+        subTasksLength: 3,
         subTasksCompletedNumber: 2,
         note: {content: 'jfieji', displayView: true},
         comments:[
@@ -46,8 +42,8 @@ export default {
         createDate: 1525331956727,
         deadline: null,
         isCompleted: false,
-        subTasks: [],
-        subTasksCompletedNumber: 0,
+        subTasksLength: 1,
+        subTasksCompletedNumber: 1,
         note: {content: '', displayView: true},
         comments: [],
         fileList: [],
@@ -62,7 +58,7 @@ export default {
         doneDate: 1525331966728,
         deadline: null,
         isCompleted: true,
-        subTasks: [],
+        subTasksLength: 0,
         subTasksCompletedNumber: 0,
         note: {content: '', displayView: true},
         comments: [],
@@ -76,7 +72,7 @@ export default {
         return doneTaskItems[index]
       }
       return taskItems[index]
-    }
+    },
   },
   mutations: {
     // 用户在未完成 item 的checkbox 上点击

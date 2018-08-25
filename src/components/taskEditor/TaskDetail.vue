@@ -56,60 +56,7 @@
         </a>
       </div>
 
-      <div class="section subtasks" :class="{hasSubtasks: taskItem.subTasks.length}" tabindex="0">
-        <ul>
-          <!-- done -->
-          <!-- 没有实现拖动功能 -->
-          <li tabindex="0" class="section-item subtask" draggable="true" v-for="(item, index) in taskItem.subTasks" :class="{done: item.isCompleted}" @focusout="item.displayView = true">
-            <div class="section-icon">
-              <!-- checked -->
-              <a class="subtask-checkbox check-box" :class="{checked: item.isCompleted}" @click="toggleSubtaskCheckbox(index)">
-                <svg class="task-check" width="20px" height="20px">
-                  <use xlink:href="#icon-task-check"></use>
-                </svg>
-                <svg class="task-checked" width="20px" height="20px">
-                  <use xlink:href="#icon-task-checked"></use>
-                </svg>
-              </a>
-            </div>
-            <div class="section-content top" :ref="`subtask-${index}`" >
-              <div class="section-title selectable" tabindex=0>
-                <!-- 将其他的子任务displayView 改为 true -->
-              <div class="content-fakable">
-                <div class="display-view" :class="{hidden: !item.displayView}" @click="editSubtask(item, index)">{{ item.title }}</div>
-                <div class="edit-view" :class="{hidden: item.displayView}">
-                  <div class="expandingArea active">
-                    <pre>{{ item.title }}</pre>
-                    <textarea v-model="item.title" @keypress.enter.prevent="item.displayView = true" @focusin="item.displayView = false"></textarea>
-                  </div>
-                </div>
-              </div>
-              </div>
-            </div>
-            <a class="section-delete" @click="deleteSubtask(item, index)">
-              <svg class="delete" width="20px" height="20px">
-                <use xlink:href="#icon-delete"></use>
-              </svg>
-            </a>
-          </li>
-        </ul>
-        <div class="section-item subtask-add">
-          <div class="section-icon">
-            <svg class="plus-small" width="20px" height="20px">
-              <use xlink:href="#icon-plus-small"></use>
-            </svg>
-          </div>
-          <div class="section-content top">
-            <!-- <div class="section-title hidden">添加子任务</div> -->
-            <div class="section-edit">
-              <div class="expandingArea active">
-                <pre>{{newSubtask.title}}</pre>
-                <textarea tabindex="0" placeholder="添加子任务" v-model="newSubtask.title" @keypress.enter.prevent="addSubtask" @focusout="addSubtask"></textarea>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <SubTasks :taskItem="taskItem"/>
 
       <!-- 没有实现 note 功能 -->
       <div class="section section-item note" :class="{hasNote: taskItem.note.content}" tabindex="0" @focusout="taskItem.note.displayView = true">
@@ -244,16 +191,16 @@ import utils from '../../lib/utils'
 import DatePicker from 'vuejs-datepicker'
 import UploadFile from './UploadFile.vue'
 import TaskEditorTopbar from './TaskEditorTopbar'
+import SubTasks from './SubTasks'
 
 let chineseWeekDate = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
 export default {
   name: 'TaskDetail',
-  components: {DatePicker, UploadFile, TaskEditorTopbar},
+  components: {DatePicker, UploadFile, TaskEditorTopbar, SubTasks},
   data() {
     return {
       datePickerState,
       showCalenderTrigon: false,
-      newSubtask: this.createSubtaskTemplate(),
       newComment: this.createCommentTemplate(),
     }
   },
@@ -281,21 +228,6 @@ export default {
     toggleTaskStarred(){
       this.taskItem.taskStarred = !this.taskItem.taskStarred
     },
-    toggleSubtaskCheckbox(index){
-      if(this.taskItem.subTasks[index].isCompleted) {
-        // 如果由完成改为未完成
-        this.taskItem.subTasks[index].isCompleted = false
-        // 完成数量减一
-        this.taskItem.subTasksCompletedNumber --
-      }else{
-        // 如果由未完成改为已经完成
-        this.taskItem.subTasks[index].isCompleted = true
-        // 完成数量加一
-        this.taskItem.subTasksCompletedNumber ++ 
-      }
-      // 自己的 displayView 改为true
-      this.taskItem.subTasks[index].displayView = true
-    },
     addComment(){
       if(this.newComment.content){
         // 写入创建时间
@@ -308,23 +240,6 @@ export default {
           this.$refs.body.scrollTop = this.$refs.body.scrollHeight
         })
       }
-    },
-    deleteSubtask(item, index){
-      // 删除子任务
-      this.taskItem.subTasks.splice(index, 1)
-      // 完成数量减一个
-      if(item.isCompleted) this.taskItem.subTasksCompletedNumber--
-    },
-    addSubtask(){
-      // 添加子任务
-      if(this.newSubtask.title){
-        this.taskItem.subTasks.push(this.newSubtask)
-        this.newSubtask = this.createSubtaskTemplate()
-      }
-    },
-    editSubtask(item, index){
-      // 编辑子任务
-      item.displayView = false
     },
     formatDate(timeStamp){
       // 传入一个时间戳 返回一个 '周二,5月15 到期' 的时间格式
@@ -349,9 +264,6 @@ export default {
       if(hours) result = `${hours} 小时`
       if(days) result = `${days} 天`
       return `${result} 之前`
-    },
-    createSubtaskTemplate(){
-      return {title:'', isCompleted: false, displayView: true,}
     },
     createCommentTemplate(){
       return {content:'', username: this.username, createDate: null}
@@ -381,9 +293,9 @@ let datePickerState = {
 <style scoped>
 #task-detail{display: flex; flex-direction: column; height: 100vh; width: 367px; position: relative; overflow: hidden; background: #fff;}
 #task-detail.animate{transition: 100ms width ease;}
+
 textarea{outline: none; background: transparent; font-weight: 500; line-height: 20px;}
 textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
-
 .content-fakable .display-view{white-space: pre-wrap; word-wrap: break-word; word-break: break-all; overflow: hidden; margin-top: 1px;}
 .content-fakable .display-view span{white-space: pre-wrap; user-select: text;}
 .expandingArea{position: relative;}
@@ -395,6 +307,7 @@ textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
   border: none; display: block; white-space: pre-wrap; word-wrap: break-word; word-break: break-all; font-family: 'Avenir', Helvetica, Arial, sans-serif;}
 
 .body{flex: 1; padding-bottom: 16px; transition: margin 150ms; background: #fafafa; overflow-x: hidden; overflow-y: auto;}
+
 .section{outline: none; position: relative; padding: 8px 0; text-align: left;}
 .section-item{position: relative; outline: none; padding-left: 10px; padding-right: 10px; display: flex; align-items: center;}
 .section:before{content: ''; position: absolute; bottom: 0; left: 50px; right: 0; border-bottom: 1px solid #ebebebeb;}
@@ -413,18 +326,6 @@ textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
 .section-item .section-description{font-size: 12px;}
 .section-files.hasFiles .section-icon svg{fill: #63b4be;}
 
-.subtasks a{color: #328ad6;}
-.subtasks .section-icon .task-check{stroke: #67ae2b;}
-.subtasks .check-box .task-checked{fill: rgba(0, 0, 0, 0.35); display: none;}
-.subtasks .check-box.checked .task-check{display: none;}
-.subtasks .check-box.checked .task-checked{display: block;}
-.section-item .section-content.top{align-self: flex-start; padding: 6px 0;}
-.subtask .section-title{color: #262626;}
-.subtask.done .display-view{text-decoration: line-through; color: #aaa;}
-.subtasks pre{line-height: 20px; font-weight: normal;}
-.subtasks textarea{line-height: 20px; font-weight: normal;}
-.subtask-add textarea{font-size: 14px;}
-.subtasks.hasSubtasks .plus-small{fill: #67ae2b;}
 
 .note.hasNote .section-icon svg{fill: #e29600;}
 .note .note-body{height:auto; border: none; font-size: 16px; line-height: 20px; word-wrap: break-word;}

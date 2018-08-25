@@ -97,7 +97,7 @@
         <div class="taskItem-progress">
           <span 
             class="taskItem-progress-bar" 
-            :style="item.subTasks.length && `width: ${item.subTasksCompletedNumber/item.subTasks.length*100}%`"></span>
+            :style="item.subTasksLength && `width: ${item.subTasksCompletedNumber/item.subTasksLength*100}%`"></span>
         </div>
       </div>
 
