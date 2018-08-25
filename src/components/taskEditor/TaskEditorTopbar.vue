@@ -38,7 +38,7 @@
     <div class="title-container">
       <div tabindex="0" class="title">
         <span class="title-text">
-          <div class="content-fakable" @click="displayView = false">
+          <div class="content-fakable" @click="enableTextEditor">
 
             <div class="display-view" :class="{hidden: !displayView}">
               <span>{{ taskItem.title }}</span>
@@ -50,12 +50,12 @@
               @focusout="displayView = true"
             >
               <div class="expandingArea active">
-                <pre>{{ taskItem.title }}</pre>
+                <pre>{{ title }}</pre>
                 <textarea 
                   tabindex="0" 
-                  v-model.trim="taskItem.title" 
+                  v-model.trim="title" 
                   @keypress.enter.prevent="changeTaskTitle"
-                >{{ taskItem.title }}</textarea>
+                >{{ title }}</textarea>
               </div>
             </div>
 
@@ -72,7 +72,8 @@ export default {
   props: [ 'taskItem' ],
   data () {
     return {
-      displayView: true,
+      displayView: true, // 显示文字编辑是否已经完成
+      title: this.taskItem.title
     }
   },
   computed: {
@@ -92,7 +93,16 @@ export default {
       this.$store.commit('toggleTaskStar', { ...this.currentTask })
     },
     changeTaskTitle () {
-      this.$store.commit('changeTaskTitle', this.title)
+      this.displayView = true
+      if (!this.title) {
+        this.title = this.taskItem.title
+      } else {
+        this.$store.commit('changeTaskTitle', this.title)
+      }
+    },
+    enableTextEditor () {
+      this.displayView = false
+      this.title = this.taskItem.title
     }
   }
 }
