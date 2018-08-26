@@ -13,7 +13,7 @@
 
 <script>
 import Popover from './Popover'
-import utils from '../../lib/utils'
+import leancloud from '../../lib/leancloud'
 
 export default {
   name: 'UserPopover',
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     logOut () {
-      utils.logOut()
+      leancloud.logOut()
     }
   }
 }

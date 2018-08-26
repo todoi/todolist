@@ -3,7 +3,7 @@ export default {
   currentList: {
     objectId: '',
     title: '',
-    index: '',
+    index: 0,
     isFilter: true,
   },
   allList: [

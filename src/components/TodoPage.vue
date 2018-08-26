@@ -59,6 +59,7 @@
       <ActivityPopover v-show="currentPopover === 'activity'"/>
       <ConversationPopover v-show="currentPopover === 'conversation'"/>
     </div>
+    <button @click="deleteAll">删除</button>
   </div>
 </template>
 
@@ -84,7 +85,7 @@ import ConversationPopover from './popovers/ConversationPopover.vue'
 
 
 // import js file
-import AV from '../lib/leancloud'
+import leancloud from '../lib/leancloud'
 import utils from '../lib/utils'
 import icon from '../assets/icons.js'
 
@@ -92,7 +93,7 @@ export default {
   name: 'TodoPage',
   components: {DialogListEditor, DialogListDeletor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, TaskList, ListToolbar, AddTask, NotFound, TaskDetail, UserPopover, ActivityPopover, ConversationPopover},
   created () {
-    this.$store.commit('setUser', utils.getAVUser())
+    this.$store.commit('setUser', leancloud.getAVUser())
     utils.goHomePage()
   },
   data (){
@@ -105,7 +106,7 @@ export default {
   },
   computed: {
     currentList () {
-      return this.$store.state.collections.currentList
+      return this.$store.state.currentList
     }
   },
   methods: {
@@ -123,7 +124,7 @@ export default {
       this.$store.commit('changeListTitle', obj)
     },
     createList (title) {
-      this.$store.commit('createList', title )
+      this.$store.dispatch('createList', title )
       this.$nextTick().then(() => {
         this.$refs.sideListsScroll.$el.scrollTop = '10000'
       })
@@ -139,6 +140,17 @@ export default {
     openTaskEditor(){
       this.showTaskEditor = true
     },
+    deleteAll () {
+      let {AV} = leancloud
+      let object0 = AV.Object.createWithoutData('AllList', '5b825edc0b61600063ecf4c9')
+      let object1 = AV.Object.createWithoutData('AllList', '5b825e7fee920a003b6d0597')
+      let object2 = AV.Object.createWithoutData('AllList', '5b825d650b61600063ece5bf')
+      AV.Object.destroyAll([object0, object1, object2]).then(function () {
+        console.log('successful')
+      }, function (error) {
+        console.log(error)
+      });
+    }
   }
 }
 

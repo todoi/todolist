@@ -54,7 +54,7 @@
 </template>
 
 <script>
-  import AV from '../lib/leancloud.js'
+  import leancloud from '../lib/leancloud.js'
   export default {
     name: 'SignIn',
     data () {
@@ -85,7 +85,7 @@
       },
       sendEmail () {
         this.switchSubmitStatus('loading')
-        AV.User.requestPasswordReset(this.content)
+        leancloud.AV.User.requestPasswordReset(this.content)
           .then((success) => {
             this.switchSubmitStatus('successful')
             this.isSuccess = true

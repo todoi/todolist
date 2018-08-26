@@ -6,8 +6,10 @@ import list  from './modules/list'
 import subtasks  from './modules/subtasks'
 
 import newState from './todoList-state'
+
 import listGetters from './list-getters.js'
 import listMutations from './list-mutations.js'
+import listActions from './list-actions.js'
 
 Vue.use(Vuex)
 
@@ -29,6 +31,9 @@ export default new Vuex.Store({
       state.user = user
     },
     ...listMutations,
+  },
+  actions: {
+    ...listActions,
   },
   modules: {
     collections,

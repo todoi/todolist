@@ -5,12 +5,20 @@ export default {
     allList.forEach(item => item.active = false)
     if(listArea === 'filters'){
       filterCollection[index]['active'] = 'true'
-      Object.assign(currentList, filterCollection[index], {index})
+      Object.assign(currentList, filterCollection[index], {index, isFilter: true})
     }
     if(listArea === 'lists'){
       allList[index]['active'] = 'true'
-      Object.assign(currentList, allList[index], {index})
-      console.log(currentList)
+      Object.assign(currentList, allList[index], {index, isFilter: false})
     }
+  },
+  changeListTitle ({ allList }, { index, newTitle, isFilter }) {
+    if (!isFilter) {
+      allList[index].title = newTitle
+    }
+  },
+  initList ( {allList, allTasks}, { objectId, title, active } ) {
+    allList.push({ objectId, title, active: true })
+    allTasks[objectId] = []
   }
 }

@@ -1,4 +1,5 @@
-import AV from './leancloud'
+import leancloud from './leancloud'
+let { AV, getAVUser } = leancloud
 export default {
   getAvatarSrc(username){
     let letter = username.trim().slice(0,1).toUpperCase()
@@ -74,25 +75,17 @@ export default {
     }
     return errorCode
   },
-  getAVUser (user) {
-    let {id, attributes: { username, email }} = user || AV.User.current() || { attributes: {} }
-    return {id, username, email}
-  },
   goTodoPage () {
-    let currentUser = this.getAVUser()
+    let currentUser = getAVUser()
     if (currentUser.id) {
       window.location.href = '/todopage'
     }
   },
   goHomePage () {
-    let currentUser = this.getAVUser()
+    let currentUser = getAVUser()
     if (!currentUser.id) {
       window.location.href = '/'
     }
-  },
-  logOut () {
-    AV.User.logOut()
-    window.location.href = '/'
   },
   createId (arg) {
     return window.btoa(window.encodeURI(arg))

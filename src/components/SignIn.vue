@@ -74,7 +74,7 @@
 </template>
 
 <script>
-  import AV from '../lib/leancloud.js'
+  import leancloud from '../lib/leancloud.js'
   import utils from '../lib/utils'
 
   export default {
@@ -114,7 +114,7 @@
       },
       signIn () {
         this.switchSubmitStatus('loading')
-        AV.User.logIn(this.username, this.password).then((loginedUser) => {
+        leancloud.AV.User.logIn(this.username, this.password).then((loginedUser) => {
           this.switchSubmitStatus('successful')
           window.location.href = '/todopage'
         }, (error) => {

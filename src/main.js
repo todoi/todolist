@@ -11,8 +11,6 @@ import SignUp from './components/SignUp'
 import SignIn from './components/SignIn'
 import ResetPassword from './components/ResetPassword'
 
-import AV from './lib/leancloud'
-
 require('./assets/css/fonts.css')
 require('./assets/css/reset.css')
 

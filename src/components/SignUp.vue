@@ -101,7 +101,7 @@
 </template>
 
 <script>
-  import AV from '../lib/leancloud'
+  import leancloud from '../lib/leancloud'
   import utils from '../lib/utils'
   import getErrorMessages from '../lib/getErrorMessages'
 
@@ -241,7 +241,7 @@
             this.switchSubmitStatus('again')
             return
           }
-          var user = new AV.User();
+          var user = new leancloud.AV.User();
           user.setUsername(this.username.content);
           user.setPassword(this.password.content);
           user.setEmail(this.email.content);
@@ -258,7 +258,7 @@
         }, 500)
       },
       updateUserAndEmailStore ({username, email}) {
-        var Store = AV.Object.extend('UsernameAndEmail');
+        var Store = leancloud.AV.Object.extend('UsernameAndEmail');
         var store = new Store();
         store.set('username', username);
         store.set('email', email);

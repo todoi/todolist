@@ -72,22 +72,5 @@ export default {
   getters: {
   },
   mutations: {
-    createList (state, title) {
-      let list = {
-        id: utils.createId(title),
-        isAnimateUp: false,
-        title,
-        overdueCount: 0,
-        count: 0,
-        active: false,
-      }
-      state.listsCollection.push(list)
-    },
-    deleteList (state, { index }) {
-      state.listsCollection.splice(index, 1)
-    },
-    changeListTitle (state, { index, newTitle }) {
-      state.listsCollection[index].title = newTitle
-    }
   }
 }
