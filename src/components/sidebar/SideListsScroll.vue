@@ -34,7 +34,7 @@ export default {
       return this.$store.state.filterCollection 
     },
     listCollection () {
-      return this.$store.state.allList 
+      return this.$store.state.allList
     },
   },
   methods: {

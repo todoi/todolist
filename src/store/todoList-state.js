@@ -18,7 +18,7 @@ export default {
     },
   ],
   // list 的 leancloud objectId 为 key
-  allTasks: {
+  allTask: {
     work: [
       {
         objectId: 'workTask0',
@@ -86,7 +86,7 @@ export default {
   },
 
   // task 的 leancloud objectId 为 key
-  allSubTasks: {
+  allSubTask: {
     work0: [
       {title:'份额份额', isCompleted: false, displayView: true,}, 
       {title: 'dd', isCompleted: true, displayView: true,}, 
@@ -110,7 +110,7 @@ export default {
     ],
     left2: [],
   },
-  allComments: {
+  allComment: {
     work0: [
       { content: 'fjidjifedf', createAt: 1525332096726, },
       { content: 'fjidjifedfdddddddd', createAt: 1525343096726, }
@@ -127,7 +127,7 @@ export default {
     left1: [],
     left2: [],
   },
-  allFileMetas: {
+  allFileMeta: {
     work0: [
       {
         fileExtension: 'jpg', 

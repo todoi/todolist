@@ -26,7 +26,6 @@
         this.$emit('closeDialog')
       },
       deleteList () {
-        this.closeDialog()
         this.$emit('submit')
       }
     }

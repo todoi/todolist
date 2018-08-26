@@ -59,7 +59,6 @@
       <ActivityPopover v-show="currentPopover === 'activity'"/>
       <ConversationPopover v-show="currentPopover === 'conversation'"/>
     </div>
-    <button @click="deleteAll">删除</button>
   </div>
 </template>
 
@@ -130,7 +129,8 @@ export default {
       })
     },
     deleteList () {
-      this.$store.commit('deleteList', this.currentList)
+      this.$store.dispatch('deleteList', this.currentList)
+      this.closeDialog()
     },
     openDialogListChanger () { 
       //payload = {listId, index, title}
@@ -140,17 +140,6 @@ export default {
     openTaskEditor(){
       this.showTaskEditor = true
     },
-    deleteAll () {
-      let {AV} = leancloud
-      let object0 = AV.Object.createWithoutData('AllList', '5b825edc0b61600063ecf4c9')
-      let object1 = AV.Object.createWithoutData('AllList', '5b825e7fee920a003b6d0597')
-      let object2 = AV.Object.createWithoutData('AllList', '5b825d650b61600063ece5bf')
-      AV.Object.destroyAll([object0, object1, object2]).then(function () {
-        console.log('successful')
-      }, function (error) {
-        console.log(error)
-      });
-    }
   }
 }
 

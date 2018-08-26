@@ -29,7 +29,7 @@
           {{ isList ? $store.getters.getListOverdue(item.objectId).length : $store.getters[`get${toCapitalize(item.objectId)}Overdue`].length }}
         </span>
         <span class="count">
-          {{ (isList ? $store.state.allTasks[item.objectId].length : $store.getters[`get${toCapitalize(item.objectId)}`].length) || '' }}
+          {{ (isList ? $store.state.allTask[item.objectId].length : $store.getters[`get${toCapitalize(item.objectId)}`].length) || '' }}
         </span>
         <span class="list-options" title="清单选项" @click="$emit('openDialogListChanger')">
           <svg class="options rtl-flip" width="20px" height="20px">

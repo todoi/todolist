@@ -7,11 +7,11 @@ export default {
   getListCollection (state) {
     return state.allList
   },
-  getAllTasks ({allTasks}) {
+  getAllTasks ({allTask}) {
     let arr = []
-    for (var key in allTasks) {
-      if (allTasks.hasOwnProperty(key)) {
-        arr = arr.concat(allTasks[key])
+    for (var key in allTask) {
+      if (allTask.hasOwnProperty(key)) {
+        arr = arr.concat(allTask[key])
       }
     }
     return arr
@@ -66,11 +66,22 @@ export default {
     let arr = getWeek.filter(task => task.deadline < nowTimeStamp)
     return arr
   },
-  getListOverdue ({allTasks}) {
+  getListOverdue ({allTask}) {
     return (objectId) => {
       let nowTimeStamp = new Date().getTime()
-      let arr = allTasks[objectId].filter(task => task.deadline && task.deadline < nowTimeStamp)
+      let arr = allTask[objectId].filter(task => task.deadline && task.deadline < nowTimeStamp)
       return arr
     }
+  },
+  getCurrentListAllId (state) {
+    let {currentList: {objectId}, allTask, allSubTask, allComment, allFileMeta} = state
+    let taskIds, subTaskIds = [], commentIds = [], fileMetaIds = []
+    taskIds = allTask[objectId].map(task => task.objectId)
+    taskIds.forEach(objectId => {
+      allSubTask[objectId].forEach(subTask =>  subTaskIds.push(subTask.id))
+      allComment[objectId].forEach(comment =>  commentIds.push(comment.id))
+      allFileMeta[objectId].forEach(fileMeta =>  fileMetas.push(fileMeta.id))
+    })
+    return {taskIds, subTaskIds, commentIds, fileMetaIds}
   }
 }
