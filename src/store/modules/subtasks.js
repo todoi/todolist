@@ -6,13 +6,11 @@ export default {
   },
   mutations: {
     setSubTasks (state, subTasks) {
-      console.log(3)
       state.subTasks = subTasks
     }
   },
   actions: {
     fetchSubTasks ({ state, commit }, id) {
-      console.log(2)
       let subTasks = [
         {title:'份额份额', isCompleted: false, displayView: true,}, 
         {title: 'dd', isCompleted: true, displayView: true,}, 

@@ -9,21 +9,8 @@ export default {
     },
     filtersCollection: [
       {
-        id: 'inbox',
-        isAnimateUp: true,  //是否隐藏
-        title: '收件箱',
-        overdueCount: 10,  //过期任务的个数
-        count: 1, // 总共的任务数量
-        active: false, 
-      },{
-        id: 'assigned',
-        isAnimateUp: true, 
-        title: '分配给我',
-        overdueCount: 0,
-        count: 1,
-        active: false,
-      },{
         id: 'all',
+        objectId: 'all',
         isAnimateUp: false,
         title: '全部',
         overdueCount: 10,
@@ -31,6 +18,7 @@ export default {
         active: false,
       },{
         id: 'starred',
+        objectId: 'starred',
         isAnimateUp: false,
         title: '已加星标',
         overdueCount: 0,
@@ -38,6 +26,7 @@ export default {
         active: false,
       },{
         id: 'today',
+        objectId: 'today',
         isAnimateUp: false,
         title: '今天',
         overdueCount: 0,
@@ -45,6 +34,7 @@ export default {
         active: false,
       },{
         id: 'week',
+        objectId: 'week',
         isAnimateUp: false,
         title: '周',
         overdueCount: 0,
@@ -52,6 +42,7 @@ export default {
         active: false,
       },{
         id: 'completed',
+        objectId: 'completed',
         isAnimateUp: false,
         title: '已完成',
         overdueCount: 0,
@@ -62,12 +53,14 @@ export default {
     listsCollection:[
       {
         id: '3429677865',
+        objectId: 'work',
         title: '工作',
         overdueCount: 10,
         count: 2,
         active: false,
       },{
         id: '3429676336',
+        objectId: 'life',
         title: '生活',
         overdueCount: 10,
         count: 1,
@@ -79,19 +72,6 @@ export default {
   getters: {
   },
   mutations: {
-    switchList ({filtersCollection,listsCollection, currentList}, {index, listArea}) {
-      // 选中侧边栏中的 List 
-      filtersCollection.forEach(function(item, index){item.active = false})
-      listsCollection.forEach(function(item, index){item.active = false})
-      if(listArea === 'filters'){
-        filtersCollection[index]['active'] = 'true'
-        Object.assign(currentList, filtersCollection[index], {index})
-      }
-      if(listArea === 'lists'){
-        listsCollection[index]['active'] = 'true'
-        Object.assign(currentList, listsCollection[index], {index})
-      }
-    },
     createList (state, title) {
       let list = {
         id: utils.createId(title),

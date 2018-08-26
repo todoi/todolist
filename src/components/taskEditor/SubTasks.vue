@@ -107,7 +107,6 @@ export default {
       return this.$store.state.subtasks.subTasks
     },
     taskItemTitle () {
-      console.log(1)
       this.$store.dispatch('fetchSubTasks', this.taskItem.objectId)
       return this.taskItem.title
     }

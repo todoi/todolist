@@ -5,6 +5,10 @@ import collections  from './modules/collections'
 import list  from './modules/list'
 import subtasks  from './modules/subtasks'
 
+import newState from './todoList-state'
+import listGetters from './list-getters.js'
+import listMutations from './list-mutations.js'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -15,11 +19,16 @@ export default new Vuex.Store({
       username: '',
       email: ''
     },
+    ...newState
+  },
+  getters: {
+    ...listGetters,
   },
   mutations: {
     setUser (state, user) {
       state.user = user
     },
+    ...listMutations,
   },
   modules: {
     collections,
@@ -27,3 +36,4 @@ export default new Vuex.Store({
     subtasks
   }
 })
+

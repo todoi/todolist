@@ -5,14 +5,14 @@
       v-for="(item, index) in items" 
       :class="{
         active: item.active, 
-        overdue: item.overdueCount, 
+        overdue: isList ? $store.getters.getListOverdue(item.objectId).length : $store.getters[`get${toCapitalize(item.objectId)}Overdue`].length , 
         'animate-up': item.isAnimateUp, 
         'owner list draggable': isList
       }" 
       :tabindex="item.isAnimateUp ? -1 : 0" 
       @click="selectItem($event, index, itemType)"
       >
-      <a :href="'#/lists/' + item.id">
+      <a :href="'#/lists/' + item.objectId">
         <span 
           class="list-icon" 
           :title="item.title"
@@ -20,13 +20,17 @@
           <svg width="20px" height="20px" class="list rtl-flip" v-if="isList">
             <use xlink:href="#icon-list"></use>
           </svg>
-          <svg width="20px" height="20px" :class="item.id" v-else>
-            <use :xlink:href="`#icon-${item.id}`"></use>
+          <svg width="20px" height="20px" :class="item.objectId" v-else>
+            <use :xlink:href="`#icon-${item.objectId}`"></use>
           </svg>
         </span>
         <span class="title">{{ item.title }}</span>
-        <span class="overdue-count">{{ item.overdueCount }}</span>
-        <span class="count">{{ item.count ? item.count : '' }}</span>
+        <span class="overdue-count">
+          {{ isList ? $store.getters.getListOverdue(item.objectId).length : $store.getters[`get${toCapitalize(item.objectId)}Overdue`].length }}
+        </span>
+        <span class="count">
+          {{ (isList ? $store.state.allTasks[item.objectId].length : $store.getters[`get${toCapitalize(item.objectId)}`].length) || '' }}
+        </span>
         <span class="list-options" title="清单选项" @click="$emit('openDialogListChanger')">
           <svg class="options rtl-flip" width="20px" height="20px">
             <use xlink:href="#icon-options"></use>
@@ -42,9 +46,13 @@ export default {
   name: 'Xyz',
   props: ['isList', 'items', 'itemType'],
   methods: {
-    selectItem: function($event, index, listArea){
+    selectItem ($event, index, listArea) {
       this.$emit('selectItem', {index, listArea})
     },
+    toCapitalize (string) {
+      let str = string.slice(0, 1).toUpperCase() + string.slice(1)
+      return string.slice(0, 1).toUpperCase() + string.slice(1)
+    }
   }
 }
 </script>

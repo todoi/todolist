@@ -113,5 +113,26 @@ export default {
     if(hours) result = `${hours}小时`
     if(days) result = `${days}天`
     return result
+  },
+  getTodayDuration (timeStamp) {
+    let time = new Date(timeStamp),
+      hours = time.getHours(),
+      minutes = time.getMinutes(),
+      seconds = time.getSeconds (),
+      milliseconds = time.getMilliseconds(),
+      min, max
+    min = timeStamp - hours * 60 * 60 * 1000 - minutes *60 * 1000 - seconds * 1000 - milliseconds
+    max = min + 24 * 60 * 60 * 1000
+    return { min, max }
+  },
+  getWeekDuration (timeStamp) {
+    let time = new Date(timeStamp)
+    let { min:dayMin, max: dayMax } = this.getTodayDuration(timeStamp)
+    let day = time.getDay()
+    let arr = [7, 1, 2, 3, 4, 5, 6]
+    let min, max
+    min = dayMin - (arr[day] - 1) * 24 * 60 * 60 * 1000
+    max = dayMax + (7 - arr[day]) * 24 * 60 * 60 * 1000
+    return {min, max}
   }
 }

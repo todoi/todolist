@@ -2,13 +2,13 @@
   <div class="lists-scroll">
     <CollectionScroll class="filters-collection" 
       itemType="filters" 
-      :items="filtersCollection" 
+      :items="filterCollection" 
       @selectItem="selectItem" />
 
     <CollectionScroll class="lists-collection" 
       isList="true"
       itemType="lists" 
-      :items="listsCollection" 
+      :items="listCollection" 
       @selectItem="selectItem" 
       @openDialogListChanger="$emit('openDialogListChanger')"
       />
@@ -30,11 +30,11 @@ export default {
   name: 'SideListsScroll',
   components: { CollectionScroll },
   computed: {
-    filtersCollection () {
-      return this.$store.state.collections.filtersCollection 
+    filterCollection () {
+      return this.$store.state.filterCollection 
     },
-    listsCollection () {
-      return this.$store.state.collections.listsCollection 
+    listCollection () {
+      return this.$store.state.allList 
     },
   },
   methods: {
