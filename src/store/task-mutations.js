@@ -9,12 +9,14 @@ export default {
   },
   // 点击在 list 列表的 的某个任务
   selectListTask ({ allTask, currentTask }, {taskId, listId, item}) {
+    if (currentTask.id === taskId && currentTask.selected) {return}
     allTask[listId].forEach(task => task.id === taskId ? task.selected=true : task.selected=false )
     Object.assign(currentTask, item)
   },
   // 点击在 filter 列表的 的某个任务
   // 比如点击在 '已加星标' 的某个任务上
   selectFilterTask ({ allTask, currentTask }, {taskId, listId, task, items}) {
+    if (currentTask.id === taskId && currentTask.selected) {return}
     items.forEach(item => {
       if (item.listId === listId) {
         allTask[item.listId].forEach(task => task.id === taskId ? task.selected=true : task.selected=false)
@@ -22,7 +24,7 @@ export default {
         allTask[item.listId].forEach(task => task.selected=false)
       }
     })
-    Object.assign(currentTask, item)
+    Object.assign(currentTask, task)
   },
   // 用户在未完成 item 的checkbox 上点击
   checkTask ({ currentTask, allTask }, task) {
@@ -50,5 +52,14 @@ export default {
       }
     })
     Object.assign(currentTask, task)
+  },
+  toggleTaskStar ({allTask}, task){
+    let listId = task.belongTo.id
+    let taskId = task.id
+    allTask[listId].forEach(task => {
+      if (task.id === taskId) {
+        task.starred = !task.starred
+      }
+    })
   },
 }

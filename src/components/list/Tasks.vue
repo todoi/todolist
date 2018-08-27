@@ -72,7 +72,7 @@
         <a 
           class="taskItem-star" 
           tabindex="-1" 
-          @click.stop="$emit('toggleTaskStar', { index, isDoneItem })"
+          @click.stop="$emit('toggleTaskStar', item)"
         >
           <span 
             title="标记为星标"

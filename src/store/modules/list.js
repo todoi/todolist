@@ -76,13 +76,6 @@ export default {
   },
   mutations: {
     // 切换星标
-    toggleTaskStar ({ taskItems, doneTaskItems }, {index, isDoneItem}){
-      if (isDoneItem){
-        doneTaskItems[index].taskStarred = !doneTaskItems[index].taskStarred
-      }else{
-        taskItems[index].taskStarred = !taskItems[index].taskStarred
-      }
-    },
     changeTaskTitle ({ currentTask: { index, isDoneItem }, taskItems, doneTaskItems }, title) {
       if (isDoneItem) {
         doneTaskItems[index].title = title

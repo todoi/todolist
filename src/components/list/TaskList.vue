@@ -77,8 +77,8 @@ export default {
       this.currentList.id === 'completed' ? this.restoreTask(item) : this.checkTask(item)
     },
     // 切换星标
-    toggleTaskStar ({index, isDoneItem}){
-      this.$store.commit('toggleTaskStar', { index, isDoneItem })
+    toggleTaskStar (item){
+      this.$store.commit('toggleTaskStar', item)
     },
     // 返回一个首字母大写的字符串
     toCapitalize (string) {
