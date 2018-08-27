@@ -17,15 +17,15 @@ export default {
       allList[index].title = newTitle
     }
   },
-  initList ({allList, allTask}, { objectId, title, active }) {
-    allList.push({ objectId, title, active: true })
-    allTask[objectId] = []
+  initList ({allList, allTask}, { id, title, active }) {
+    allList.push({ id, title, active: true })
+    allTask[id] = []
   },
-  deleteItem (state, {objectId, collectionName, index}) {
+  deleteItem (state, {id, collectionName, index}) {
     if (index) {
       state[collectionName].splice(index, 1)
     } else {
-      delete state[collectionName].objectId
+      delete state[collectionName].id
     }
   }
 }

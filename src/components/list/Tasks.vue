@@ -40,7 +40,7 @@
           tabindex="-1"
           title="此任务已有评论" 
           class="conversations-wrapper" 
-          :class="{hidden: !item.comments.length}" 
+          :class="{hidden: !$store.getters.getCurrentComments(item.id).length}" 
         >
           <svg class="conversations-small rtl-flip" width="20px" height="20px">
             <use xlink:href="#icon-conversations-small"></use>
@@ -51,7 +51,7 @@
           tabindex="-1"
           title="此任务带有附件" 
           class="attachment-wrapper" 
-          :class="{hidden: !item.fileList.length}" 
+          :class="{hidden: !$store.getters.getCurrentFileMetas(item.id).length}" 
         >
           <svg class="attachment" width="20px" height="20px">
             <use xlink:href="#icon-attachment"></use>
@@ -77,7 +77,7 @@
           <span 
             title="标记为星标"
             class="star-wrapper" 
-            :class="{hidden: item.taskStarred}" 
+            :class="{hidden: item.starred}" 
           >
             <svg width="18px" height="18px">
               <use xlink:href="#icon-star-taskItem"></use>
@@ -86,7 +86,7 @@
           <span 
             title="移除星标"
             class="starred-wrapper" 
-            :class="{hidden: !item.taskStarred}" 
+            :class="{hidden: !item.starred}" 
           >
             <svg width="22px" height="44px">
               <use xlink:href="#icon-starred-taskItem"></use>
@@ -95,9 +95,9 @@
         </a>
 
         <div class="taskItem-progress">
-          <span 
-            class="taskItem-progress-bar" 
-            :style="item.subTasksLength && `width: ${item.subTasksCompletedNumber/item.subTasksLength*100}%`"></span>
+            <!--:style="item.subTasksLength && `width: ${item.subTasksCompletedNumber/item.subTasksLength*100}%`"-->
+          <span class="taskItem-progress-bar" >
+          </span>
         </div>
       </div>
 

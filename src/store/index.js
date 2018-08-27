@@ -11,6 +11,10 @@ import listGetters from './list-getters.js'
 import listMutations from './list-mutations.js'
 import listActions from './list-actions.js'
 
+import taskGetters from './task-getters.js'
+import taskMutations from './task-mutations.js'
+import taskActions from './task-actions.js'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -25,15 +29,18 @@ export default new Vuex.Store({
   },
   getters: {
     ...listGetters,
+    ...taskGetters,
   },
   mutations: {
     setUser (state, user) {
       state.user = user
     },
     ...listMutations,
+    ...taskMutations,
   },
   actions: {
     ...listActions,
+    ...taskActions,
   },
   modules: {
     collections,

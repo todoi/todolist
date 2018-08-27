@@ -23,12 +23,12 @@
       tabindex="0" 
       @click.stop="toggleTaskStar"
     >
-      <span class="star-wrapper" title="标记为星标" :class="{hidden: taskItem.taskStarred}">
+      <span class="star-wrapper" title="标记为星标" :class="{hidden: taskItem.starred}">
         <svg width="100%" height="100%">
           <use xlink:href="#icon-star-detail"></use>
         </svg>
       </span>
-      <span class="starred-wrapper" title="移除星标" :class="{hidden: !taskItem.taskStarred}">
+      <span class="starred-wrapper" title="移除星标" :class="{hidden: !taskItem.starred}">
         <svg width="100%" height="100%">
           <use xlink:href="#icon-starred-detail"></use>
         </svg>

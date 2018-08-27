@@ -43,12 +43,12 @@ export default {
     }
     return promise
   },
-  deleteAll (className, objectIds) {
+  deleteAll (className, ids) {
     let objects, promise
-    if (objectIds instanceof Array && objectIds.length === 0) {
+    if (ids instanceof Array && ids.length === 0) {
       return Promise.resolve('传过来的 ObjectIds 数组是空的')
     }
-    objects = objectIds.map(objectId => AV.Object.createWithoutData(className, objectId))
+    objects = ids.map(id => AV.Object.createWithoutData(className, id))
     try {
       promise = AV.Object.destroyAll(objects)
     } catch (error) {
@@ -57,9 +57,9 @@ export default {
     }
     return promise
   },
-  deleteObject (className, objectId) {
+  deleteObject (className, id) {
     let object, promise
-    object = AV.Object.createWithoutData(className, objectId);
+    object = AV.Object.createWithoutData(className, id);
     try {
       promise = object.destroy()
     } catch (error) {

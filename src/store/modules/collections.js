@@ -10,7 +10,7 @@ export default {
     filtersCollection: [
       {
         id: 'all',
-        objectId: 'all',
+        id: 'all',
         isAnimateUp: false,
         title: '全部',
         overdueCount: 10,
@@ -18,7 +18,7 @@ export default {
         active: false,
       },{
         id: 'starred',
-        objectId: 'starred',
+        id: 'starred',
         isAnimateUp: false,
         title: '已加星标',
         overdueCount: 0,
@@ -26,7 +26,7 @@ export default {
         active: false,
       },{
         id: 'today',
-        objectId: 'today',
+        id: 'today',
         isAnimateUp: false,
         title: '今天',
         overdueCount: 0,
@@ -34,7 +34,7 @@ export default {
         active: false,
       },{
         id: 'week',
-        objectId: 'week',
+        id: 'week',
         isAnimateUp: false,
         title: '周',
         overdueCount: 0,
@@ -42,7 +42,7 @@ export default {
         active: false,
       },{
         id: 'completed',
-        objectId: 'completed',
+        id: 'completed',
         isAnimateUp: false,
         title: '已完成',
         overdueCount: 0,
@@ -53,14 +53,14 @@ export default {
     listsCollection:[
       {
         id: '3429677865',
-        objectId: 'work',
+        id: 'work',
         title: '工作',
         overdueCount: 10,
         count: 2,
         active: false,
       },{
         id: '3429676336',
-        objectId: 'life',
+        id: 'life',
         title: '生活',
         overdueCount: 10,
         count: 1,

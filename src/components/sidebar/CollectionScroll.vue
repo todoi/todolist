@@ -5,14 +5,14 @@
       v-for="(item, index) in items" 
       :class="{
         active: item.active, 
-        overdue: isList ? $store.getters.getListOverdue(item.objectId).length : $store.getters[`get${toCapitalize(item.objectId)}Overdue`].length , 
+        overdue: isList ? $store.getters.getListOverdue(item.id).length : $store.getters[`get${toCapitalize(item.id)}Overdue`].length , 
         'animate-up': item.isAnimateUp, 
         'owner list draggable': isList
       }" 
       :tabindex="item.isAnimateUp ? -1 : 0" 
       @click="selectItem($event, index, itemType)"
       >
-      <a :href="'#/lists/' + item.objectId">
+      <a :href="'#/lists/' + item.id">
         <span 
           class="list-icon" 
           :title="item.title"
@@ -20,16 +20,16 @@
           <svg width="20px" height="20px" class="list rtl-flip" v-if="isList">
             <use xlink:href="#icon-list"></use>
           </svg>
-          <svg width="20px" height="20px" :class="item.objectId" v-else>
-            <use :xlink:href="`#icon-${item.objectId}`"></use>
+          <svg width="20px" height="20px" :class="item.id" v-else>
+            <use :xlink:href="`#icon-${item.id}`"></use>
           </svg>
         </span>
         <span class="title">{{ item.title }}</span>
         <span class="overdue-count">
-          {{ isList ? $store.getters.getListOverdue(item.objectId).length : $store.getters[`get${toCapitalize(item.objectId)}Overdue`].length }}
+          {{ isList ? $store.getters.getListOverdue(item.id).length : $store.getters[`get${toCapitalize(item.id)}Overdue`].length }}
         </span>
         <span class="count">
-          {{ (isList ? $store.state.allTask[item.objectId].length : $store.getters[`get${toCapitalize(item.objectId)}`].length) || '' }}
+          {{ (isList ? $store.state.allTask[item.id].length : $store.getters[`get${toCapitalize(item.id)}`].length) || '' }}
         </span>
         <span class="list-options" title="清单选项" @click="$emit('openDialogListChanger')">
           <svg class="options rtl-flip" width="20px" height="20px">
@@ -51,7 +51,7 @@ export default {
     },
     toCapitalize (string) {
       let str = string.slice(0, 1).toUpperCase() + string.slice(1)
-      return string.slice(0, 1).toUpperCase() + string.slice(1)
+      return str
     }
   }
 }

@@ -1,50 +1,55 @@
 export default {
   // 侧边栏选中的list
   currentList: {
-    objectId: '',
-    title: '',
+    id: 'all',
+    title: '全部',
     index: 0,
     isFilter: true,
   },
+  currentTask: {
+    id: '',
+    title: '',
+    index: 0,
+  },
   allList: [
     {
-      objectId: 'work',
+      id: 'work',
       title: '工作',
       active: false, // 拉倒数据是添加进去的
     },{
-      objectId: 'life',
+      id: 'life',
       title: '生活',
       active: false,
     },
   ],
-  // list 的 leancloud objectId 为 key
+  // list 的 leancloud id 为 key
   allTask: {
     work: [
       {
-        objectId: 'workTask0',
+        id: 'work0',
         title: '工作 1',
         selected: false,
         starred: false,
-        createAt: 1525331956726,
+        createdAt: 1525331956726,
         deadline: 1525331976726,
         isCompleted: false,
         note: 'jfieji'
       },{
-        objectId: 'workTask1',
+        id: 'work1',
         title: '代码 2',
         selected: false,
         starred: true,
-        createAt: 1525331956727,
+        createdAt: 1525331956727,
         deadline: null,
         isCompleted: false,
         note: ''
       },
       {
-        objectId: 'workTask2',
+        id: 'work2',
         selected: false,
         title: '小珠子 333',
         starred: false,
-        createAt: 1525331956728,
+        createdAt: 1525331956728,
         doneDate: 1525331966728,
         deadline: null,
         isCompleted: true,
@@ -53,30 +58,30 @@ export default {
     ],
     life: [
       {
-        objectId: 'life0',
+        id: 'life0',
         title: '生活 a',
         selected: false,
         starred: true,
-        createAt: 1525331956726,
+        createdAt: 1525331956726,
         deadline: 1525331976726,
         isCompleted: false,
         note: 'jfieji',
       },{
-        objectId: 'life1',
+        id: 'life1',
         title: '生活 b',
         selected: false,
         starred: true,
-        createAt: 1525331956727,
+        createdAt: 1525331956727,
         deadline: null,
         isCompleted: false,
         note: '',
       },
       {
-        objectId: 'life2',
+        id: 'life2',
         selected: false,
         title: '生活 c',
         starred: false,
-        createAt: 1525331956728,
+        createdAt: 1525331956728,
         doneDate: 1525331966728,
         deadline: null,
         isCompleted: true,
@@ -85,7 +90,7 @@ export default {
     ]
   },
 
-  // task 的 leancloud objectId 为 key
+  // task 的 leancloud id 为 key
   allSubTask: {
     work0: [
       {title:'份额份额', isCompleted: false, displayView: true,}, 
@@ -103,29 +108,29 @@ export default {
       {title: 'life0-subtask b', isCompleted: true, displayView: true,}, 
       {title: 'life0-subtask c', isCompleted: true, displayView:true,}
     ],
-    left1: [
+    life1: [
       {title: 'life1-subtask a', isCompleted: false, displayView: true,}, 
       {title: 'life1-subtask b', isCompleted: true, displayView: true,}, 
       {title: 'life1-subtask c', isCompleted: true, displayView:true,}
     ],
-    left2: [],
+    life2: [],
   },
   allComment: {
     work0: [
-      { content: 'fjidjifedf', createAt: 1525332096726, },
-      { content: 'fjidjifedfdddddddd', createAt: 1525343096726, }
+      { content: 'fjidjifedf', createdAt: 1525332096726, },
+      { content: 'fjidjifedfdddddddd', createdAt: 1525343096726, }
     ],
     work1: [
-      { content: 'work1-comment 0', createAt: 1525332096726, },
-      { content: 'work1-comment 1', createAt: 1525343096726, }
+      { content: 'work1-comment 0', createdAt: 1525332096726, },
+      { content: 'work1-comment 1', createdAt: 1525343096726, }
     ],
     work2: [],
     life0: [
-      { content: 'life0-comment 0', createAt: 1525332096726, },
-      { content: 'life0-comment 1', createAt: 1525343096726, }
+      { content: 'life0-comment 0', createdAt: 1525332096726, },
+      { content: 'life0-comment 1', createdAt: 1525343096726, }
     ],
-    left1: [],
-    left2: [],
+    life1: [],
+    life2: [],
   },
   allFileMeta: {
     work0: [
@@ -148,32 +153,32 @@ export default {
         creatorName: 'todoi', 
       }
     ],
-    left1: [],
-    left2: [],
+    life1: [],
+    life2: [],
   },
   filterCollection: [
     {
-      objectId: 'all',
+      id: 'all',
       isAnimateUp: false,
       title: '全部',
       active: false,
     },{
-      objectId: 'starred',
+      id: 'starred',
       isAnimateUp: false,
       title: '已加星标',
       active: false,
     },{
-      objectId: 'today',
+      id: 'today',
       isAnimateUp: false,
       title: '今天',
       active: false,
     },{
-      objectId: 'week',
+      id: 'week',
       isAnimateUp: false,
       title: '周',
       active: false,
     },{
-      objectId: 'completed',
+      id: 'completed',
       isAnimateUp: false,
       title: '已完成',
       active: false,

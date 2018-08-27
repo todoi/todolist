@@ -18,7 +18,7 @@
       :isDoneItem="true"
       v-if="this.isShowDoneItems" 
       :items="doneTaskItems"
-      @openTaskEditor="$emit('openTaskEditor')"
+      @openTaskEditor="(payload) => $emit('openTaskEditor', payload)"
       @selectTaskItem="selectTaskItem"
       @triggerCheckEvent="restoreTask"
       @toggleTaskStar="toggleTaskStar"
@@ -41,12 +41,12 @@ export default {
   },
   computed:{
     taskItems () {
-      return this.$store.state.list.taskItems
+      return this.$store.getters.getTaskItems
     },
     doneTaskItems () {
-      return this.$store.state.list.doneTaskItems
-    }
-  },
+      return this.$store.getters.getDoneTaskItems 
+    } 
+  }, 
   methods: {
     // 隐藏或者显示已经完成的任务列表
     toggleDoneTaskItems(){

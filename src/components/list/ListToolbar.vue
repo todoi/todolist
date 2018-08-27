@@ -93,7 +93,7 @@ export default {
   },
   computed: {
     currentList () {
-      return this.$store.state.collections.currentList
+      return this.$store.state.currentList
     },
     actionBarMore () {
       return obj.actionBarMore 
@@ -154,9 +154,9 @@ export default {
     sortByPriority(){
       // 根据星星排序
       this.taskItems.sort((a, b) => {
-        // taskStarred 是个布尔值
+        // starred 是个布尔值
         // 加星星的优先级比较高，所以在前面加个 符号
-        return -(Number(a.taskStarred) - Number(b.taskStarred))
+        return -(Number(a.starred) - Number(b.starred))
       })
     },
     sortByDeadline(){

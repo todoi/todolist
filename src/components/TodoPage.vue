@@ -43,7 +43,7 @@
         <div class="tasks-main">
           <ListToolbar />
           <div class="tasks-scroll">
-            <AddTask />
+            <AddTask v-if="!currentList.isFilter"/>
             <TaskList @openTaskEditor="openTaskEditor"/>
             <NotFound class="hidden" />
           </div>
@@ -51,7 +51,7 @@
       </div>
 
       <!-- 编辑任务 -->
-      <TaskDetail v-show="showTaskEditor" @toggleDetailCheckbox="showTaskEditor = false" @close="showTaskEditor = false" @delete="showTaskEditor = false" />
+      <TaskDetail v-if="showTaskEditor" @toggleDetailCheckbox="showTaskEditor = false" @close="showTaskEditor = false" @delete="showTaskEditor = false" />
 
     </div>
     <div class="popover-area" tabindex="-1" ref="popover" @focusout="currentPopover = ''">
@@ -100,7 +100,7 @@ export default {
       isCollapsed: false,
       currentPopover: '',
       currentDialog: '',
-      showTaskEditor: true, // 打开任务编辑区域
+      showTaskEditor: false, // 打开任务编辑区域
     }
   },
   computed: {
@@ -123,14 +123,15 @@ export default {
       this.$store.commit('changeListTitle', obj)
     },
     createList (title) {
-      this.$store.dispatch('createList', title )
-      this.$nextTick().then(() => {
-        this.$refs.sideListsScroll.$el.scrollTop = '10000'
+      this.$store.dispatch('createList', title ).then(value => {
+        this.$nextTick().then(() => {
+          this.$refs.sideListsScroll.$el.scrollTop = '10000'
+        })
       })
     },
     deleteList () {
-      this.$store.dispatch('deleteList', this.currentList)
-      this.closeDialog()
+      let promise = this.$store.dispatch('deleteList', this.currentList)
+      promise.then(value =>  this.closeDialog())
     },
     openDialogListChanger () { 
       //payload = {listId, index, title}

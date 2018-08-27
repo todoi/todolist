@@ -105,7 +105,7 @@ export default {
     datePickerDate(){
       // 更新任务模板中的到期时间
       this.newTask.deadline = this.date 
-        ? new Date(this.date).getTime() 
+        ? new Date(this.date) 
         : ''
       return this.date && new Date(this.date).getDate()
     },
@@ -114,17 +114,12 @@ export default {
     // 返回一个 任务模板
     createTaskTemplate(){
       return {
-        selected: false, // 用于设置被选中时的样式
         title: '',
-        taskStarred: false,  // 是否加了星星
-        createDate: null, // 创建的时间
-        deadline: null, // 到期时间
-        isCompleted: false, // 是否已经完成
-        subTasks: [],   // 子任务数组
-        subTasksCompletedNumber: 0, // 子任务完成的数量
-        note: {content: '', displayView: true},  // 备注
-        comments: [], // 评论
-        fileList: [], // 附件
+        selected: false,
+        starred: false,
+        deadline: '',
+        isCompleted: false,
+        note: '',
       }
     },
     // 是否 focus 在添加任务的输入框
@@ -139,16 +134,15 @@ export default {
     // 切换输入框处的 星星
     toggleNewTaskStarred(){
       this.starred = !this.starred
-      // 更新 newTask 中的 taskStarred 标记
-      this.newTask.taskStarred = this.starred
+      // 更新 newTask 中的 starred 标记
+      this.newTask.starred = this.starred
     },
     // 在添加任务的输入框中 按下 enter 键时调用
     addTask (){
       if(this.newTask.title){
         let item = JSON.parse(JSON.stringify(this.newTask))
         // 写入创建时间 
-        item.createDate = new Date().getTime() 
-        this.taskItems.unshift(item)
+        this.$store.dispatch('createTask', item)
         // 重置 newTask
         this.newTask = this.createTaskTemplate()
         // 去掉 星星 的 starred 类名

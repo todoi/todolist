@@ -67,20 +67,20 @@ export default {
     return arr
   },
   getListOverdue ({allTask}) {
-    return (objectId) => {
+    return (id) => {
       let nowTimeStamp = new Date().getTime()
-      let arr = allTask[objectId].filter(task => task.deadline && task.deadline < nowTimeStamp)
+      let arr = allTask[id].filter(task => task.deadline && task.deadline < nowTimeStamp)
       return arr
     }
   },
   getCurrentListAllId (state) {
-    let {currentList: {objectId}, allTask, allSubTask, allComment, allFileMeta} = state
+    let {currentList: {id}, allTask, allSubTask, allComment, allFileMeta} = state
     let taskIds, subTaskIds = [], commentIds = [], fileMetaIds = []
-    taskIds = allTask[objectId].map(task => task.objectId)
-    taskIds.forEach(objectId => {
-      allSubTask[objectId].forEach(subTask =>  subTaskIds.push(subTask.id))
-      allComment[objectId].forEach(comment =>  commentIds.push(comment.id))
-      allFileMeta[objectId].forEach(fileMeta =>  fileMetas.push(fileMeta.id))
+    taskIds = allTask[id].map(task => task.id)
+    taskIds.forEach(id => {
+      allSubTask[id].forEach(subTask =>  subTaskIds.push(subTask.id))
+      allComment[id].forEach(comment =>  commentIds.push(comment.id))
+      allFileMeta[id].forEach(fileMeta =>  fileMetas.push(fileMeta.id))
     })
     return {taskIds, subTaskIds, commentIds, fileMetaIds}
   }

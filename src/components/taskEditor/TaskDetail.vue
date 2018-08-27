@@ -226,7 +226,7 @@ export default {
       this.$emit('delete', this.taskItem)
     },
     toggleTaskStarred(){
-      this.taskItem.taskStarred = !this.taskItem.taskStarred
+      this.taskItem.starred = !this.taskItem.starred
     },
     addComment(){
       if(this.newComment.content){

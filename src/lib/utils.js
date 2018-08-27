@@ -127,5 +127,9 @@ export default {
     min = dayMin - (arr[day] - 1) * 24 * 60 * 60 * 1000
     max = dayMax + (7 - arr[day]) * 24 * 60 * 60 * 1000
     return {min, max}
+  },
+  toCapitalize (string) {
+    let str = string.slice(0, 1).toUpperCase() + string.slice(1)
+    return str
   }
 }
