@@ -25,25 +25,29 @@ export default {
       return getListAllTask.filter(task => task.isCompleted)
     }
   },
-  // 根据 taskId 得到下面所有的 subtask
+  // 根据 taskId 得到下面所有的 subtask 
+  // 用于 tasks 组件, 没法确定 taskId 的情况之下, v-for
   getCurrentSubTasks ({allSubTask}) {
     return (id) => {
       return allSubTask[id]
     }
   },
   // 根据 taskId 得到下面所有已经完成的 subtask
+  // 用于 tasks 组件, 没法确定 taskId 的情况之下, v-for
   getCompletedSubTasks ({allSubTask}) {
     return (id) => {
       return allSubTask[id].filter(subTask => subTask.isCompleted)
     }
   },
   // 根据 taskId 得到下面所有的 comment
+  // 用于 tasks 组件, 没法确定 taskId 的情况之下, v-for
   getCurrentComments ({allComment}) {
     return (id) => {
       return allComment[id]
     }
   },
   // 根据 taskId 得到下面所有的 filemeta
+  // 用于 tasks 组件, 没法确定 taskId 的情况之下, v-for
   getCurrentFileMetas ({allFileMeta}) {
     return (id) => {
       return allFileMeta[id]
@@ -70,6 +74,7 @@ export default {
     return utils.sortFilterTasks (getWeek)
   },
   // 通过 listId 找到list 
+  // 用于 filter 列表之中, 得到按list分类的标题
   getListById ({allList}) {
     return (listId) => {
       return allList.find(list => list.id === listId)
@@ -80,5 +85,8 @@ export default {
     let taskId = currentTask.id
     let listId = currentTask.belongTo.id
     return allTask[listId].find(task => task.id === taskId)
+  },
+  getEditorSubTasks ({currentTask, allSubTask}) {
+    return allSubTask[currentTask.id]
   }
 }

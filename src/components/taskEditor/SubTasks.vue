@@ -4,7 +4,7 @@
     class="section subtasks" 
     :class="{hasSubtasks: subTasks.length}" 
   >
-    <ul>
+    <ul v-if="subTasks.length">
       <!-- done -->
       <!-- 没有实现拖动功能 -->
       <li 
@@ -13,14 +13,13 @@
         class="section-item subtask" 
         v-for="(item, index) in subTasks"
         :class="{done: item.isCompleted}" 
-        @focusout="closeTextEditor(index)"
       >
         <div class="section-icon">
           <!-- checked -->
           <a 
             class="subtask-checkbox check-box" 
             :class="{checked: item.isCompleted}" 
-            @click="toggleSubtaskCheckbox(index)"
+            @click="toggleSubTaskBox(item, index)"
           >
             <svg class="task-check" width="20px" height="20px">
               <use xlink:href="#icon-task-check"></use>
@@ -32,22 +31,26 @@
         </div>
 
         <div class="section-content top" :ref="`subtask-${index}`" >
-          <div class="section-title selectable" tabindex=0>
+          <div 
+            tabindex=0
+            class="section-title selectable" 
+            @focusout="closeTextEditor(index)"
+            >
             <!-- 将其他的子任务displayView 改为 true -->
             <div class="content-fakable">
               <div 
                 class="display-view" 
-                :class="{hidden: !item.displayView}" 
+                :class="{hidden: !displayViewArr[index]}" 
                 @click="editSubtask(item, index)"
               >{{ item.title }}</div>
 
-              <div class="edit-view" :class="{hidden: item.displayView}">
+              <div class="edit-view" :class="{hidden: displayViewArr[index]}">
                 <div class="expandingArea active">
-                  <pre>{{ item.title }}</pre>
+                  <pre>{{ 'item.title' }}</pre>
                   <textarea 
                     v-model="item.title" 
-                    @keypress.enter.prevent="item.displayView = true" 
-                    @focusin="item.displayView = false"
+                    @keypress.enter.prevent="displayViewArr[index] = true" 
+                    @focusin="editSubtask(item, index)"
                   ></textarea>
                 </div>
               </div>
@@ -88,7 +91,6 @@
       </div>
 
     </div>
-    <div class="hidden">{{ taskItemTitle }}</div>
   </div>
 
 </template>
@@ -96,44 +98,40 @@
 <script>
 export default {
   name: 'SubTasks',
-  props: [ 'taskItem' ],
   data () {
     return {
       newSubtask: this.createSubtaskTemplate(),
+      displayViewArr: [],
+      newTitle: 'jdfioej:w'
     }
   },
   computed: {
     subTasks () {
-      return this.$store.state.subtasks.subTasks
+      let subTasks = this.$store.getters.getEditorSubTasks
+      let length = subTasks.length
+      if (length !== this.displayViewArr.length) {
+        for (var i = 0; i < length; i++) {
+          this.displayViewArr[i] = true
+        }
+      }
+      return subTasks
     },
-    taskItemTitle () {
-      this.$store.dispatch('fetchSubTasks', this.taskItem.id)
-      return this.taskItem.title
-    }
   },
   methods: {
     closeTextEditor (index) {
-      item.displayView = true
-      this.$store.commit('closeSubtaskEditor', index)
+      this.$set(this.displayViewArr, index, true)
     },
-    toggleSubtaskCheckbox(index){
-      if(this.subTasks[index].isCompleted) {
-        // 如果由完成改为未完成
-        this.subTasks[index].isCompleted = false
-        // 完成数量减一
-        this.subTasksCompletedNumber --
-      }else{
-        // 如果由未完成改为已经完成
-        this.subTasks[index].isCompleted = true
-        // 完成数量加一
-        this.subTasksCompletedNumber ++ 
-      }
+    toggleSubTaskBox(item, index){
+      this.$store.commit('toggleSubTaskBox', {index, item})
       // 自己的 displayView 改为true
-      this.subTasks[index].displayView = true
+      this.displayViewArr[index] = true
     },
     // 编辑子任务
     editSubtask(item, index){
-      item.displayView = false
+      // this.displayViewArr[index] = false
+      // this.displayViewArr = [].concat(this.displayViewArr.slice(0, index), this.displayViewArr.slice(index))
+      // 触发 setter 更新
+      this.$set(this.displayViewArr, index, false)
     },
     // 删除子任务
     deleteSubtask(item, index){
@@ -142,7 +140,7 @@ export default {
       if(item.isCompleted) this.subTasksCompletedNumber--
     },
     createSubtaskTemplate(){
-      return {title:'', isCompleted: false, displayView: true,}
+      return {title:'', isCompleted: false}
     },
     // 添加子任务
     addSubtask(){
@@ -161,7 +159,7 @@ textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
 .content-fakable .display-view{white-space: pre-wrap; word-wrap: break-word; word-break: break-all; overflow: hidden; margin-top: 1px;}
 .content-fakable .display-view span{white-space: pre-wrap; user-select: text;}
 .expandingArea{position: relative;}
-.expandingArea pre{line-height: 24px; min-height: 24px; font-size: 16px; font-weight: bold; tab-size: 1; margin-top: 1px; padding: 0; border: none;
+.expandingArea pre{line-height: 24px; min-height: 20px; font-size: 16px; font-weight: bold; tab-size: 1; margin-top: 1px; padding: 0; border: none;
   visibility: hidden; display: block; white-space: pre-wrap; word-wrap: break-word; word-break: break-all;font-family: 'Avenir', Helvetica, Arial, sans-serif;}
 .expandingArea textarea{line-height: 24px; font-size: 16px; 
   overflow: hidden; position: absolute; top: -1px; left: 0; width: 100%; height: 100%;

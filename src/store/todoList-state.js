@@ -105,25 +105,25 @@ export default {
   // task 的 leancloud id 为 key
   allSubTask: {
     work0: [
-      {title:'份额份额', isCompleted: false, displayView: true,}, 
-      {title: 'dd', isCompleted: false, displayView: true,}, 
-      {title: 'hh', isCompleted: true, displayView:true,}
+      {title:'份额份额', isCompleted: false}, 
+      {title: 'dd', isCompleted: false}, 
+      {title: 'hh', isCompleted: true}
     ],
     work1: [
-      {title: 'wor1-subtask a', isCompleted: false, displayView: true,}, 
-      {title: 'wor1-subtask b', isCompleted: true, displayView: true,}, 
-      {title: 'wor1-subtask c', isCompleted: true, displayView:true,}
+      {title: 'wor1-subtask a', isCompleted: false}, 
+      {title: 'wor1-subtask b', isCompleted: true}, 
+      {title: 'wor1-subtask c', isCompleted: true,}
     ],
     work2: [],
     life0: [
-      {title: 'life0-subtask a', isCompleted: false, displayView: true,}, 
-      {title: 'life0-subtask b', isCompleted: false, displayView: true,}, 
-      {title: 'life0-subtask c', isCompleted: false, displayView:true,}
+      {title: 'life0-subtask a', isCompleted: false}, 
+      {title: 'life0-subtask b', isCompleted: false}, 
+      {title: 'life0-subtask c', isCompleted: false}
     ],
     life1: [
-      {title: 'life1-subtask a', isCompleted: false, displayView: true,}, 
-      {title: 'life1-subtask b', isCompleted: true, displayView: true,}, 
-      {title: 'life1-subtask c', isCompleted: true, displayView:true,}
+      {title: 'life1-subtask a', isCompleted: false}, 
+      {title: 'life1-subtask b', isCompleted: true}, 
+      {title: 'life1-subtask c', isCompleted: true}
     ],
     life2: [],
   },
@@ -182,12 +182,12 @@ export default {
     },{
       id: 'today',
       isAnimateUp: false,
-      title: '今天',
+      title: '今天到期',
       active: false,
     },{
       id: 'week',
       isAnimateUp: false,
-      title: '周',
+      title: '本周到期',
       active: false,
     },{
       id: 'completed',
