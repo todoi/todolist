@@ -44,7 +44,7 @@
           <ListToolbar />
           <div class="tasks-scroll">
             <AddTask v-if="!currentList.isFilter"/>
-            <TaskList @openTaskEditor="openTaskEditor"/>
+            <TaskList :currentList="currentList" @openTaskEditor="openTaskEditor"/>
             <NotFound class="hidden" />
           </div>
         </div>

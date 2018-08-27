@@ -1,6 +1,7 @@
 import leancloud from './leancloud'
 let { AV, getAVUser } = leancloud
 export default {
+  // 使用 Canvas 写成 用户名首字母的图片
   getAvatarSrc(username){
     let letter = username.trim().slice(0,1).toUpperCase()
     let canvas = document.createElement('canvas')
@@ -21,7 +22,8 @@ export default {
     dataSrc = canvas.toDataURL()
     return dataSrc
   },
-  throttle (inputObject, callback, delay) { // input 错误检查时, 间隔500ms, 检查一次
+  //  间隔500ms, 检查一次 input
+  throttle (inputObject, callback, delay) { 
     if (inputObject.timer) {
       window.clearTimeout(inputObject.timer)
     }
@@ -29,7 +31,8 @@ export default {
       callback()
     }, delay)
   },
-  validateUsername (content) { //判断是否存在语法错误
+  // 检验用户名是否存在语法错误
+  validateUsername (content) { 
     let errorCode = 0
     if(content.length > 16) {
       errorCode = 704
@@ -38,11 +41,13 @@ export default {
     }
     return errorCode
   },
-  validateEmail (content) { //判断是否存在语法错误
+  // 检验邮箱是否存在语法错误
+  validateEmail (content) { 
     let errorCode = 0
     if(!(/^[\w]+[\w-.]*@[\w-]+(\.[\w-]+)+$/.test(content))) errorCode = 802
     return errorCode
   },
+  // 检验 密码
   validatePassword (content) { //判断是否存在语法错误
     let errorCode = 0
     if (content.length < 7) {
@@ -56,8 +61,10 @@ export default {
     }
     return errorCode
   },
+  // 检验 输入的内容是否已经 存在
   async validateExist (inputName, content) {
-    let errorCode = 0, results = [] // 如果结果长度大于1, 说明这个已经被注册了
+    // results 长度大于1, 说明这个已经被注册了
+    let errorCode = 0, results = [] 
     let query = new AV.Query('UsernameAndEmail');
     query.equalTo(inputName, content);
     try {
@@ -75,12 +82,14 @@ export default {
     }
     return errorCode
   },
+  // 如果已经登录 直接到 todoPage 页面
   goTodoPage () {
     let currentUser = getAVUser()
     if (currentUser.id) {
       window.location.href = '/todopage'
     }
   },
+  // 如果没有登录 那么 转到homepage 
   goHomePage () {
     let currentUser = getAVUser()
     if (!currentUser.id) {
@@ -107,6 +116,9 @@ export default {
     if(days) result = `${days}天`
     return result
   },
+  // 取得今天的 0 点和 24点 的 timeStamp 
+  // min 代表 0点
+  // max 代表 24 点
   getTodayDuration (timeStamp) {
     let time = new Date(timeStamp),
       hours = time.getHours(),
@@ -118,6 +130,7 @@ export default {
     max = min + 24 * 60 * 60 * 1000
     return { min, max }
   },
+  // 取得这个 周一 点和 周日 的 timeStamp 
   getWeekDuration (timeStamp) {
     let time = new Date(timeStamp)
     let { min:dayMin, max: dayMax } = this.getTodayDuration(timeStamp)
@@ -128,8 +141,24 @@ export default {
     max = dayMax + (7 - arr[day]) * 24 * 60 * 60 * 1000
     return {min, max}
   },
+  // 返回一个首字母大写的字符串
   toCapitalize (string) {
     let str = string.slice(0, 1).toUpperCase() + string.slice(1)
     return str
-  }
+  },
+  // 侧边栏 按每个任务的 listId 不同分类
+  // 输出示例 [{listId: 'work', tasks: [task0, task1]}, {listId: 'life', tasks: [task0, task1]}]
+  sortFilterTasks (filterTasks) {
+    let listId = '', arr = [], index = 0
+    filterTasks.forEach(task => {
+      if(task.belongTo.id != listId) {
+        listId = task.belongTo.id
+        arr[index] = {listId, tasks: [task]}
+        index ++
+      } else {
+        arr[index-1].tasks.push(task)
+      }
+    })
+    return arr
+  },
 }

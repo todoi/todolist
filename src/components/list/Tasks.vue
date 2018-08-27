@@ -6,7 +6,7 @@
       class="taskItem" 
       v-for="(item, index) in items" 
       :class="{selected: item.selected, done: isDoneItem}" 
-      @click="$emit('selectTaskItem', {index, isDoneItem})" 
+      @click="$emit('selectTaskItem', item)" 
       @dblclick="$emit('openTaskEditor')"
     >
       <div class="taskItem-body">
@@ -14,7 +14,7 @@
         <a 
           class="taskItem-checkboxWrapper checkbox" 
           tabindex="-1" 
-          @click.stop="$emit('triggerCheckEvent', {index, item})"
+          @click.stop="$emit('triggerCheckEvent',  item)"
         >
           <span title="标记为已完成">
             <svg class="task-check" :class="{hidden: item.isCompleted}" width="20px" height="20px">
@@ -33,7 +33,7 @@
           <div 
             class="taskItem-titleMeta-info" 
             :class="{ hidden: !isDoneItem }"
-          >{{ getDeltaTime(item.doneDate) }} 由 {{ username }}</div>
+          >{{ getDeltaTime(item.finishAt) }} 由 {{ username }}</div>
         </div>
 
         <span 
@@ -95,8 +95,10 @@
         </a>
 
         <div class="taskItem-progress">
-            <!--:style="item.subTasksLength && `width: ${item.subTasksCompletedNumber/item.subTasksLength*100}%`"-->
-          <span class="taskItem-progress-bar" >
+          <span 
+            class="taskItem-progress-bar"
+            :style="$store.getters.getCurrentSubTasks(item.id).length && `width: ${$store.getters.getCompletedSubTasks(item.id).length/$store.getters.getCurrentSubTasks(item.id).length*100}%`"
+            >
           </span>
         </div>
       </div>
@@ -126,9 +128,9 @@ export default {
         }) 
     },
     // 更新距离时间
-    getDeltaTime (doneDate) {
-      return utils.showDuration(doneDate) + '之前'
-    }
+    getDeltaTime (finishAt) {
+      return utils.showDuration(finishAt) + '之前'
+    },
   }
 }
 </script>

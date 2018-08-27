@@ -9,7 +9,7 @@ export default {
   currentTask: {
     id: '',
     title: '',
-    index: 0,
+    belongTo: {id: ''},
   },
   allList: [
     {
@@ -33,7 +33,8 @@ export default {
         createdAt: 1525331956726,
         deadline: 1525331976726,
         isCompleted: false,
-        note: 'jfieji'
+        belongTo: {id: 'work'},
+        note: 'jfieji',
       },{
         id: 'work1',
         title: '代码 2',
@@ -42,6 +43,7 @@ export default {
         createdAt: 1525331956727,
         deadline: null,
         isCompleted: false,
+        belongTo: {id: 'work'},
         note: ''
       },
       {
@@ -50,9 +52,10 @@ export default {
         title: '小珠子 333',
         starred: false,
         createdAt: 1525331956728,
-        doneDate: 1525331966728,
+        finishAt: 1525331966728,
         deadline: null,
         isCompleted: true,
+        belongTo: {id: 'work'},
         note: ''
       }
     ],
@@ -65,6 +68,7 @@ export default {
         createdAt: 1525331956726,
         deadline: 1525331976726,
         isCompleted: false,
+        belongTo: {id: 'life'},
         note: 'jfieji',
       },{
         id: 'life1',
@@ -74,6 +78,7 @@ export default {
         createdAt: 1525331956727,
         deadline: null,
         isCompleted: false,
+        belongTo: {id: 'life'},
         note: '',
       },
       {
@@ -82,9 +87,10 @@ export default {
         title: '生活 c',
         starred: false,
         createdAt: 1525331956728,
-        doneDate: 1525331966728,
+        finishAt: 1525331966728,
         deadline: null,
         isCompleted: true,
+        belongTo: {id: 'life'},
         note: '',
       }
     ]
@@ -94,7 +100,7 @@ export default {
   allSubTask: {
     work0: [
       {title:'份额份额', isCompleted: false, displayView: true,}, 
-      {title: 'dd', isCompleted: true, displayView: true,}, 
+      {title: 'dd', isCompleted: false, displayView: true,}, 
       {title: 'hh', isCompleted: true, displayView:true,}
     ],
     work1: [
@@ -105,8 +111,8 @@ export default {
     work2: [],
     life0: [
       {title: 'life0-subtask a', isCompleted: false, displayView: true,}, 
-      {title: 'life0-subtask b', isCompleted: true, displayView: true,}, 
-      {title: 'life0-subtask c', isCompleted: true, displayView:true,}
+      {title: 'life0-subtask b', isCompleted: false, displayView: true,}, 
+      {title: 'life0-subtask c', isCompleted: false, displayView:true,}
     ],
     life1: [
       {title: 'life1-subtask a', isCompleted: false, displayView: true,}, 

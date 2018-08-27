@@ -1,28 +1,39 @@
 <template>
   <div class="task-list starred">
-    <h2 class="heading normal">
-      <a class="group-header">inbox</a>
-    </h2>
-    <Tasks 
-      :items="taskItems"
-      @openTaskEditor="$emit('openTaskEditor')"
-      @selectTaskItem="selectTaskItem"
-      @triggerCheckEvent="checkTask"
-      @toggleTaskStar="toggleTaskStar"
-      />
+    <div v-if="currentList.isFilter">
+      <div v-for="(item ,index) in $store.getters[`get${toCapitalize(currentList.id)}Sort`]">
+        <h2 class="heading normal">
+          <a class="group-header">{{ $store.getters.getListById(item.listId).title }}</a>
+        </h2>
+        <Tasks 
+          :items="item.tasks"
+          :isDoneItem="currentList.id === 'completed'"
+          @selectTaskItem="selectFilterTask"
+          @openTaskEditor="$emit('openTaskEditor')"
+          @triggerCheckEvent="filterCheckEvent"
+          @toggleTaskStar="toggleTaskStar" />
+      </div>
+    </div>
 
-    <h2 tabindex="0" class="heading normal" :class="{hidden: !doneTaskItems.length}">
-      <a class="group-header" @click.stop="toggleDoneTaskItems">显示已完成任务</a>
-    </h2>
-    <Tasks
-      :isDoneItem="true"
-      v-if="this.isShowDoneItems" 
-      :items="doneTaskItems"
-      @openTaskEditor="(payload) => $emit('openTaskEditor', payload)"
-      @selectTaskItem="selectTaskItem"
-      @triggerCheckEvent="restoreTask"
-      @toggleTaskStar="toggleTaskStar"
-      />
+    <div v-else>
+      <Tasks 
+        :items="taskItems"
+        @selectTaskItem="selectListTask"
+        @openTaskEditor="$emit('openTaskEditor')"
+        @triggerCheckEvent="checkTask"
+        @toggleTaskStar="toggleTaskStar" />
+      <h2 tabindex="0" class="heading normal" :class="{hidden: !doneTaskItems.length}">
+        <a class="group-header" @click.stop="toggleDoneTaskItems">显示已完成任务</a>
+      </h2>
+      <Tasks
+        v-if="this.isShowDoneItems" 
+        :isDoneItem="true"
+        :items="doneTaskItems"
+        @selectTaskItem="selectListTask"
+        @openTaskEditor="$emit('openTaskEditor')"
+        @triggerCheckEvent="restoreTask"
+        @toggleTaskStar="toggleTaskStar" />
+    </div>
 
   </div>
 </template>
@@ -34,6 +45,7 @@ import utils from '../../lib/utils'
 export default {
   name: 'TaskList',
   components: { Tasks },
+  props: ['currentList'],
   data(){
     return {
       isShowDoneItems: true,  // 显示已经完成任务列表
@@ -45,7 +57,7 @@ export default {
     },
     doneTaskItems () {
       return this.$store.getters.getDoneTaskItems 
-    } 
+    },
   }, 
   methods: {
     // 隐藏或者显示已经完成的任务列表
@@ -53,19 +65,33 @@ export default {
       this.isShowDoneItems = !this.isShowDoneItems
     },
     // 点击复选框 完成
-    checkTask ({ index, item }) {
-      this.$store.commit('checkTask', { index })
+    checkTask (item) {
+      this.$store.commit('checkTask', item)
     },
     // 点击复选框 未完成
-    restoreTask ({ index, item }) {
-      this.$store.commit('restoreTask', { index })
+    restoreTask (item) {
+      this.$store.commit('restoreTask', item)
+    },
+    // 当任务列表是属于 filter 时 点击复选框的处理函数
+    filterCheckEvent (item) {
+      this.currentList.id === 'completed' ? this.restoreTask(item) : this.checkTask(item)
     },
     // 切换星标
     toggleTaskStar ({index, isDoneItem}){
       this.$store.commit('toggleTaskStar', { index, isDoneItem })
     },
-    selectTaskItem ({index, isDoneItem}){
-      this.$store.commit('selectTaskItem', { index, isDoneItem })
+    // 返回一个首字母大写的字符串
+    toCapitalize (string) {
+      let str = string.slice(0, 1).toUpperCase() + string.slice(1)
+      return str
+    },
+    selectListTask (item) {
+      this.$store.commit('selectListTask', { taskId: item.id, listId: item.belongTo.id, task: item })
+    },
+    selectFilterTask (item) {
+      let {$store, toCapitalize, currentList} = this
+      let items = $store.getters[`get${toCapitalize(currentList.id)}Sort`]
+      $store.commit('selectFilterTask', { taskId: item.id, listId: item.belongTo.id, task: item, items })
     },
   },
 }

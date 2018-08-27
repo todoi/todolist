@@ -2,6 +2,7 @@ import leancloud from '../lib/leancloud'
 let { AV, createObject, deleteAll, deleteObject } = leancloud
 
 export default {
+  // 将 Task 上传到 leancloud
   createTask ({ commit, state: {allTask, currentList} }, newTask) {
     let promise, createdAt, deadline
     let listAVObject = AV.Object.createWithoutData('AllList', currentList.id)

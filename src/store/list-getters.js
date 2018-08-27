@@ -16,61 +16,55 @@ export default {
     }
     return arr
   },
-  // 不包含已完成的任务
+  // 不包含已完成的任务 侧边栏 '全部' tab 
   getAll (state, { getAllTasks }) {
     let arr = getAllTasks.filter(task => !task.isCompleted)
     return arr
   },
-  // 只包含已经完成的任务
+  // 只包含已经完成的任务 侧边栏 '已完成' tab
   getCompleted (state, { getAllTasks }) {
-    let arr = getAllTasks.filter(task => task.isCompleted)
-    return arr
+    return getAllTasks.filter(task => task.isCompleted)
   },
   getCompletedOverdue () {
     return []
   },
   getAllHasDeadline (state, { getAll }) {
-    let arr = getAll.filter(task => task.deadline)
-    return arr
+    return getAll.filter(task => task.deadline)
   },
+  // 不包含已完成的任务 侧边栏 '全部' tab 的过期任务数量 
   getAllOverdue (state, { getAllHasDeadline }) {
     let nowTimeStamp = new Date().getTime()
-    let arr = getAllHasDeadline.filter(task => task.deadline < nowTimeStamp)
-    return arr
+    return getAllHasDeadline.filter(task => task.deadline < nowTimeStamp)
   },
+  // 不包含已完成的任务 侧边栏 '已加星标' tab 
   getStarred (state, { getAll }) {
-    let arr = getAll.filter(task => task.starred)
-    return arr
+    return getAll.filter(task => task.starred)
   },
   getStarredOverdue (state, { getAllOverdue }) {
-    let arr = getAllOverdue.filter(task => task.starred)
-    return arr
+    return getAllOverdue.filter(task => task.starred)
   },
+  // 不包含已完成的任务 侧边栏 '今天'到期的 tab 
   getToday (state, { getAllHasDeadline }) {
     let {min, max} = utils.getTodayDuration(new Date().getTime())
-    let arr = getAllHasDeadline.filter(task => task.deadline >= min && task.deadline < max)
-    return arr
+    return getAllHasDeadline.filter(task => task.deadline >= min && task.deadline < max)
   },
   getTodayOverdue (state, { getToday }) {
     let nowTimeStamp = new Date().getTime()
-    let arr = getToday.filter(task => task.deadline < nowTimeStamp)
-    return arr
+    return getToday.filter(task => task.deadline < nowTimeStamp)
   },
+  // 不包含已完成的任务 侧边栏 '周'到期的 tab 
   getWeek (state, { getAllHasDeadline }) {
     let {min, max} = utils.getWeekDuration(new Date().getTime())
-    let arr = getAllHasDeadline.filter(task => task.deadline >= min && task.deadline < max)
-    return arr
+    return getAllHasDeadline.filter(task => task.deadline >= min && task.deadline < max)
   },
   getWeekOverdue (state, { getWeek }) {
     let nowTimeStamp = new Date().getTime()
-    let arr = getWeek.filter(task => task.deadline < nowTimeStamp)
-    return arr
+    return getWeek.filter(task => task.deadline < nowTimeStamp)
   },
   getListOverdue ({allTask}) {
     return (id) => {
       let nowTimeStamp = new Date().getTime()
-      let arr = allTask[id].filter(task => task.deadline && task.deadline < nowTimeStamp)
-      return arr
+      return allTask[id].filter(task => task.deadline && task.deadline < nowTimeStamp)
     }
   },
   getCurrentListAllId (state) {

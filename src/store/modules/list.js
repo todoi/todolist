@@ -75,40 +75,6 @@ export default {
     },
   },
   mutations: {
-    // 用户在未完成 item 的checkbox 上点击
-    checkTask ({ currentTask, taskItems, doneTaskItems }, { index }) {
-      // 得到 push 之前的 length
-      let length = doneTaskItems.length
-      let item = taskItems[index]
-      taskItems.splice(index, 1)
-      // 重置为 已经完成
-      item.isCompleted = true
-      // 完成时间为当前时间
-      item.doneDate = new Date().getTime()
-      doneTaskItems.push(item)
-      // 更新 currentTask 
-      if (!currentTask.isDoneItem && index < currentTask.index) {
-        currentTask.index --
-      } else if(!currentTask.isDoneItem && index === currentTask.index) {
-        Object.assign(currentTask, {index: length, isDoneItem: true})
-      }
-    },
-    // 用户在已经完成 item 的checkbox 上点击
-    restoreTask ({ currentTask, taskItems, doneTaskItems }, { index }) {
-      let length = taskItems.length
-      let item = doneTaskItems[index]
-      doneTaskItems.splice(index, 1)
-      // 重置为 未完成
-      item.isCompleted = false
-      // 完成时间重置为 null
-      item.doneDate = 0
-      taskItems.push(item)
-      if (currentTask.isDoneItem && index < currentTask.index) {
-        currentTask.index --
-      } else if(currentTask.isDoneItem && index === currentTask.index) {
-        Object.assign(currentTask, {index: length, isDoneItem: false})
-      }
-    },
     // 切换星标
     toggleTaskStar ({ taskItems, doneTaskItems }, {index, isDoneItem}){
       if (isDoneItem){
@@ -116,12 +82,6 @@ export default {
       }else{
         taskItems[index].taskStarred = !taskItems[index].taskStarred
       }
-    },
-    selectTaskItem ({ taskItems, doneTaskItems, currentTask }, {index, isDoneItem}) {
-      taskItems.forEach(item => item.selected = false )
-      doneTaskItems.forEach(item => item.selected = false )
-      isDoneItem ? doneTaskItems[index].selected = true : taskItems[index].selected = true
-      Object.assign(currentTask, { index, isDoneItem })
     },
     changeTaskTitle ({ currentTask: { index, isDoneItem }, taskItems, doneTaskItems }, title) {
       if (isDoneItem) {
