@@ -69,9 +69,16 @@ export default {
   getWeekSort (state, {getWeek}) {
     return utils.sortFilterTasks (getWeek)
   },
+  // 通过 listId 找到list 
   getListById ({allList}) {
     return (listId) => {
-      return allList.filter(list => list.id === listId)[0]
+      return allList.find(list => list.id === listId)
     }
   },
+  // 从 allTask 中 得到当前要被编辑的 task
+  getCurrentTask ({currentTask, allTask}) {
+    let taskId = currentTask.id
+    let listId = currentTask.belongTo.id
+    return allTask[listId].find(task => task.id === taskId)
+  }
 }

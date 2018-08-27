@@ -51,7 +51,14 @@
       </div>
 
       <!-- 编辑任务 -->
-      <TaskDetail v-if="showTaskEditor" @toggleDetailCheckbox="showTaskEditor = false" @close="showTaskEditor = false" @delete="showTaskEditor = false" />
+      <TaskDetail 
+        v-if="showTaskEditor" 
+        @toggleDetailCheckbox="showTaskEditor = false" 
+        @close="showTaskEditor = false" 
+        @delete="showTaskEditor = false"
+      >
+        <TaskEditorTopbar slot="topbar" :taskItem="taskItem" />
+      </TaskDetail>
 
     </div>
     <div class="popover-area" tabindex="-1" ref="popover" @focusout="currentPopover = ''">
@@ -75,6 +82,7 @@ import AddTask from './list/AddTask'
 import NotFound from './list/NotFound'
 
 import TaskDetail from './taskEditor/TaskDetail'
+import TaskEditorTopbar from './taskEditor/TaskEditorTopbar'
 
 import DialogListEditor from './dialogs/DialogListEditor'
 import DialogListDeletor from './dialogs/DialogListDeletor'
@@ -90,7 +98,7 @@ import icon from '../assets/icons.js'
 
 export default {
   name: 'TodoPage',
-  components: {DialogListEditor, DialogListDeletor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, TaskList, ListToolbar, AddTask, NotFound, TaskDetail, UserPopover, ActivityPopover, ConversationPopover},
+  components: {DialogListEditor, DialogListDeletor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, TaskList, ListToolbar, AddTask, NotFound, TaskDetail, TaskEditorTopbar, UserPopover, ActivityPopover, ConversationPopover},
   created () {
     this.$store.commit('setUser', leancloud.getAVUser())
     utils.goHomePage()
@@ -100,12 +108,15 @@ export default {
       isCollapsed: false,
       currentPopover: '',
       currentDialog: '',
-      showTaskEditor: false, // 打开任务编辑区域
+      showTaskEditor: true, // 打开任务编辑区域
     }
   },
   computed: {
     currentList () {
       return this.$store.state.currentList
+    },
+    taskItem () {
+      return this.$store.getters.getCurrentTask  
     }
   },
   methods: {

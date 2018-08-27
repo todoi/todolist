@@ -69,7 +69,7 @@
 <script>
 export default {
   name: 'TaskEditorTopbar',
-  props: [ 'taskItem' ],
+  props: ['taskItem'],
   data () {
     return {
       displayView: true, // 显示文字编辑是否已经完成
@@ -77,20 +77,17 @@ export default {
     }
   },
   computed: {
-    currentTask () {
-      return this.$store.state.list.currentTask
-    },
   },
   methods: {
     toggleCheck () {
-      if (this.currentTask.isDoneItem) {
-        this.$store.commit('restoreTask', { index: this.currentTask.index })
+      if (this.taskItem.isCompleted) {
+        this.$store.commit('restoreTask', this.taskItem)
       } else {
-        this.$store.commit('checkTask', { index: this.currentTask.index })
+        this.$store.commit('checkTask', this.taskItem) 
       }
     },
     toggleTaskStar () {
-      this.$store.commit('toggleTaskStar', { ...this.currentTask })
+      this.$store.commit('toggleTaskStar', this.taskItem )
     },
     changeTaskTitle () {
       this.displayView = true

@@ -75,13 +75,5 @@ export default {
     },
   },
   mutations: {
-    // 切换星标
-    changeTaskTitle ({ currentTask: { index, isDoneItem }, taskItems, doneTaskItems }, title) {
-      if (isDoneItem) {
-        doneTaskItems[index].title = title
-      } else {
-        taskItems[index].title = title
-      }
-    }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div id="task-detail" class="animate">
-    <TaskEditorTopbar :taskItem="taskItem" />
+    <slot name="topbar"></slot>
     <div class="body" ref="body">
       <div class="section section-item detail-date" tabindex="0" :class="{'overdue' : taskItem.deadline && (new Date().getTime() > taskItem.deadline), date: taskItem.deadline}">
         <div class="section-icon">
@@ -190,13 +190,12 @@
 import utils from '../../lib/utils'
 import DatePicker from 'vuejs-datepicker'
 import UploadFile from './UploadFile.vue'
-import TaskEditorTopbar from './TaskEditorTopbar'
 import SubTasks from './SubTasks'
 
 let chineseWeekDate = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
 export default {
   name: 'TaskDetail',
-  components: {DatePicker, UploadFile, TaskEditorTopbar, SubTasks},
+  components: {DatePicker, UploadFile, SubTasks},
   data() {
     return {
       datePickerState,
