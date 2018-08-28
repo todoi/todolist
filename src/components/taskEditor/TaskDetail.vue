@@ -61,40 +61,7 @@
 
       <Note :taskItem="taskItem"/>
 
-      <div class="section section-files" tabindex="0" :class="{hasFiles: $store.state.allFileMeta[taskItem.id].length}">
-        <div class="audio-recorder hidden">
-          <div class="audio-recorder-container">
-            <audio></audio>
-            <a class="start-recording-audio" tabindex="0" title="开始/暂停录音"><span class="icon-file record-audio"></span></a>
-            <a class="play-recorded-audio disabled" tabindex="0" title="播放"><span class="icon-file play-audio"></span></a>
-            <span class="duration">00:00</span>
-            <a class="clear-recorded-audio" tabindex="0" title="清除录音"><span class="icon-file clear-audio"></span></a>
-            <a class="upload-recorded-audio disabled" tabindex="0" title="上传录音"><span class="icon-file upload-audio"></span></a>
-          </div>
-        </div>
-        <div class="section-item files-add" @click="triggerUpload">
-          <div class="section-icon add-file" tabindex="0">
-            <svg class="clip" width="20" height="20">
-              <use xlink:href="#icon-clip"></use>
-            </svg>
-          </div>
-          <div class="section-content">
-            <div class="section-title files-add-label">
-              <span>添加一个文件</span>
-            </div>
-          </div>
-          <!-- 录音功能暂不实现 -->
-          <div class="section-attachments">
-            <span class="add-sound" tabindex="0" title="添加录音">
-              <svg class="speech" width="20px" height="20px">
-                <use xlink:href="#icon-speech"></use>
-              </svg>
-            </span>
-          </div>
-        </div>
-        <!-- <ul class="files-list"></ul> -->
-        <upload-file ref="fileList" :fileList="taskItem.fileList"></upload-file>
-      </div>
+      <UploadFile :taskItem="taskItem" />
 
       <div class="comments-main has-comments">
         <!-- 没用到 promise 暂不实现这个功能 -->
@@ -161,7 +128,7 @@
 <script>
 import utils from '../../lib/utils'
 import DatePicker from 'vuejs-datepicker'
-import UploadFile from './UploadFile.vue'
+import UploadFile from './UploadFile'
 import SubTasks from './SubTasks'
 import Note from './Note'
 
@@ -238,9 +205,6 @@ export default {
     createCommentTemplate(){
       return {content:'', username: this.username, createDate: null}
     },
-    triggerUpload(){
-      this.$refs.fileList.$refs.select.click()
-    },
   },
   watch: {
     taskItem(){
@@ -300,21 +264,6 @@ textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
 .section-attachments{text-align: center;}
 .section-attachments svg{margin: 6px;}
 .section-attachments span{display: inline-block; width: 32px; height: 32px;}
-
-.audio-recorder-container{border-radius: 3px; border: 1px solid #c9c9c9; margin:11px 0 10px;  background: #fff; text-align: center;}
-.audio-recorder-container a, .audio-recorder-container .duration{vertical-align: middle;}
-.audio-recorder-container span{display: inline-block;}
-.icon-file{background-image: url('../../assets/images/files.png');}
-.icon-file.record-audio{width: 18px; height: 18px; background-position: -129px -162px;}
-.audio-recorder-container a{display: inline-block; width: 48px; padding: 10px 0; margin: 0 2px; font-size: 0; font-weight: bold; text-align: center;}
-.audio-recorder-container .start-recording-audio{color: #f00;}
-.audio-recorder-container .play-recorded-audio{color: #008000;}
-.icon-file.play-audio{width: 18px; height: 18px; background-position: -75px -162px;}
-a.disabled .play-audio{width: 18px; height: 18px; background-position: -111px -162px;}
-.audio-recorder-container .duration{width: 84px; font-size: 16px; font-weight: bold; color: #737372;}
-.audio-recorder-container .icon-file.clear-audio{width: 19px; height: 19px; background-position: 0 -162px;}
-.cion-file.upload-audio{width: 19px; height: 19px; background-position: -19px -162px;}
-a.disabled .upload-audio{width: 19px; height: 19px; background-position: -162px -137px;}
 
 .comments-main{position: relative;}
 .comments-main .spinner{height: 0; transition: all 250ms ease; position: relative;}

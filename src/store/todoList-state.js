@@ -151,7 +151,6 @@ export default {
         fileName: 'Chrysanthemum.jpg', 
         uploadDate: 1525331956728, 
         fileSrc: '//via.placeholder.com/50x50', 
-        creatorName: 'todoi', 
       }
     ],
     work1: [],
@@ -162,7 +161,6 @@ export default {
         fileName: 'Chrysanthemum.jpg', 
         uploadDate: 1525331956728, 
         fileSrc: '//via.placeholder.com/50x50', 
-        creatorName: 'todoi', 
       }
     ],
     life1: [],

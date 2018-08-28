@@ -1,74 +1,92 @@
 <template>
-  <div>
-    <input type="file" mutiple style="display:none;" ref="select" @change="uploadWithSDK">
+  <div 
+    class="section section-files" 
+    tabindex="0" 
+    :class="{hasFiles: fileList.length}"
+    >
+    <div class="audio-recorder hidden">
+      <div class="audio-recorder-container">
+        <audio></audio>
 
-    <ul class="files-list" id="files-list">
-      <li class="section-item section-item-file image" v-for="(item, index) in fileList">
-        <div class="section-icon"></div>
-        <div class="section-content section-content-file" tabindex="0" >
-          <div class="file-preview">
-            <div class="file-extension">{{ item.fileExtension }}</div>
-          </div>
-          <div class="file-info">
-            <a class="file-name" :title="item.fileName" :href="item.fileSrc" target="_blank">{{ item.fileName }}</a>
-            <div class="file-progress">
-              <div class="bar"></div>
-            </div>
-            <div class="file-meta" :title="formatDate(item.uploadDate)">
-              <span class="creator left">
-                <div class="avatar tiny" :title="item.creatorName">
-                  <img :src="getAvatarSrc">
-                </div>
-              </span>
-              <span class="ago">{{ formatDate(item.uploadDate )}}</span>
-              <!-- <span class="waiting"> ·
-                <text rel="upload_file_not_synced_yet">未同步</text>
-                </span> -->
-            </div>
-          </div>
-          <a class="file-delete" data-key-title="button_delete" title="删除" @click="deleteFile(item, index)">
-            <svg class="delete" width="20px" height="20px">
-              <use xlink:href="#icon-delete"></use>
-            </svg>
-          </a>
-        </div>
-      </li>
-    </ul>
+        <a class="start-recording-audio" tabindex="0" title="开始/暂停录音">
+          <span class="icon-file record-audio"></span>
+        </a>
 
-    <ul class="files-list">
-      <li class="section-item section-item-file image" v-for="(item, index) in uploadingList">
-        <div class="section-icon"></div>
-        <div class="section-content section-content-file" tabindex="0">
-          <div class="file-preview">
-            <div class="file-extension">{{ item.fileExtension }}</div>
-          </div>
-          <div class="file-info">
-            <a class="file-name" :title="item.fileName">{{ item.fileName }}</a>
-            <div class="file-progress active">
-              <div class="bar" :style="'width: ' + item.progress + '%'"></div>
-            </div>
-          </div>
-          <div class="control-container">
-            <button class="btn btn-default control-upload" @click="toggleButton(item)">{{ item.btnText }}</button>
-          </div>
-          <a class="file-delete" data-key-title="button_delete" title="删除" @click="deleteUploadingFile(item, index)">
-            <svg class="delete" width="20px" height="20px">
-              <use xlink:href="#icon-delete"></use>
-            </svg>
-          </a>
+        <a class="play-recorded-audio disabled" tabindex="0" title="播放">
+          <span class="icon-file play-audio"></span>
+        </a>
+
+        <span class="duration">00:00</span>
+
+        <a class="clear-recorded-audio" tabindex="0" title="清除录音">
+          <span class="icon-file clear-audio"></span>
+        </a>
+
+        <a class="upload-recorded-audio disabled" tabindex="0" title="上传录音">
+          <span class="icon-file upload-audio"></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="section-item files-add" @click="triggerUpload">
+      <div class="section-icon add-file" tabindex="0">
+        <svg class="clip" width="20" height="20">
+          <use xlink:href="#icon-clip"></use>
+        </svg>
+      </div>
+
+      <div class="section-content">
+        <div class="section-title files-add-label">
+          <span>添加一个文件</span>
         </div>
-      </li>
-    </ul>
+      </div>
+
+      <!-- 录音功能暂不实现 -->
+      <div class="section-attachments">
+        <span class="add-sound" tabindex="0" title="添加录音">
+          <svg class="speech" width="20px" height="20px">
+            <use xlink:href="#icon-speech"></use>
+          </svg>
+        </span>
+      </div>
+
+    </div>
+    <!-- <ul class="files-list"></ul> -->
+
+    <div ref="fileList">
+      <input 
+        mutiple 
+        type="file" 
+        style="display:none;" 
+        ref="select" 
+        @change="uploadWithSDK">
+
+      <Xyz 
+        :items="fileList"
+        :isUploadList="false"
+        @triggerDelete="deleteFile"
+        />
+
+      <Xyz 
+        :items="uploadingList"
+        :isUploadList="true"
+        @triggerDelete="deleteUploadingFile"
+        @triggerControl="toggleButton"
+        />
+    </div>
   </div>
 </template>
 
 <script>
 import utils from '../../lib/utils'
+import Xyz from './Xyz'
+
 let qiniu = require('qiniu-js')
 
 export default {
   name: 'Uploadfile',
-  props: ['fileList'],
+  components: {Xyz},
+  props: ['taskItem'],
   data(){
     return {
       uploadingList: []
@@ -80,41 +98,28 @@ export default {
     },
     getAvatarSrc () {
       return utils.getAvatarSrc(this.username)
+    },
+    fileList () {
+      return this.$store.state.allFileMeta[this.taskItem.id]
     }
   },
   methods: {
-    formatDate(timeStamp){
-      // 输入一个 完成的任务对象
-      // 输出新的时间 和 旧的时间之间的间隔
-      let newDate = new Date().getTime()
-      let delta = Math.ceil((newDate - timeStamp)/1000)
-      let days, hours, minutes, result //, seconds
-      days = Math.floor(delta / (60*60*24))
-      hours = Math.floor(delta / (60*60)) % 24
-      minutes = Math.floor(delta / 60) % 60
-      // seconds = delta % 60
-      result = '几秒钟'
-      if(minutes) result = `${minutes} 分钟`
-      if(hours) result = `${hours} 小时`
-      if(days) result = `${days} 天`
-      return `${result} 之前`
-    },
-    createFileMeta(){ 
-      // 创建一个文件元数据对象
+    // 创建一个文件元数据对象
+    createFileMeta () { 
       return {
         fileExtension: '', 
         fileName: '', 
-        uploadDate: null, 
+        uploadAt: 0, 
         fileSrc: '', 
-        creatorName: '', 
         progress: 0,
         btnText: '开始上传',
       }
     },
-    getFileExtension(filename){
+    getFileExtension (filename) { 
       return (/.+[.]/.test(filename)) ? /[^.]+$/.exec(filename)[0] : ''
     },
-    uploadWithSDK(event){
+
+    uploadWithSDK (event) {
       let file = event.target.files[0]
       if (!file) return
       // let observable
@@ -127,7 +132,7 @@ export default {
         start: true,
         fileExtension: this.getFileExtension(key),
         fileName: key,
-        creatorName: 'todoi',
+        owner: this.username,
         observable: undefined,
         subscription: undefined,
       })
@@ -137,8 +142,9 @@ export default {
       // 调用sdk上传接口获得相应的observable，控制上传和暂停
       newFileMeta.observable = qiniu.upload(file, key, token, putExtra, config);
     },
-    toggleButton(item){
-      // 设置next,error,complete对应的操作，分别处理相应的进度信息，错误信息，以及完成后的操作
+
+    // 设置next,error,complete对应的操作，分别处理相应的进度信息，错误信息，以及完成后的操作
+    toggleButton (item) {
       let self = this
       let error = function(err) {
         item.start = true;
@@ -149,7 +155,7 @@ export default {
 
       let complete = function(res) {
         // console.log(res)
-        item.uploadDate = new Date().getTime()
+        item.uploadAt = new Date().getTime()
         item.fileSrc = '//p9vumvpee.bkt.clouddn.com/' + item.fileName
         self.fileList.push(item)
         self.uploadingList.splice(self.uploadingList.indexOf(item), 1)
@@ -175,14 +181,17 @@ export default {
         item.subscription.unsubscribe();
       }
     },
-    deleteFile(item, index){
+    deleteFile ({item, index}) {
       this.fileList.splice(index, 1)
     },
-    deleteUploadingFile(item, index){
+    deleteUploadingFile ({item, index}) {
       if(item.subscription){
         item.subscription.unsubscribe()
       }
       this.uploadingList.splice(index, 1)
+    },
+    triggerUpload(){
+      this.$refs.fileList.$refs.select.click()
     },
   }
 }
@@ -204,42 +213,43 @@ let putExtra = {
 </script>
 
 <style scoped>
-.files-list li{overflow: hidden;}
-.section-item{padding-left: 10px; padding-right: 10px; position: relative; display: flex; align-items: center;}
-.section-item.section-item-file{margin: 8px 0;}
+.section{outline: none; position: relative; padding: 8px 0; text-align: left;}
+.section-item{position: relative; outline: none; padding-left: 10px; padding-right: 10px; display: flex; align-items: center;}
+.section:before{content: ''; position: absolute; bottom: 0; left: 50px; right: 0; border-bottom: 1px solid #ebebebeb;}
+.section-item .section-icon, .section-item .section-attachments{align-self: flex-start; flex-shrink: 0; height: 32px; min-width: 32px; fill:#a3a3a2;}
+.section-item .section-icon svg{margin: 6px;}
+.section-item .section-content{flex: auto; margin: 0 8px; overflow: hidden;}
+.section-item .section-title{font-size: 16px; line-height: 20px; color: #9fa2a6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.section-item .section-edit .assign{font-size: 16px;}
+.section-item .section-delete{visibility: hidden; align-self: flex-start; flex-shrink: 0; height: 32px; min-width: 32px; fill: #a3a3a2; margin-left: auto;}
+.section-item:hover .section-delete{visibility: visible;}
+.section-item .section-delete svg{margin: 6px; fill: #737372;}
+.section-item.date .section-title{color: #328ad6;}
+.section-item.date.overdue .section-title{color: #b3312d;}
+.section-item.date.overdue .reminder, .section-item.date.overdue .date{fill: #b3312d;}
+.section-item.date .reminder, .section-item.date .date{fill: #328ad6;}
+.section-item .section-description{font-size: 12px;}
+.section-files.hasFiles .section-icon svg{fill: #63b4be;}
 
-.section-item .section-icon{align-self: flex-start; flex-shrink: 0; height: 32px; min-width: 32px; fill: #a3a3a2;}
-.section-item .section-content{flex: auto; margin-right: 8px; margin-left: 8px; overflow:hidden;}
-.section-content-file{position: relative; border-radius: 3px; display: flex; align-items: center;}
+.section-attachments{text-align: center;}
+.section-attachments svg{margin: 6px;}
+.section-attachments span{display: inline-block; width: 32px; height: 32px;}
 
-.file-preview{width: 40px; height: 40px;}
-.file-preview .file-extension{text-align: center; color: #f7f7f7; text-transform: uppercase; font-size: 12px; height: 40px; width: 40px; padding-top: 15px; box-sizing: border-box; background: #63b4be;}
+.audio-recorder-container{border-radius: 3px; border: 1px solid #c9c9c9; margin:11px 0 10px;  background: #fff; text-align: center;}
+.audio-recorder-container a, .audio-recorder-container .duration{vertical-align: middle;}
+.audio-recorder-container span{display: inline-block;}
+.icon-file{background-image: url('../../assets/images/files.png');}
+.icon-file.record-audio{width: 18px; height: 18px; background-position: -129px -162px;}
+.audio-recorder-container a{display: inline-block; width: 48px; padding: 10px 0; margin: 0 2px; font-size: 0; font-weight: bold; text-align: center;}
+.audio-recorder-container .start-recording-audio{color: #f00;}
+.audio-recorder-container .play-recorded-audio{color: #008000;}
+.icon-file.play-audio{width: 18px; height: 18px; background-position: -75px -162px;}
+a.disabled .play-audio{width: 18px; height: 18px; background-position: -111px -162px;}
+.audio-recorder-container .duration{width: 84px; font-size: 16px; font-weight: bold; color: #737372;}
+.audio-recorder-container .icon-file.clear-audio{width: 19px; height: 19px; background-position: 0 -162px;}
+.cion-file.upload-audio{width: 19px; height: 19px; background-position: -19px -162px;}
+a.disabled .upload-audio{width: 19px; height: 19px; background-position: -162px -137px;}
 
-.file-info{margin: 0 10px; flex: 1; overflow: hidden;}
-.file-info .file-name{font-size: 14px; font-weight: bold; color: #262626; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;}
-.file-info .file-progress{display: none; height: 6px; border-radius: 8px; border: 1px solid #9bb6d1; margin-top: 9px;}
-.file-info .file-progress .bar{transition: 1ms width ease-in; background: #ccdae6; height: 100%; width: 20%; border-radius: 1px;}
-.file-info .file-progress.active{display:block;}
-
-.file-info .file-meta{color: #737272; white-space: nowrap; overflow:hidden; text-overflow: ellipsis;}
-.left{float: left;}
-.avatar{position: relative; display: block; width: 25px; height: 25px;}
-.avatar img{border-radius: 50%; overflow:hidden; z-index: 1;}
-.avatar.tiny{width: 15px; height: 15px;}
-.avatar.tiny img{width: 15px; height: 15px;}
-.file-info .file-meta .ago,.file-info .file-meta .waiting{display:inline-block; vertical-align: top; font-size: 12px; margin: 0 6px;}
-.file-info .file-meta .waiting{font-weight: bold; display:none;}
-
-.file-delete{margin: 0 5px; fill: #262626; opacity: 0;}
-.section-content-file:hover .file-delete{opacity: 1; filter:none;}
-.section-content-file::after{content: ''; position: absolute; top:0; border: 1px solid rgba(0, 0, 0, 0.1); bottom: 0; left: 0; right: 0; border-radius: 3px; pointer-events: none;}
-
-.control-container{float: left; width: 22%; box-sizing: border-box;}
-.btn{display: inline-block; padding: 4px 5px; margin-bottom: 0; font-size: 14px; font-weight: normal; text-align: center; white-space: nowrap; vertical-align: middle; cursor: pointer; background-image: none; border: 1px solid transparent; border-radius: 4px; user-select: none;}
-.btn-default{color: #333; background-color: #fff; border-color: #ccc;}
-.control-upload{line-height: 14px;}
-.btn-default:hover{color: #333; background-color: #ebebeb; border: #adadad; text-decoration:none;}
-.btn:active{outline: 0; box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);}
 </style>
 
 

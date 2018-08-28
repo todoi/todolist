@@ -42,7 +42,7 @@
                 class="display-view" 
                 :class="{hidden: !displayViewArr[index]}" 
                 @click="editSubTask(item, index)"
-              >{{ item.title + ' '+ displayViewArr }}</div>
+              >{{ item.title }}</div>
 
               <div class="edit-view" :class="{hidden: displayViewArr[index]}">
                 <div class="expandingArea active">
