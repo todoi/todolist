@@ -1,3 +1,4 @@
+import Vue from 'vue'
 export default {
   switchList ({filterCollection, allList, currentList}, {index, listArea}) {
     // 选中侧边栏中的 List 
@@ -20,8 +21,9 @@ export default {
   },
 
   initList ({allList, allTask}, { id, title, active }) {
+    //allTask[id] = []
     allList.push({ id, title, active: true })
-    allTask[id] = []
+    Vue.set(allTask, id, [])
   },
 
   deleteItem (state, {id, collectionName, index}) {

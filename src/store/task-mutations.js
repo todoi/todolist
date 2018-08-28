@@ -1,11 +1,15 @@
+import Vue from 'vue'
 export default {
   // 添加新的 Task
   addTask ({allTask, allSubTask, allComment, allFileMeta}, newTask) {
-    allTask[newTask.belongTo.id].unshift(newTask)
-    // init allSubTask
-    allSubTask[newTask.id] = []
-    allComment[newTask.id] = []
-    allFileMeta[newTask.id] = []
+    // allTask[newTask.belongTo.id].unshift(newTask)
+    //allSubTask[newTask.id] = []
+    //allComment[newTask.id] = []
+    //allFileMeta[newTask.id] = []
+    allTask[newTask.belongTo.id] = [newTask].concat(allTask[newTask.belongTo.id])
+    Vue.set(allSubTask, newTask.id, [])
+    Vue.set(allComment, newTask.id, [])
+    Vue.set(allFileMeta, newTask.id, [])
   },
 
   // 点击在 list 列表的 的某个任务
