@@ -1,5 +1,5 @@
 import leancloud from '../lib/leancloud'
-let { AV, createObject, deleteAll, deleteObject } = leancloud
+let { AV, createObject, deleteAll, deleteObject, updateObject } = leancloud
 export default {
   createList ({ commit, state: {allList} }, title) {
     let promise, id, length = allList.length
@@ -13,15 +13,18 @@ export default {
       return result
     }).catch(error => console.log(error))
   },
+
+  // 删除整个 list
   deleteList ({ commit, state, getters }, { index, id }) {
-    let promises = []
     let {taskIds, subTaskIds, commentIds, fileMetaIds} = getters.getCurrentListAllId
     let {allList, allTask, allSubTask, allComment, allFileMeta} = state
-    promises.push(deleteObject('AllList', id))
-    promises.push(deleteAll('AllTask', taskIds))
-    promises.push(deleteAll('AllSubTask', subTaskIds))
-    promises.push(deleteAll('AllComment', commentIds))
-    promises.push(deleteAll('AllFileMeta', fileMetaIds))
+    let promises = [
+      deleteObject('AllList', id), 
+      deleteAll('AllTask', taskIds), 
+      deleteAll('AllSubTask', subTaskIds),
+      deleteAll('AllComment', commentIds), 
+      deleteAll('AllFileMeta', fileMetaIds)
+    ]
     return Promise.all(promises).then((value) => {
       taskIds.forEach(taskId => {
         commit('deleteItem', {id: taskId, collectionName: 'allSubTask'})
@@ -31,6 +34,13 @@ export default {
       commit('deleteItem', {id, collectionName: 'allTask'})
       commit('deleteItem', {collectionName: 'allList', index})
       return value
+    }).catch(error => console.log(error))
+  },
+
+  updateList ({commit}, {list, attributes, commitFn}) {
+    return updateObject('AllList', list.id, attributes).then(val => {
+      commit(commitFn, {list, attributes})
+      return val
     }).catch(error => console.log(error))
   },
 }

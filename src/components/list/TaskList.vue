@@ -66,11 +66,25 @@ export default {
     },
     // 点击复选框 完成
     checkTask (item) {
-      this.$store.commit('checkTask', item)
+      this.$store.dispatch('updateTask', {
+        commitFn: 'toggleTaskCheckbox', 
+        task: item,
+        attributes: {
+          isCompleted: !item.isCompleted,
+          finishAt: new Date().getTime()
+        }
+      }).then()
     },
     // 点击复选框 未完成
     restoreTask (item) {
-      this.$store.commit('restoreTask', item)
+      this.$store.dispatch('updateTask', {
+        commitFn: 'toggleTaskCheckbox', 
+        task: item,
+        attributes: {
+          isCompleted: !item.isCompleted,
+          finishAt: 0
+        }
+      })
     },
     // 当任务列表是属于 filter 时 点击复选框的处理函数
     filterCheckEvent (item) {
@@ -78,7 +92,11 @@ export default {
     },
     // 切换星标
     toggleTaskStar (item){
-      this.$store.commit('toggleTaskStar', item)
+      this.$store.dispatch('updateTask', {
+        commitFn: 'toggleTaskStar', 
+        task: item,
+        attributes: {starred: !item.starred}
+      })
     },
     // 返回一个首字母大写的字符串
     toCapitalize (string) {

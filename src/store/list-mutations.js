@@ -12,15 +12,18 @@ export default {
       Object.assign(currentList, allList[index], {index, isFilter: false})
     }
   },
-  changeListTitle ({ allList }, { index, newTitle, isFilter }) {
-    if (!isFilter) {
-      allList[index].title = newTitle
+
+  changeListTitle ({ allList }, { list, attributes }) {
+    if (!list.isFilter) {
+      allList[list.index].title = attributes.title
     }
   },
+
   initList ({allList, allTask}, { id, title, active }) {
     allList.push({ id, title, active: true })
     allTask[id] = []
   },
+
   deleteItem (state, {id, collectionName, index}) {
     if (index) {
       state[collectionName].splice(index, 1)

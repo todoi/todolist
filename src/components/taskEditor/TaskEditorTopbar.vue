@@ -80,21 +80,32 @@ export default {
   },
   methods: {
     toggleCheck () {
-      if (this.taskItem.isCompleted) {
-        this.$store.commit('restoreTask', this.taskItem)
-      } else {
-        this.$store.commit('checkTask', this.taskItem) 
-      }
+      this.$store.dispatch('updateTask', {
+        commitFn: 'toggleTaskCheckbox', 
+        task: this.taskItem,
+        attributes: {
+          isCompleted: !this.taskItem.isCompleted,
+          finishAt: this.taskItem.isCompleted ? 0 : new Date().getTime()
+        }
+      })
     },
     toggleTaskStar () {
-      this.$store.commit('toggleTaskStar', this.taskItem )
+      this.$store.dispatch('updateTask', {
+        commitFn: 'toggleTaskStar', 
+        task: this.taskItem,
+        attributes: {starred: !this.taskItem.starred}
+      })
     },
     changeTaskTitle () {
       this.displayView = true
       if (!this.title) {
         this.title = this.taskItem.title
       } else {
-        this.$store.commit('changeTaskTitle', this.title)
+        this.$store.dispatch('updateTask', {
+          task: this.taskItem,
+          attributes: {title: this.title}, 
+          commitFn:'changeTaskTitle', 
+        })
       }
     },
     openTextEditor () {

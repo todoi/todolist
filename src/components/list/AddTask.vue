@@ -104,8 +104,8 @@ export default {
     // 当选择日期之时 要改变日历上的数字
     datePickerDate(){
       // 更新任务模板中的到期时间
-      this.newTask.deadline = this.date 
-        ? new Date(this.date) 
+      this.newTask.deadline = this.date
+        ? new Date(this.date).getTime()
         : ''
       return this.date && new Date(this.date).getDate()
     },
@@ -117,9 +117,10 @@ export default {
         title: '',
         selected: false,
         starred: false,
-        deadline: '',
+        deadline: 0,
         isCompleted: false,
         note: '',
+        finishAt: 0
       }
     },
     // 是否 focus 在添加任务的输入框

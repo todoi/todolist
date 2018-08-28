@@ -130,8 +130,12 @@ export default {
       })
     },
     changeListTitle (newTitle) {
-      let obj = Object.assign({}, this.currentList, { newTitle })
-      this.$store.commit('changeListTitle', obj)
+      let obj = Object.assign({}, this.currentList )
+      this.$store.dispatch('updateList', {
+        commitFn: 'changeListTitle', 
+        list: obj, 
+        attributes: {title: newTitle}
+      })
     },
     createList (title) {
       this.$store.dispatch('createList', title ).then(value => {

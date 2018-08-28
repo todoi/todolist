@@ -119,7 +119,7 @@ export default {
   },
   methods: {
     toggleSubTaskBox(item, index){
-      this.$store.dispatch('updateSubTaskTitle', {
+      this.$store.dispatch('updateSubTask', {
         index,
         subTask: item,
         attributes:{isCompleted: !item.isCompleted},
@@ -153,7 +153,7 @@ export default {
         this.$set(this.displayViewArr, index, true)
         return 
       } else {
-        this.$store.dispatch('updateSubTaskTitle', {
+        this.$store.dispatch('updateSubTask', {
           index, 
           subTask: item, 
           attributes:{title: this.newTitle},
