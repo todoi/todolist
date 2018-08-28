@@ -37,9 +37,9 @@ export default {
     }).catch(error => console.log(error))
   },
 
-  updateList ({commit}, {list, attributes, commitFn}) {
+  updateList ({commit}, {list, attributes}) {
     return updateObject('AllList', list.id, attributes).then(val => {
-      commit(commitFn, {list, attributes})
+      commit('updateList', {list, attributes})
       return val
     }).catch(error => console.log(error))
   },

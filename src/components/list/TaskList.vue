@@ -67,7 +67,6 @@ export default {
     // 点击复选框 完成
     checkTask (item) {
       this.$store.dispatch('updateTask', {
-        commitFn: 'toggleTaskCheckbox', 
         task: item,
         attributes: {
           isCompleted: !item.isCompleted,
@@ -78,7 +77,6 @@ export default {
     // 点击复选框 未完成
     restoreTask (item) {
       this.$store.dispatch('updateTask', {
-        commitFn: 'toggleTaskCheckbox', 
         task: item,
         attributes: {
           isCompleted: !item.isCompleted,
@@ -93,7 +91,6 @@ export default {
     // 切换星标
     toggleTaskStar (item){
       this.$store.dispatch('updateTask', {
-        commitFn: 'toggleTaskStar', 
         task: item,
         attributes: {starred: !item.starred}
       })

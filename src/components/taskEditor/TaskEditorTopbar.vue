@@ -81,7 +81,6 @@ export default {
   methods: {
     toggleCheck () {
       this.$store.dispatch('updateTask', {
-        commitFn: 'toggleTaskCheckbox', 
         task: this.taskItem,
         attributes: {
           isCompleted: !this.taskItem.isCompleted,
@@ -91,7 +90,6 @@ export default {
     },
     toggleTaskStar () {
       this.$store.dispatch('updateTask', {
-        commitFn: 'toggleTaskStar', 
         task: this.taskItem,
         attributes: {starred: !this.taskItem.starred}
       })
@@ -104,7 +102,6 @@ export default {
         this.$store.dispatch('updateTask', {
           task: this.taskItem,
           attributes: {title: this.title}, 
-          commitFn:'changeTaskTitle', 
         })
       }
     },

@@ -42,7 +42,7 @@
                 class="display-view" 
                 :class="{hidden: !displayViewArr[index]}" 
                 @click="editSubTask(item, index)"
-              >{{ item.title }}</div>
+              >{{ item.title + ' '+ displayViewArr }}</div>
 
               <div class="edit-view" :class="{hidden: displayViewArr[index]}">
                 <div class="expandingArea active">
@@ -110,6 +110,7 @@ export default {
       let subTasks = this.$store.getters.getEditorSubTasks
       let length = subTasks.length
       if (length !== this.displayViewArr.length) {
+        this.displayViewArr = []
         for (var i = 0; i < length; i++) {
           this.displayViewArr[i] = true
         }
@@ -123,7 +124,6 @@ export default {
         index,
         subTask: item,
         attributes:{isCompleted: !item.isCompleted},
-        commitFn: 'toggleSubTaskBox'
       })
     },
     // 编辑子任务
@@ -157,7 +157,6 @@ export default {
           index, 
           subTask: item, 
           attributes:{title: this.newTitle},
-          commitFn: 'changeSubTaskTitle'
         })
         this.$set(this.displayViewArr, index, true)
       }

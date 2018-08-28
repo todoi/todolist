@@ -14,9 +14,9 @@ export default {
     }
   },
 
-  changeListTitle ({ allList }, { list, attributes }) {
+  updateList ({ allList }, { list, attributes }) {
     if (!list.isFilter) {
-      allList[list.index].title = attributes.title
+      Object.assign(allList[list.index], attributes)
     }
   },
 

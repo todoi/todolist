@@ -52,6 +52,7 @@
 
       <!-- 编辑任务 -->
       <TaskDetail 
+        :taskItem="taskItem"
         v-if="showTaskEditor" 
         @toggleDetailCheckbox="showTaskEditor = false" 
         @close="showTaskEditor = false" 
@@ -132,7 +133,6 @@ export default {
     changeListTitle (newTitle) {
       let obj = Object.assign({}, this.currentList )
       this.$store.dispatch('updateList', {
-        commitFn: 'changeListTitle', 
         list: obj, 
         attributes: {title: newTitle}
       })

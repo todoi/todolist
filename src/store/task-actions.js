@@ -30,16 +30,16 @@ export default {
     }).catch(error => console.log(error))
   },
 
-  updateTask ({commit}, {task, attributes, commitFn}) {
+  updateTask ({commit}, {task, attributes}) {
     return updateObject('AllTask', task.id, attributes).then(val => {
-      commit(commitFn, {task, attributes})
+      commit('updateTask', {task, attributes})
       return val
     }).catch(error => console.log(error))
   },
 
-  updateSubTask ({commit}, {subTask, index, attributes, commitFn}) {
+  updateSubTask ({commit}, {subTask, index, attributes}) {
     return updateObject('AllSubTask', subTask.id, attributes).then(val => {
-      commit(commitFn, {subTask, index, attributes})
+      commit('updateSubTask', {subTask, index, attributes})
     }).catch(error => console.log(error))
   }
 }

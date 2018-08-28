@@ -33,35 +33,12 @@ export default {
     })
   },
 
-  // 用户在未完成 item 的checkbox 上点击
-  toggleTaskCheckbox ({ allTask }, { task, attributes }) {
-    let listId = task.belongTo.id
-    let taskId = task.id
-    let findTask = allTask[listId].find(task => task.id === taskId) 
-    findTask.isCompleted = attributes.isCompleted
-    // 重置完成时间
-    findTask.finishAt = attributes.finishAt
-  },
-
-  // 切换星标
-  toggleTaskStar ({allTask}, {task, attributes}){
-    let listId = task.belongTo.id
-    let taskId = task.id
-    allTask[listId].find(task => task.id === taskId).starred = attributes.starred
-  },
-
-  // 更改任务标题
-  changeTaskTitle ({ currentTask, allTask }, {task, attributes}) {
+  updateTask ({allTask}, {task, attributes}) {
     let taskId = task.id
     let listId = task.belongTo.id
-    allTask[listId].find(task => task.id === taskId).title = attributes.title
+    Object.assign(allTask[listId].find(task => task.id === taskId), attributes)
   },
 
-
-
-  toggleSubTaskBox ({ allSubTask }, {index, subTask, attributes: {isCompleted}}) {
-    allSubTask[subTask.belongTo.id][index].isCompleted = isCompleted
-  },
 
   addSubTask ({allSubTask}, newSubTask) {
     let taskId = newSubTask.belongTo.id
@@ -73,7 +50,8 @@ export default {
     allSubTask[taskId].splice(index, 1)
   },
 
-  changeSubTaskTitle ({allSubTask}, {index, subTask, attributes: {title: newTitle}}) {
-    allSubTask[subTask.belongTo.id][index].title = newTitle
+  updateSubTask ({allSubTask}, {index, subTask, attributes}) {
+    Object.assign(allSubTask[subTask.belongTo.id][index], attributes)
   }
+
 }

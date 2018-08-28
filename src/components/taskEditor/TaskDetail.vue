@@ -2,6 +2,7 @@
   <div id="task-detail" class="animate">
     <slot name="topbar"></slot>
     <div class="body" ref="body">
+
       <div class="section section-item detail-date" tabindex="0" :class="{'overdue' : taskItem.deadline && (new Date().getTime() > taskItem.deadline), date: taskItem.deadline}">
         <div class="section-icon">
           <svg class="date" width="20px" height="20px">
@@ -58,38 +59,9 @@
 
       <SubTasks :taskItem="taskItem"/>
 
-      <!-- 没有实现 note 功能 -->
-      <div class="section section-item note" :class="{hasNote: taskItem.note.content}" tabindex="0" @focusout="taskItem.note.displayView = true">
-        <div class="section-icon">
-          <svg class="options rtl-flip" width="20px" height="20px">
-            <use xlink:href="#icon-options"></use>
-          </svg>
-        </div>
-        <div class="section-content top">
-          <!-- <div class="section-title note-add" v-if="!taskItem.note.content">添加备注...</div> -->
-          <div class="note-body selectable"> <!-- v-else -->
-            <div class="content-fakable">
-              <div class="display-view" :class="{hidden: !taskItem.note.displayView, active: taskItem.note.content}" @click="taskItem.note.displayView = false">{{ taskItem.note.content ? taskItem.note.content : '添加备注...'}}</div>
-              <div class="edit-view" :class="{hidden: taskItem.note.displayView}">
-                <div class="expandingArea active">
-                  <pre>{{ taskItem.note.content }}</pre>
-                  <textarea tabindex="0" placeholder="添加备注..." v-model.trim="taskItem.note.content" @focusin="taskItem.note.displayView = false"></textarea>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- 功能暂不实现 note -->
-        <div class="section-attachments" title="删除" tabindex="0">
-          <a class="open-fullscreen-note" title="全屏打开笔记" tabindex="0">
-            <svg class="fullscreen" width="20px" height="20px">
-              <use xlink:href="#icon-fullscreen"></use>
-            </svg>
-          </a>
-        </div>
-      </div>
+      <Note :taskItem="taskItem"/>
 
-      <div class="section section-files" tabindex="0" :class="{hasFiles: taskItem.fileList.length}">
+      <div class="section section-files" tabindex="0" :class="{hasFiles: $store.state.allFileMeta[taskItem.id].length}">
         <div class="audio-recorder hidden">
           <div class="audio-recorder-container">
             <audio></audio>
@@ -191,11 +163,13 @@ import utils from '../../lib/utils'
 import DatePicker from 'vuejs-datepicker'
 import UploadFile from './UploadFile.vue'
 import SubTasks from './SubTasks'
+import Note from './Note'
 
 let chineseWeekDate = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
 export default {
   name: 'TaskDetail',
-  components: {DatePicker, UploadFile, SubTasks},
+  props: ['taskItem'],
+  components: {DatePicker, UploadFile, SubTasks, Note},
   data() {
     return {
       datePickerState,
@@ -207,12 +181,9 @@ export default {
     username () {
       return this.$store.state.user.username
     },
-    taskItem () {
-      return this.$store.getters.getSelectedTask
-    },
     getAvatarSrc () {
       return utils.getAvatarSrc(this.username)
-    }
+    },
   },
   methods: {
     log(args){
@@ -326,12 +297,6 @@ textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
 .section-files.hasFiles .section-icon svg{fill: #63b4be;}
 
 
-.note.hasNote .section-icon svg{fill: #e29600;}
-.note .note-body{height:auto; border: none; font-size: 16px; line-height: 20px; word-wrap: break-word;}
-.note .note-body .display-view{color:#9fa2a6;}
-.note .note-body .display-view.active{color:#2c3e50;}
-.note .note-body .expandingArea pre{min-height: 100px; font-weight: normal;}
-.note .note-body .expandingArea textarea{min-height: 100px; font-weight: normal;}
 .section-attachments{text-align: center;}
 .section-attachments svg{margin: 6px;}
 .section-attachments span{display: inline-block; width: 32px; height: 32px;}
