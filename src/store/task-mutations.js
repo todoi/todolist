@@ -68,8 +68,19 @@ export default {
     let listId = currentTask.belongTo.id
     allTask[listId].find(task => task.id === taskId).title = title
   },
-  toggleSubTaskBox ({ currentTask, allSubTask }, {index, item: subTask}) {
-    let sb = allSubTask[currentTask.id][index]  
-    sb.isCompleted = !sb.isCompleted
+
+  toggleSubTaskBox ({ allSubTask }, {index, subTask, attributes: {isCompleted}}) {
+    allSubTask[subTask.belongTo.id][index].isCompleted = isCompleted
+  },
+  addSubTask ({allSubTask}, newSubTask) {
+    let taskId = newSubTask.belongTo.id
+    allSubTask[taskId].push(newSubTask)
+  },
+  deleteSubTask ({allSubTask}, {subTask, index}) {
+    let taskId = subTask.belongTo.id
+    allSubTask[taskId].splice(index, 1)
+  },
+  changeSubTaskTitle ({allSubTask}, {index, subTask, attributes: {title: newTitle}}) {
+    allSubTask[subTask.belongTo.id][index].title = newTitle
   }
 }

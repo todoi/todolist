@@ -67,5 +67,14 @@ export default {
       alert('请求失败,请稍后重试')
     }
     return promise
+  },
+  updateObject (className, id, attributes) {
+    var obj = AV.Object.createWithoutData(className, id)
+    for (let key in attributes) {
+      if (attributes.hasOwnProperty(key)) {
+        obj.set(key, attributes[key])
+      }
+    }
+    return obj.save()
   }
 }

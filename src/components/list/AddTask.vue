@@ -142,7 +142,7 @@ export default {
       if(this.newTask.title){
         let item = JSON.parse(JSON.stringify(this.newTask))
         // 写入创建时间 
-        this.$store.dispatch('createTask', item)
+        this.$store.dispatch('createTask', item).then(val => {})
         // 重置 newTask
         this.newTask = this.createTaskTemplate()
         // 去掉 星星 的 starred 类名

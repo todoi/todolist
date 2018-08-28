@@ -34,23 +34,23 @@
           <div 
             tabindex=0
             class="section-title selectable" 
-            @focusout="closeTextEditor(index)"
+            @focusout="changeSubTaskTitle(item, index)"
             >
             <!-- 将其他的子任务displayView 改为 true -->
             <div class="content-fakable">
               <div 
                 class="display-view" 
                 :class="{hidden: !displayViewArr[index]}" 
-                @click="editSubtask(item, index)"
+                @click="editSubTask(item, index)"
               >{{ item.title }}</div>
 
               <div class="edit-view" :class="{hidden: displayViewArr[index]}">
                 <div class="expandingArea active">
-                  <pre>{{ 'item.title' }}</pre>
+                  <pre>{{ newTitle }}</pre>
                   <textarea 
-                    v-model="item.title" 
-                    @keypress.enter.prevent="displayViewArr[index] = true" 
-                    @focusin="editSubtask(item, index)"
+                    v-model.trim="newTitle" 
+                    @keypress.enter.prevent="changeSubTaskTitle(item, index)" 
+                    @focusin="editSubTask(item, index)"
                   ></textarea>
                 </div>
               </div>
@@ -59,7 +59,7 @@
           </div>
         </div>
 
-        <a class="section-delete" @click="deleteSubtask(item, index)">
+        <a class="section-delete" @click="deleteSubTask(item, index)">
           <svg class="delete" width="20px" height="20px">
             <use xlink:href="#icon-delete"></use>
           </svg>
@@ -78,13 +78,13 @@
         <!-- <div class="section-title hidden">添加子任务</div> -->
         <div class="section-edit">
           <div class="expandingArea active">
-            <pre>{{newSubtask.title}}</pre>
+            <pre>{{newSubTask.title}}</pre>
             <textarea 
               tabindex="0" 
               placeholder="添加子任务" 
-              v-model="newSubtask.title" 
-              @keypress.enter.prevent="addSubtask" 
-              @focusout="addSubtask"
+              v-model="newSubTask.title" 
+              @keypress.enter.prevent="addSubTask" 
+              @focusout="addSubTask"
             ></textarea>
           </div>
         </div>
@@ -100,9 +100,9 @@ export default {
   name: 'SubTasks',
   data () {
     return {
-      newSubtask: this.createSubtaskTemplate(),
+      newSubTask: this.createSubTaskTemplate(),
       displayViewArr: [],
-      newTitle: 'jdfioej:w'
+      newTitle: ''
     }
   },
   computed: {
@@ -118,37 +118,50 @@ export default {
     },
   },
   methods: {
-    closeTextEditor (index) {
-      this.$set(this.displayViewArr, index, true)
-    },
     toggleSubTaskBox(item, index){
-      this.$store.commit('toggleSubTaskBox', {index, item})
-      // 自己的 displayView 改为true
-      this.displayViewArr[index] = true
+      this.$store.dispatch('updateSubTaskTitle', {
+        index,
+        subTask: item,
+        attributes:{isCompleted: !item.isCompleted},
+        commitFn: 'toggleSubTaskBox'
+      })
     },
     // 编辑子任务
-    editSubtask(item, index){
+    editSubTask(item, index){
       // this.displayViewArr[index] = false
       // this.displayViewArr = [].concat(this.displayViewArr.slice(0, index), this.displayViewArr.slice(index))
-      // 触发 setter 更新
+      this.newTitle = item.title
+      // 触发 setter 更新 
       this.$set(this.displayViewArr, index, false)
     },
     // 删除子任务
-    deleteSubtask(item, index){
-      this.subTasks.splice(index, 1)
-      // 完成数量减一个
-      if(item.isCompleted) this.subTasksCompletedNumber--
+    deleteSubTask(item, index){
+      this.$store.dispatch('deleteSubTask', {subTask: item, index})
     },
-    createSubtaskTemplate(){
+    createSubTaskTemplate(){
       return {title:'', isCompleted: false}
     },
     // 添加子任务
-    addSubtask(){
-      if(this.newSubtask.title){
-        this.subTasks.push(this.newSubtask)
-        this.newSubtask = this.createSubtaskTemplate()
+    addSubTask(){
+      if(this.newSubTask.title){
+        this.$store.dispatch('createSubTask', this.newSubTask).then(val => { })
+        this.newSubTask = this.createSubTaskTemplate()
       }
     },
+    changeSubTaskTitle (item, index) {
+      if (!this.newTitle || this.newTitle === item.title) {
+        this.$set(this.displayViewArr, index, true)
+        return 
+      } else {
+        this.$store.dispatch('updateSubTaskTitle', {
+          index, 
+          subTask: item, 
+          attributes:{title: this.newTitle},
+          commitFn: 'changeSubTaskTitle'
+        })
+        this.$set(this.displayViewArr, index, true)
+      }
+    }
   }
 }
 </script>
