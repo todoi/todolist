@@ -39,7 +39,6 @@
         -->
         <date-picker 
           ref="datePicker"
-          v-model="date" 
           :input-class="'date-picker-input'" 
           :wrapper-class="'date-picker-wrapper'"
           :calendar-class="'date-picker-calendar'" 
@@ -48,7 +47,8 @@
           :calendar-button="true" 
           :clear-button="true"
           :highlighted="highlighted"
-          > </date-picker>
+          @selected="setDeadline"
+        > </date-picker>
 
         <svg class="today" width="20px" height="20px" :class="{active: datePickerDate}">
           <use xlink:href="#icon-today"></use>
@@ -89,25 +89,17 @@ export default {
       focusAddTask: false,
       starred: false,
       newTask: this.createTaskTemplate(),
-      date: '',
       highlighted: {
         dates: [ // Highlight an array of dates
           new Date(), // 当天高亮
         ],
-      }
+      },
+      datePickerDate: '',
     }
   },
   computed: {
     hiddenAllAddTaskMeta (){
       return !this.focusAddTask
-    },
-    // 当选择日期之时 要改变日历上的数字
-    datePickerDate(){
-      // 更新任务模板中的到期时间
-      this.newTask.deadline = this.date
-        ? new Date(this.date).getTime()
-        : ''
-      return this.date && new Date(this.date).getDate()
     },
   },
   methods: {
@@ -122,6 +114,10 @@ export default {
         note: '',
         finishAt: 0
       }
+    },
+    setDeadline (date) {
+      this.newTask.deadline = date ? new Date (date).getTime() : 0
+      this.datePickerDate = date && new Date(date).getDate()
     },
     // 是否 focus 在添加任务的输入框
     focusAddTaskData (){
@@ -148,8 +144,8 @@ export default {
         this.newTask = this.createTaskTemplate()
         // 去掉 星星 的 starred 类名
         this.starred = false
-        // 重置date 上面的日期
-        this.date = ''
+        // 清空日期
+        this.$refs.datePicker.clearDate()
       }
     },
   }

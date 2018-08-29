@@ -4,7 +4,7 @@ let { AV, createObject, deleteAll, deleteObject, updateObject } = leancloud
 export default {
   // 将 Task 上传到 leancloud
   createTask ({ commit, state: {allTask, currentList} }, newTask) {
-    let promise, createdAt
+    let promise
     let listAVObject = AV.Object.createWithoutData('AllList', currentList.id)
     promise = createObject('AllTask', Object.assign({}, newTask, {belongTo: listAVObject,}))
     return promise.then(result => {

@@ -2,43 +2,7 @@
   <div id="task-detail" class="animate">
     <slot name="topbar"></slot>
     <div class="body" ref="body">
-
-      <div class="section section-item detail-date" tabindex="0" :class="{'overdue' : taskItem.deadline && (new Date().getTime() > taskItem.deadline), date: taskItem.deadline}">
-        <div class="section-icon">
-          <svg class="date" width="20px" height="20px">
-            <use xlink:href="#icon-date"></use>
-          </svg>
-        </div>
-        <div class="section-content">
-          <div class="section-title">
-            {{ taskItem.deadline ? formatDate(taskItem.deadline) + '到期' : '设置到期日'}}
-          </div>
-          <date-picker 
-            v-model="taskItem.deadline" 
-            :input-class="'date-picker-input-taskdetail'" 
-            :wrapper-class="'date-picker-wrapper-taskdetail'"
-            :calendar-class="'date-picker-calendar-taskdetail'" 
-            :calendar-button-icon="'date-picker-icon-taskdetail'" 
-            :calendar-button-icon-content="''" 
-            :calendar-button="true" 
-            :highlighted="datePickerState.highlighted" 
-            v-on:closed="showCalenderTrigon = !showCalenderTrigon"
-            v-on:opened="showCalenderTrigon = !showCalenderTrigon"
-            :ref="'task-detail-date-picker'"
-            >
-            <template slot="afterDateInput">
-              <div class="calender-trigon trigon1" v-show="showCalenderTrigon"></div>
-              <div class="calender-trigon trigon2" v-show="showCalenderTrigon"></div>
-            </template>
-          </date-picker>
-          <div class="section-description"></div>
-        </div>
-        <a class="section-delete" title="删除" tabindex="0" @click="taskItem.deadline = null">
-          <svg class="delete" width="20px" height="20px">
-            <use xlink:href="#icon-delete"></use>
-          </svg>
-        </a>
-      </div>
+      <Deadline :taskItem="taskItem"/>
 
       <div class="section section-item detail-reminder date overdue" tabindex="0">
         <div class="section-icon">
@@ -78,7 +42,7 @@
 
 <script>
 import utils from '../../lib/utils'
-import DatePicker from 'vuejs-datepicker'
+import Deadline from './Deadline'
 import UploadFile from './UploadFile'
 import SubTasks from './SubTasks'
 import Note from './Note'
@@ -88,11 +52,9 @@ import TaskEditorBottom from './TaskEditorBottom'
 export default {
   name: 'TaskDetail',
   props: ['taskItem'],
-  components: {DatePicker, UploadFile, SubTasks, Note, CommentList, TaskEditorBottom},
+  components: {Deadline, UploadFile, SubTasks, Note, CommentList, TaskEditorBottom},
   data() {
     return {
-      datePickerState,
-      showCalenderTrigon: false,
     }
   },
   computed: {
@@ -107,9 +69,6 @@ export default {
     }
   },
   methods: {
-    log (args) {
-      return console.log.call(null, args)
-    },
     deleteTask () {
       this.$store.dispatch('deleteTask', this.taskItem)
       this.$emit('closeTaskEditor')
@@ -117,27 +76,9 @@ export default {
     toggleTaskStarred () {
       this.taskItem.starred = !this.taskItem.starred
     },
-    // 传入一个时间戳 返回一个 '周二,5月15 到期' 的时间格式
-    formatDate (timeStamp) {
-      return utils.formatDate(timeStamp)
-    },
   },
-  watch: {
-    taskItem () { 
-      // 如果换了一个项目，关闭 date-picker 和 倒三角
-      this.$refs['task-detail-date-picker'].close()
-      this.showCalenderTrigon = false
-    }
-  }
 }
 
-let datePickerState = {
-  highlighted: {
-    dates: [ // Highlight an array of dates
-      new Date(), // 当天高亮
-    ],
-  }
-}
 
 </script>
 <style scoped>
