@@ -41,5 +41,21 @@ export default {
     return updateObject('AllSubTask', subTask.id, attributes).then(val => {
       commit('updateSubTask', {subTask, index, attributes})
     }).catch(error => console.log(error))
-  }
+  },
+
+  createFileMeta ({commit}, {task, fileMeta}) {
+    let promise, taskAVObject = AV.Object.createWithoutData('AllTask', task.id)
+    promise = createObject('AllFileMeta', Object.assign({}, fileMeta, {belongTo: taskAVObject,}))
+    return promise.then(result => {
+      commit('addFileMeta', Object.assign({}, result.attributes, {id: result.id}))
+      return result
+    }).catch(error => console.log(error))
+  },
+
+  deleteFileMeta ({commit}, {fileMeta, index}) {
+    return deleteObject('AllFileMeta', fileMeta.id).then(val => {
+      commit('deleteFileMeta', {fileMeta, index})
+      return val
+    }).catch(error => console.log(error))
+  },
 }

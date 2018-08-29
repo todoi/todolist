@@ -53,7 +53,7 @@
     </div>
     <!-- <ul class="files-list"></ul> -->
 
-    <div ref="fileList">
+    <div>
       <input 
         mutiple 
         type="file" 
@@ -61,13 +61,13 @@
         ref="select" 
         @change="uploadWithSDK">
 
-      <Xyz 
+      <FileList 
         :items="fileList"
         :isUploadList="false"
         @triggerDelete="deleteFile"
         />
 
-      <Xyz 
+      <FileList 
         :items="uploadingList"
         :isUploadList="true"
         @triggerDelete="deleteUploadingFile"
@@ -79,13 +79,13 @@
 
 <script>
 import utils from '../../lib/utils'
-import Xyz from './Xyz'
+import FileList from './FileList'
 
 let qiniu = require('qiniu-js')
 
 export default {
   name: 'Uploadfile',
-  components: {Xyz},
+  components: {FileList},
   props: ['taskItem'],
   data(){
     return {
@@ -95,9 +95,6 @@ export default {
   computed: {
     username () {
       return this.$store.state.user.username
-    },
-    getAvatarSrc () {
-      return utils.getAvatarSrc(this.username)
     },
     fileList () {
       return this.$store.state.allFileMeta[this.taskItem.id]
@@ -109,14 +106,16 @@ export default {
       return {
         fileExtension: '', 
         fileName: '', 
+        owner: this.username,
         uploadAt: 0, 
         fileSrc: '', 
         progress: 0,
         btnText: '开始上传',
       }
     },
-    getFileExtension (filename) { 
-      return (/.+[.]/.test(filename)) ? /[^.]+$/.exec(filename)[0] : ''
+
+    triggerUpload(){
+      this.$refs.select.click()
     },
 
     uploadWithSDK (event) {
@@ -130,9 +129,8 @@ export default {
       Object.assign(newFileMeta, {
         file: file,
         start: true,
-        fileExtension: this.getFileExtension(key),
+        fileExtension: utils.getFileExtension(key),
         fileName: key,
-        owner: this.username,
         observable: undefined,
         subscription: undefined,
       })
@@ -143,8 +141,14 @@ export default {
       newFileMeta.observable = qiniu.upload(file, key, token, putExtra, config);
     },
 
+    saveAFileMeta (item) {
+      let { fileExtension, fileName, uploadAt, fileSrc, owner } = item
+      let fileMeta = { fileExtension, fileName, uploadAt, fileSrc, owner }
+      return this.$store.dispatch('createFileMeta', {task: this.taskItem, fileMeta})
+    },
+
     // 设置next,error,complete对应的操作，分别处理相应的进度信息，错误信息，以及完成后的操作
-    toggleButton (item) {
+    toggleButton ({item, index}) {
       let self = this
       let error = function(err) {
         item.start = true;
@@ -156,9 +160,11 @@ export default {
       let complete = function(res) {
         // console.log(res)
         item.uploadAt = new Date().getTime()
-        item.fileSrc = '//p9vumvpee.bkt.clouddn.com/' + item.fileName
-        self.fileList.push(item)
+        item.fileSrc = '//pe7des760.bkt.clouddn.com/' + item.fileName
+        item.btnText = '上传完成'
         self.uploadingList.splice(self.uploadingList.indexOf(item), 1)
+        self.saveAFileMeta(item).then(val => {
+        })
       };
 
       let next = function(response) {
@@ -182,16 +188,13 @@ export default {
       }
     },
     deleteFile ({item, index}) {
-      this.fileList.splice(index, 1)
+      this.$store.dispatch('deleteFileMeta', {fileMeta: item, index})
     },
     deleteUploadingFile ({item, index}) {
       if(item.subscription){
         item.subscription.unsubscribe()
       }
       this.uploadingList.splice(index, 1)
-    },
-    triggerUpload(){
-      this.$refs.fileList.$refs.select.click()
     },
   }
 }
@@ -202,7 +205,7 @@ let config = {
   useCdnDomain: true,
   disableStatisticsReport: false,
   retryCount: 6,
-  region: qiniu.region.z0 //解决Error: incorrect region please use up-z2.qiniu.com的错误
+  region: qiniu.region.z2 //解决Error: incorrect region please use up-z2.qiniu.com的错误
 };
 let putExtra = {
   fname: "",

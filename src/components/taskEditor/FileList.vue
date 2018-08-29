@@ -39,7 +39,7 @@
         <div class="control-container" v-if="isUploadList">
           <button 
             class="btn btn-default control-upload" 
-            @click="$emit('triggerControl', item)"
+            @click="$emit('triggerControl', {item, index})"
             >{{ item.btnText }}</button>
         </div>
 

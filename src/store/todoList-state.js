@@ -149,7 +149,7 @@ export default {
       {
         fileExtension: 'jpg', 
         fileName: 'Chrysanthemum.jpg', 
-        uploadDate: 1525331956728, 
+        uploadAt: 1525331956728, 
         fileSrc: '//via.placeholder.com/50x50', 
       }
     ],
@@ -159,7 +159,7 @@ export default {
       {
         fileExtension: 'jpg', 
         fileName: 'Chrysanthemum.jpg', 
-        uploadDate: 1525331956728, 
+        uploadAt: 1525331956728, 
         fileSrc: '//via.placeholder.com/50x50', 
       }
     ],

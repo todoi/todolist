@@ -161,4 +161,8 @@ export default {
     })
     return arr
   },
+  // 返回文件的扩展名
+  getFileExtension (filename) { 
+    return (/.+[.]/.test(filename)) ? /[^.]+$/.exec(filename)[0] : ''
+  },
 }

@@ -52,6 +52,14 @@ export default {
 
   updateSubTask ({allSubTask}, {index, subTask, attributes}) {
     Object.assign(allSubTask[subTask.belongTo.id][index], attributes)
+  },
+
+  addFileMeta ({allFileMeta}, newFileMeta) {
+    allFileMeta[newFileMeta.belongTo.id].unshift(newFileMeta)
+  },
+
+  deleteFileMeta ({allFileMeta}, {fileMeta, index}) {
+    allFileMeta[fileMeta.belongTo.id].splice(index, 1)
   }
 
 }
