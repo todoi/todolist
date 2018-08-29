@@ -63,65 +63,16 @@
 
       <UploadFile :taskItem="taskItem" />
 
-      <div class="comments-main has-comments">
-        <!-- 没用到 promise 暂不实现这个功能 -->
-        <div class="state loading spinner">
-          <span class="dark"></span>
-          <div class="error hidden">很抱歉，我们无法载入评论，请重试。</div>
-        </div>
-        <ul class="comments-list">
-          <li tabindex="0" class="section-item section-item-comment active-user" v-for="(comment, index) in taskItem.comments">
-            <div class="section-icon picture">
-              <div class="avatar medium" :title="comment.username">
-                <img :src="getAvatarSrc">
-              </div>
-            </div>
-            <div class="section-content">
-              <span class="comment-author">{{ comment.username }}</span>
-              <span class="comment-time">{{ showTime(comment.createDate) }}</span>
-              <div class="comment-text">{{ comment.content }}</div>
-            </div>
-            <a class="section-delete" title="删除" @click="taskItem.comments.splice(index, 1)">
-              <svg class="delete" width="20px" height="20px">
-                <use xlink:href="#icon-delete"></use>
-              </svg>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
+      <CommentList :taskItem="taskItem" :comments="comments"/>
 
-    <div class="dropTarget"></div>
-    <div class="bottom">
-      <a class="detail-close" tabindex="0" title="隐藏详细视图" @click="triggerClose">
-        <svg class="close-right" width="20px" height="20px">
-          <use xlink:href="#icon-close-right"></use>
-        </svg>
-      </a>
-      <a class="detail-trash" tabindex="0" title="删除任务" @click="triggerDelete">
-        <svg class="trash" width="20px" height="20px">
-          <use xlink:href="#icon-trash"></use>
-        </svg>
-      </a>
-      <div class="comments">
-        <div class="comments-bottom">
-          <!-- <div class="last-comment hidden">
-            <span class="unread-count"></span>
-            </div> -->
-            <div class="comments-add">
-              <div class="input-fake">
-                <div class="expandingArea active">
-                  <pre>{{ newComment.content }}</pre>
-                  <textarea tabindex="0" placeholder="添加评论..." v-model="newComment.content" @keypress.enter.prevent="addComment"></textarea>
-                </div>
-              </div>
-            </div>
-        </div>
-      </div>
-      <div class="detail-info">
-        <span :title="formatDate(this.taskItem.createDate)">{{'创建于 ' + formatDate(this.taskItem.createDate)}}</span>
-      </div>
     </div>
+    <!--<div class="dropTarget"></div>-->
+    <TaskEditorBottom 
+      :taskItem="taskItem"
+      @triggerClose="$emit('closeTaskEditor')"
+      @triggerDelete="deleteTask"
+    />
+
   </div>
 </template>
 
@@ -131,17 +82,17 @@ import DatePicker from 'vuejs-datepicker'
 import UploadFile from './UploadFile'
 import SubTasks from './SubTasks'
 import Note from './Note'
+import CommentList from './CommentList'
+import TaskEditorBottom from './TaskEditorBottom'
 
-let chineseWeekDate = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
 export default {
   name: 'TaskDetail',
   props: ['taskItem'],
-  components: {DatePicker, UploadFile, SubTasks, Note},
+  components: {DatePicker, UploadFile, SubTasks, Note, CommentList, TaskEditorBottom},
   data() {
     return {
       datePickerState,
       showCalenderTrigon: false,
-      newComment: this.createCommentTemplate(),
     }
   },
   computed: {
@@ -151,63 +102,28 @@ export default {
     getAvatarSrc () {
       return utils.getAvatarSrc(this.username)
     },
+    comments () {
+      return this.$store.state.allComment[this.taskItem.id]
+    }
   },
   methods: {
-    log(args){
+    log (args) {
       return console.log.call(null, args)
     },
-    triggerClose(){
-      this.$emit('close')
+    deleteTask () {
+      this.$store.dispatch('deleteTask', this.taskItem)
+      this.$emit('closeTaskEditor')
     },
-    triggerDelete(){
-      this.$emit('delete', this.taskItem)
-    },
-    toggleTaskStarred(){
+    toggleTaskStarred () {
       this.taskItem.starred = !this.taskItem.starred
     },
-    addComment(){
-      if(this.newComment.content){
-        // 写入创建时间
-        this.newComment.createDate = new Date().getTime()
-        this.taskItem.comments.push(this.newComment)
-        // 重置 newComment
-        this.newComment = this.createCommentTemplate()
-        // 滚动条滚到底
-        this.$nextTick(function(){
-          this.$refs.body.scrollTop = this.$refs.body.scrollHeight
-        })
-      }
-    },
-    formatDate(timeStamp){
-      // 传入一个时间戳 返回一个 '周二,5月15 到期' 的时间格式
-      let date = new Date(timeStamp)
-      let week = chineseWeekDate[date.getDay()]
-      let month = date.getMonth() + 1
-      let day = date.getDate()
-      return `${week}，${month}月${day} `
-    },
-    showTime(createDate){
-      // 输入一个 完成的任务对象
-      // 输出新的时间 和 旧的时间之间的间隔
-      let newDate = new Date().getTime()
-      let delta = Math.ceil((newDate - createDate)/1000)
-      let days, hours, minutes, result //, seconds
-      days = Math.floor(delta / (60*60*24))
-      hours = Math.floor(delta / (60*60)) % 24
-      minutes = Math.floor(delta / 60) % 60
-      // seconds = delta % 60
-      result = '几秒钟'
-      if(minutes) result = `${minutes} 分钟`
-      if(hours) result = `${hours} 小时`
-      if(days) result = `${days} 天`
-      return `${result} 之前`
-    },
-    createCommentTemplate(){
-      return {content:'', username: this.username, createDate: null}
+    // 传入一个时间戳 返回一个 '周二,5月15 到期' 的时间格式
+    formatDate (timeStamp) {
+      return utils.formatDate(timeStamp)
     },
   },
   watch: {
-    taskItem(){
+    taskItem () { 
       // 如果换了一个项目，关闭 date-picker 和 倒三角
       this.$refs['task-detail-date-picker'].close()
       this.showCalenderTrigon = false
@@ -265,30 +181,4 @@ textarea::-webkit-input-placeholder{font-weight: 500; line-height: 20px;}
 .section-attachments svg{margin: 6px;}
 .section-attachments span{display: inline-block; width: 32px; height: 32px;}
 
-.comments-main{position: relative;}
-.comments-main .spinner{height: 0; transition: all 250ms ease; position: relative;}
-.comments-main .dark{opacity: 0.6; margin-top: 10px; position: absolute; left: 50%; top: 0; margin-left: -10px; width: 19px; height: 19px; background: url('../../assets/images/loading_black.png'); animation: rotate .8s linear infinite;}
-.comments-mian li{line-height: 16px;}
-.section-item.section-item-comment{padding-top: 16px;}
-.avatar.medium{width: 32px; height: 32px;}
-.avatar img{width: 100%; height: 100%; border-radius: 50%; display: block;}
-.comments-main li .section-content{text-align: left; font-size: 14px;}
-.comments-main li .comment-author{font-weight: bold; max-width: 100px; display: inline-block; vertical-align: top; height: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-.comments-main li .comment-time{color: #737272; vertical-align: top;}
-.comments-main li .comment-text{line-height: 18px; word-wrap: break-word; white-space: pre-wrap;}
-
-.bottom{position: relative;}
-.bottom .detail-close, .bottom .detail-trash{position: absolute; bottom: 8px; opacity: 0.6}
-.bottom .detail-close:hover, .bottom .detail-trash:hover{opacity: 0.8}
-.bottom .detail-close{left: 8px;}
-.bottom .detail-trash{right: 6px;}
-.comments-bottom{border-top: 1px solid #ebebeb; background: #fff;}
-.last-comment{position: absolute; z-index: 1; left: 0; right: 0; top: -44px; border-top: 1px solid #ebebeb;}
-.comments-bottom .unread-count{position: absolute; display: none; right: 15px; top: 10px; color: #fff; font-size: 12px; line-height: 12px; border-radius: 20px; padding: 2px; padding-bottom: 3px; text-align: center; min-width: 11px; background: #d74e48;}
-.comments-add{padding: 10px; padding-bottom: 0;}
-.input-fake{width: 100%; min-height: 32px; padding: 7px; transition: all 150ms ease-in-out; box-shadow: inset 0 0 0 1px #d6d6d6; border-radius: 3px; color: #262626;}
-.input-fake textarea{top: 1px; font-weight: normal; line-height: 20px;}
-.input-fake pre{font-weight: normal; line-height: 20px;}
-.detail-info{font-size: 12px; text-align: center; padding: 14px 35px; color: #a3a3a2;}
-.detail-info span{display: inline-block; max-width: 100%; height: 15px; }
 </style>

@@ -55,7 +55,7 @@
         :taskItem="taskItem"
         v-if="showTaskEditor" 
         @toggleDetailCheckbox="showTaskEditor = false" 
-        @close="showTaskEditor = false" 
+        @closeTaskEditor="showTaskEditor = false" 
         @delete="showTaskEditor = false"
       >
         <TaskEditorTopbar slot="topbar" :taskItem="taskItem" />

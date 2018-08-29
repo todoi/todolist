@@ -129,17 +129,17 @@ export default {
   },
   allComment: {
     work0: [
-      { content: 'fjidjifedf', createdAt: 1525332096726, },
-      { content: 'fjidjifedfdddddddd', createdAt: 1525343096726, }
+      { content: 'fjidjifedf', createdAt: 1525332096726, username: 'todoi' },
+      { content: 'fjidjifedfdddddddd', createdAt: 1525343096726, username: 'dfjie'}
     ],
     work1: [
-      { content: 'work1-comment 0', createdAt: 1525332096726, },
-      { content: 'work1-comment 1', createdAt: 1525343096726, }
+      { content: 'work1-comment 0', createdAt: 1525332096726, username: 'todoi' },
+      { content: 'work1-comment 1', createdAt: 1525343096726, username: 'todoi' }
     ],
     work2: [],
     life0: [
-      { content: 'life0-comment 0', createdAt: 1525332096726, },
-      { content: 'life0-comment 1', createdAt: 1525343096726, }
+      { content: 'life0-comment 0', createdAt: 1525332096726, username: 'todoi' },
+      { content: 'life0-comment 1', createdAt: 1525343096726, username: 'todoi' }
     ],
     life1: [],
     life2: [],

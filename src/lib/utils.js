@@ -3,6 +3,7 @@ let { AV, getAVUser } = leancloud
 export default {
   // 使用 Canvas 写成 用户名首字母的图片
   getAvatarSrc(username){
+    if (!username) return
     let letter = username.trim().slice(0,1).toUpperCase()
     let canvas = document.createElement('canvas')
     let context = canvas.getContext('2d')
@@ -22,6 +23,7 @@ export default {
     dataSrc = canvas.toDataURL()
     return dataSrc
   },
+
   //  间隔500ms, 检查一次 input
   throttle (inputObject, callback, delay) { 
     if (inputObject.timer) {
@@ -31,6 +33,7 @@ export default {
       callback()
     }, delay)
   },
+
   // 检验用户名是否存在语法错误
   validateUsername (content) { 
     let errorCode = 0
@@ -41,12 +44,14 @@ export default {
     }
     return errorCode
   },
+
   // 检验邮箱是否存在语法错误
   validateEmail (content) { 
     let errorCode = 0
     if(!(/^[\w]+[\w-.]*@[\w-]+(\.[\w-]+)+$/.test(content))) errorCode = 802
     return errorCode
   },
+
   // 检验 密码
   validatePassword (content) { //判断是否存在语法错误
     let errorCode = 0
@@ -61,6 +66,7 @@ export default {
     }
     return errorCode
   },
+
   // 检验 输入的内容是否已经 存在
   async validateExist (inputName, content) {
     // results 长度大于1, 说明这个已经被注册了
@@ -82,6 +88,7 @@ export default {
     }
     return errorCode
   },
+
   // 如果已经登录 直接到 todoPage 页面
   goTodoPage () {
     let currentUser = getAVUser()
@@ -89,6 +96,7 @@ export default {
       window.location.href = '/todopage'
     }
   },
+
   // 如果没有登录 那么 转到homepage 
   goHomePage () {
     let currentUser = getAVUser()
@@ -96,10 +104,12 @@ export default {
       window.location.href = '/'
     }
   },
+
   createId (arg) {
     return window.btoa(window.encodeURI(arg))
       .replace(/[=, ?, !]/g, '') + new Date().getTime()
   },
+
   // 输入一个 完成的任务对象
   // 输出新的时间 和 旧的时间之间的间隔
   showDuration (timeStamp) {
@@ -116,6 +126,7 @@ export default {
     if(days) result = `${days}天`
     return result
   },
+
   // 取得今天的 0 点和 24点 的 timeStamp 
   // min 代表 0点
   // max 代表 24 点
@@ -130,6 +141,17 @@ export default {
     max = min + 24 * 60 * 60 * 1000
     return { min, max }
   },
+
+  // 传入一个时间戳 返回一个 '周二,5月15 到期' 的时间格式
+  formatDate (timeStamp) {
+    let chineseWeekDate = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+    let date = new Date(timeStamp)
+    let week = chineseWeekDate[date.getDay()]
+    let month = date.getMonth() + 1
+    let day = date.getDate()
+    return `${week}，${month}月${day} `
+  },
+
   // 取得这个 周一 点和 周日 的 timeStamp 
   getWeekDuration (timeStamp) {
     let time = new Date(timeStamp)
@@ -141,11 +163,13 @@ export default {
     max = dayMax + (7 - arr[day]) * 24 * 60 * 60 * 1000
     return {min, max}
   },
+
   // 返回一个首字母大写的字符串
   toCapitalize (string) {
     let str = string.slice(0, 1).toUpperCase() + string.slice(1)
     return str
   },
+
   // 侧边栏 按每个任务的 listId 不同分类
   // 输出示例 [{listId: 'work', tasks: [task0, task1]}, {listId: 'life', tasks: [task0, task1]}]
   sortFilterTasks (filterTasks) {
@@ -161,6 +185,7 @@ export default {
     })
     return arr
   },
+
   // 返回文件的扩展名
   getFileExtension (filename) { 
     return (/.+[.]/.test(filename)) ? /[^.]+$/.exec(filename)[0] : ''

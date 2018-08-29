@@ -8,9 +8,9 @@ export default {
     let listAVObject = AV.Object.createWithoutData('AllList', currentList.id)
     promise = createObject('AllTask', Object.assign({}, newTask, {belongTo: listAVObject,}))
     return promise.then(result => {
-      let {id, attributes: {deadline}, createdAt} = result
+      let {id, createdAt} = result
       createdAt = new Date(createdAt).getTime()
-      commit('addTask', Object.assign({}, result.attributes, {id, createdAt, deadline}))
+      commit('addTask', Object.assign({}, result.attributes, {id, createdAt}))
     }).catch(error => console.log(error))
   },
 
@@ -23,9 +23,42 @@ export default {
     }).catch(error => console.log(error))
   },
 
+  createFileMeta ({commit}, {task, fileMeta}) {
+    let promise, taskAVObject = AV.Object.createWithoutData('AllTask', task.id)
+    promise = createObject('AllFileMeta', Object.assign({}, fileMeta, {belongTo: taskAVObject,}))
+    return promise.then(result => {
+      commit('addFileMeta', Object.assign({}, result.attributes, {id: result.id}))
+      return result
+    }).catch(error => console.log(error))
+  },
+
+  createComment ({commit}, {task, comment}) {
+    let promise, taskAVObject = AV.Object.createWithoutData('AllTask', task.id)
+    promise = createObject('AllComment', Object.assign({}, comment, {belongTo: taskAVObject}))
+    return promise.then(result => {
+      let createdAt = new Date(result.createdAt).getTime()
+      commit('addComment', Object.assign({}, result.attributes, {id: result.id, createdAt}))
+      return result
+    }).catch(error => console.log(error))
+  },
+
   deleteSubTask ({commit}, {subTask, index}) {
     return deleteObject('AllSubTask', subTask.id).then(val => {
       commit('deleteSubTask', {subTask, index})
+      return val
+    }).catch(error => console.log(error))
+  },
+
+  deleteFileMeta ({commit}, {fileMeta, index}) {
+    return deleteObject('AllFileMeta', fileMeta.id).then(val => {
+      commit('deleteFileMeta', {fileMeta, index})
+      return val
+    }).catch(error => console.log(error))
+  },
+
+  deleteComment({commit}, {comment, index}) {
+    return deleteObject('AllComment', comment.id).then(val => {
+      commit('deleteComment', {comment, index})
       return val
     }).catch(error => console.log(error))
   },
@@ -43,19 +76,4 @@ export default {
     }).catch(error => console.log(error))
   },
 
-  createFileMeta ({commit}, {task, fileMeta}) {
-    let promise, taskAVObject = AV.Object.createWithoutData('AllTask', task.id)
-    promise = createObject('AllFileMeta', Object.assign({}, fileMeta, {belongTo: taskAVObject,}))
-    return promise.then(result => {
-      commit('addFileMeta', Object.assign({}, result.attributes, {id: result.id}))
-      return result
-    }).catch(error => console.log(error))
-  },
-
-  deleteFileMeta ({commit}, {fileMeta, index}) {
-    return deleteObject('AllFileMeta', fileMeta.id).then(val => {
-      commit('deleteFileMeta', {fileMeta, index})
-      return val
-    }).catch(error => console.log(error))
-  },
 }

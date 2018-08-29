@@ -45,6 +45,16 @@ export default {
     allSubTask[taskId].push(newSubTask)
   },
 
+  addComment ({allComment}, newComment) {
+    let taskId = newComment.belongTo.id
+    allComment[taskId].push(newComment)
+  },
+
+  addFileMeta ({allFileMeta}, newFileMeta) {
+    allFileMeta[newFileMeta.belongTo.id].unshift(newFileMeta)
+  },
+
+
   deleteSubTask ({allSubTask}, {subTask, index}) {
     let taskId = subTask.belongTo.id
     allSubTask[taskId].splice(index, 1)
@@ -54,12 +64,12 @@ export default {
     Object.assign(allSubTask[subTask.belongTo.id][index], attributes)
   },
 
-  addFileMeta ({allFileMeta}, newFileMeta) {
-    allFileMeta[newFileMeta.belongTo.id].unshift(newFileMeta)
-  },
-
   deleteFileMeta ({allFileMeta}, {fileMeta, index}) {
     allFileMeta[fileMeta.belongTo.id].splice(index, 1)
+  },
+
+  deleteComment ({allComment}, {comment, index}) {
+    allComment[comment.belongTo.id].splice(index, 1)
   }
 
 }
