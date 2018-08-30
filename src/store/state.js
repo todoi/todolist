@@ -1,23 +1,4 @@
 export default {
-  hideSyncIcon: true,
-  // 侧边栏选中的list
-  currentList: {
-    id: 'all',
-    title: '全部',
-    index: 0,
-    isFilter: true,
-  },
-  currentTask: {
-    id: 'work0',
-    title: ' ',
-    belongTo: {id: 'work'},
-    selected: false,
-    starred: false,
-    createdAt: '',
-    deadline: 0,
-    isCompleted: false,
-    note: '',
-  },
   allList: [
     {
       id: 'work',
@@ -167,32 +148,4 @@ export default {
     life1: [],
     life2: [],
   },
-  filterCollection: [
-    {
-      id: 'all',
-      isAnimateUp: false,
-      title: '全部',
-      active: false,
-    },{
-      id: 'starred',
-      isAnimateUp: false,
-      title: '已加星标',
-      active: false,
-    },{
-      id: 'today',
-      isAnimateUp: false,
-      title: '今天到期',
-      active: false,
-    },{
-      id: 'week',
-      isAnimateUp: false,
-      title: '本周到期',
-      active: false,
-    },{
-      id: 'completed',
-      isAnimateUp: false,
-      title: '已完成',
-      active: false,
-    }
-  ]
 }

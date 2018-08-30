@@ -119,7 +119,7 @@ export default {
       isCollapsed: false,
       currentPopover: '',
       currentDialog: '',
-      showTaskEditor: true, // 打开任务编辑区域
+      showTaskEditor: false, // 打开任务编辑区域
       hideOfflineIcon: true,
     }
   },
