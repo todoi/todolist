@@ -32,5 +32,8 @@ export default {
     } else {
       delete state[collectionName].id
     }
+  },
+  toggleSyncIcon ({hideSyncIcon}) {
+    hideSyncIcon = !hideSyncIcon
   }
 }

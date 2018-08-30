@@ -1,11 +1,7 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
 
-import collections  from './modules/collections'
-import list  from './modules/list'
-import subtasks  from './modules/subtasks'
-
-import newState from './todoList-state'
+import newState from './state'
 
 import listGetters from './list-getters.js'
 import listMutations from './list-mutations.js'
@@ -41,11 +37,6 @@ export default new Vuex.Store({
   actions: {
     ...listActions,
     ...taskActions,
-  },
-  modules: {
-    collections,
-    list,
-    subtasks
   }
 })
 

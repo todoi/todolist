@@ -27,15 +27,28 @@
           @closeDialog="closeDialog"
           @submit="deleteList"
           />
+
+        <DialogListDeletor
+          :title="taskItem.title"
+          v-if="currentDialog === 'deleteTask'"
+          @closeDialog="closeDialog"
+          @submit="deleteTask"
+          />
       </div>
       <div id="lists-nav" :class="{'collapsed': isCollapsed}">
         <div class="lists-inner" tabindex="0">
           <SideSearchToolbar @collapse="isCollapsed = !isCollapsed" />
-          <SideUserToolbar @openPopover="openPopover"/>
+
+          <SideUserToolbar 
+            :hideOfflineIcon="hideOfflineIcon"
+            :hideSyncIcon="hideSyncIcon"
+            @openPopover="openPopover" />
+
           <SideListsScroll 
             ref="sideListsScroll"
             @collapse="isCollapsed = !isCollapsed" 
-            @openDialogListChanger="openDialogListChanger"/>
+            @openDialogListChanger="currentDialog = 'changer'"/>
+
           <SidebarActions @openDialogListCreator="currentDialog = 'creator'"/>
         </div>
       </div>
@@ -44,7 +57,7 @@
           <ListToolbar />
           <div class="tasks-scroll">
             <AddTask v-if="!currentList.isFilter"/>
-            <TaskList :currentList="currentList" @openTaskEditor="openTaskEditor"/>
+            <TaskList :currentList="currentList" @openTaskEditor="showTaskEditor = true"/>
             <NotFound class="hidden" />
           </div>
         </div>
@@ -54,12 +67,8 @@
       <TaskDetail 
         :taskItem="taskItem"
         v-if="showTaskEditor" 
-        @toggleDetailCheckbox="showTaskEditor = false" 
         @closeTaskEditor="showTaskEditor = false" 
-        @delete="showTaskEditor = false"
-      >
-        <TaskEditorTopbar slot="topbar" :taskItem="taskItem" />
-      </TaskDetail>
+        @openDialogDeletor="currentDialog = 'deleteTask'" />
 
     </div>
     <div class="popover-area" tabindex="-1" ref="popover" @focusout="currentPopover = ''">
@@ -83,7 +92,6 @@ import AddTask from './list/AddTask'
 import NotFound from './list/NotFound'
 
 import TaskDetail from './taskEditor/TaskDetail'
-import TaskEditorTopbar from './taskEditor/TaskEditorTopbar'
 
 import DialogListEditor from './dialogs/DialogListEditor'
 import DialogListDeletor from './dialogs/DialogListDeletor'
@@ -99,7 +107,7 @@ import icon from '../assets/icons.js'
 
 export default {
   name: 'TodoPage',
-  components: {DialogListEditor, DialogListDeletor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, TaskList, ListToolbar, AddTask, NotFound, TaskDetail, TaskEditorTopbar, UserPopover, ActivityPopover, ConversationPopover},
+  components: {DialogListEditor, DialogListDeletor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, TaskList, ListToolbar, AddTask, NotFound, TaskDetail, UserPopover, ActivityPopover, ConversationPopover},
   created () {
     this.$store.commit('setUser', leancloud.getAVUser())
     utils.goHomePage()
@@ -110,7 +118,16 @@ export default {
       currentPopover: '',
       currentDialog: '',
       showTaskEditor: true, // 打开任务编辑区域
+      hideOfflineIcon: true,
     }
+  },
+  mounted () {
+    window.addEventListener('offline', () => {
+      this.hideOfflineIcon = false
+    })
+    window.addEventListener('online', () => {
+      this.hideOfflineIcon = true
+    })
   },
   computed: {
     currentList () {
@@ -118,6 +135,9 @@ export default {
     },
     taskItem () {
       return this.$store.getters.getCurrentTask  
+    },
+    hideSyncIcon () {
+      return this.$store.state.hideSyncIcon
     }
   },
   methods: {
@@ -148,14 +168,11 @@ export default {
       let promise = this.$store.dispatch('deleteList', this.currentList)
       promise.then(value =>  this.closeDialog())
     },
-    openDialogListChanger () { 
-      //payload = {listId, index, title}
-      this.currentDialog = 'changer'
-    },
     // 打开任务编辑的区域
-    openTaskEditor(){
-      this.showTaskEditor = true
-    },
+    deleteTask () {
+      this.$store.dispatch('deleteTask', this.taskItem)
+      this.showTaskEditor = false
+    }
   }
 }
 

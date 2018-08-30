@@ -1,25 +1,12 @@
 <template>
   <div id="task-detail" class="animate">
-    <slot name="topbar"></slot>
+    <TaskEditorTopbar :taskItem="taskItem" />
+
     <div class="body" ref="body">
       <Deadline :taskItem="taskItem"/>
 
-      <div class="section section-item detail-reminder date overdue" tabindex="0">
-        <div class="section-icon">
-          <svg class="reminder" width="20px" height="20px">
-            <use xlink:href="#icon-reminder"></use>
-          </svg>
-        </div>
-        <div class="section-content">
-          <div class="section-title repeat">提醒我</div>
-          <div class="section-description repeat">今天</div>
-        </div>
-        <a class="section-delete" title="删除" tabindex="0">
-          <svg class="delete" width="20px" height="20px">
-            <use xlink:href="#icon-delete"></use>
-          </svg>
-        </a>
-      </div>
+      <!--没有实现-->
+      <Reminder  class="hidden"/>
 
       <SubTasks :taskItem="taskItem"/>
 
@@ -34,7 +21,7 @@
     <TaskEditorBottom 
       :taskItem="taskItem"
       @triggerClose="$emit('closeTaskEditor')"
-      @triggerDelete="deleteTask"
+      @triggerDelete="$emit('openDialogDeletor')"
     />
 
   </div>
@@ -42,7 +29,9 @@
 
 <script>
 import utils from '../../lib/utils'
+import TaskEditorTopbar from './TaskEditorTopbar'
 import Deadline from './Deadline'
+import Reminder from './Reminder'
 import UploadFile from './UploadFile'
 import SubTasks from './SubTasks'
 import Note from './Note'
@@ -52,7 +41,7 @@ import TaskEditorBottom from './TaskEditorBottom'
 export default {
   name: 'TaskDetail',
   props: ['taskItem'],
-  components: {Deadline, UploadFile, SubTasks, Note, CommentList, TaskEditorBottom},
+  components: {TaskEditorTopbar, Deadline, Reminder, UploadFile, SubTasks, Note, CommentList, TaskEditorBottom},
   data() {
     return {
     }
@@ -69,10 +58,6 @@ export default {
     }
   },
   methods: {
-    deleteTask () {
-      this.$store.dispatch('deleteTask', this.taskItem)
-      this.$emit('closeTaskEditor')
-    },
     toggleTaskStarred () {
       this.taskItem.starred = !this.taskItem.starred
     },

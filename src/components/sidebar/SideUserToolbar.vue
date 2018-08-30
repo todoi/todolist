@@ -14,12 +14,12 @@
         </svg>
       </span>
       <div id="sync">
-        <span class="offline-wrapper">
+        <span class="offline-wrapper" :class="{hidden: hideOfflineIcon}">
           <svg class="offline" width="20px" height="20px" >
             <use xlink:href="#icon-offline"></use>
           </svg>
         </span>
-        <span class="syncing-wrapper">
+        <span class="syncing-wrapper" :class="{hidden: hideSyncIcon}">
           <svg class="sync" width="20px" height="20px" >
             <use xlink:href="#icon-sync"></use>
           </svg>
@@ -27,7 +27,7 @@
       </div>
     </a>
     <!-- 这两个功能被砍掉了 -->
-    <div class="stream-counts">
+    <div class="stream-counts hidden">
       <!-- 有设置提醒的任务 -->
       <a class="activities-count" @click="openPopover('activity')">
         <svg class="bell" width="20px" height="20px">
@@ -51,6 +51,7 @@ import utils from '../../lib/utils'
 
 export default {
   name: 'SideUserToolbar',
+  props: ['hideOfflineIcon', 'hideSyncIcon'],
   data () {
     return {}
   },

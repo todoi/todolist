@@ -88,5 +88,13 @@ export default {
   },
   getEditorSubTasks ({currentTask, allSubTask}) {
     return allSubTask[currentTask.id]
+  },
+  getCurrentTaskAllId (state) {
+    let {currentTask: {id}, allSubTask, allComment, allFileMeta} = state
+    let subTaskIds = [], commentIds = [], fileMetaIds = []
+    allSubTask[id].forEach(subTask =>  subTaskIds.push(subTask.id))
+    allComment[id].forEach(comment =>  commentIds.push(comment.id))
+    allFileMeta[id].forEach(fileMeta =>  fileMetas.push(fileMeta.id))
+    return {subTaskIds, commentIds, fileMetaIds}
   }
 }

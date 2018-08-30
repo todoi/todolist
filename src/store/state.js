@@ -1,5 +1,6 @@
 export default {
   // 侧边栏选中的list
+  hideSyncIcon: true,
   currentList: {
     id: 'all',
     title: '全部',
