@@ -22,6 +22,7 @@
           />
 
         <DialogListDeletor
+          header="删除清单"
           :title="currentList.title"
           v-if="currentDialog === 'deletor'"
           @closeDialog="closeDialog"
@@ -29,6 +30,7 @@
           />
 
         <DialogListDeletor
+          header="删除任务"
           :title="taskItem.title"
           v-if="currentDialog === 'deleteTask'"
           @closeDialog="closeDialog"
@@ -172,6 +174,7 @@ export default {
     deleteTask () {
       this.$store.dispatch('deleteTask', this.taskItem)
       this.showTaskEditor = false
+      this.closeDialog()
     }
   }
 }

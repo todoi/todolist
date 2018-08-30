@@ -74,7 +74,7 @@ export default {
     taskIds.forEach(id => {
       allSubTask[id].forEach(subTask =>  subTaskIds.push(subTask.id))
       allComment[id].forEach(comment =>  commentIds.push(comment.id))
-      allFileMeta[id].forEach(fileMeta =>  fileMetas.push(fileMeta.id))
+      allFileMeta[id].forEach(fileMeta =>  fileMetaIds.push(fileMeta.id))
     })
     return {taskIds, subTaskIds, commentIds, fileMetaIds}
   }

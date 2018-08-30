@@ -54,7 +54,6 @@ export default {
     allFileMeta[newFileMeta.belongTo.id].unshift(newFileMeta)
   },
 
-
   deleteSubTask ({allSubTask}, {subTask, index}) {
     let taskId = subTask.belongTo.id
     allSubTask[taskId].splice(index, 1)
@@ -70,6 +69,14 @@ export default {
 
   deleteComment ({allComment}, {comment, index}) {
     allComment[comment.belongTo.id].splice(index, 1)
+  },
+
+  deleteTask ({allTask}, task) {
+    let index
+    allTask[task.belongTo.id].find((t, i) => {
+      if (t.id === task.id) index = i
+    })
+    allTask[task.belongTo.id].splice(index, 1)
   }
 
 }

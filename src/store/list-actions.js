@@ -1,17 +1,13 @@
 import leancloud from '../lib/leancloud'
-let { AV, createObject, deleteAll, deleteObject, updateObject } = leancloud
+let { AV, createAVObject, deleteAVAll, deleteAVObject, updateAVObject } = leancloud
 export default {
   createList ({ commit, state: {allList} }, title) {
     commit('toggleSyncIcon')
-    let promise, id, length = allList.length
-    promise = createObject('AllList', {title, owner: AV.User.current()})
-    if (!promise) return
-    // console.log(promise)
-    return promise.then(result => {
-      id = result.id
-      commit('toggleSyncIcon')
-      commit('initList', { id, title, active: true })
+    let length = allList.length
+    return createAVObject('AllList', {title, owner: AV.User.current()}).then(result => {
+      commit('initList', { id: result.id, title, active: true })
       commit('switchList', {index: length, listArea: 'lists'} )
+      commit('toggleSyncIcon')
       return result
     }).catch(error => console.log(error))
   },
@@ -22,30 +18,27 @@ export default {
     let {taskIds, subTaskIds, commentIds, fileMetaIds} = getters.getCurrentListAllId
     let {allList, allTask, allSubTask, allComment, allFileMeta} = state
     let promises = [
-      deleteObject('AllList', id), 
-      deleteAll('AllTask', taskIds), 
-      deleteAll('AllSubTask', subTaskIds),
-      deleteAll('AllComment', commentIds), 
-      deleteAll('AllFileMeta', fileMetaIds)
+      deleteAVObject('AllList', id), 
+      deleteAVAll('AllTask', taskIds), 
+      deleteAVAll('AllSubTask', subTaskIds),
+      deleteAVAll('AllComment', commentIds), 
+      deleteAVAll('AllFileMeta', fileMetaIds)
     ]
     return Promise.all(promises).then((value) => {
-      commit('toggleSyncIcon')
       taskIds.forEach(taskId => {
-        commit('deleteItem', {id: taskId, collectionName: 'allSubTask'})
-        commit('deleteItem', {id: taskId, collectionName: 'allComment'})
-        commit('deleteItem', {id: taskId, collectionName: 'allFileMeta'})
+        commit('deleteTaskChildren', taskId)
       })
-      commit('deleteItem', {id, collectionName: 'allTask'})
-      commit('deleteItem', {collectionName: 'allList', index})
+      commit('deleteList', {listId: id, listIndex: index})
+      commit('toggleSyncIcon')
       return value
     }).catch(error => console.log(error))
   },
 
   updateList ({commit}, {list, attributes}) {
     commit('toggleSyncIcon')
-    return updateObject('AllList', list.id, attributes).then(val => {
-      commit('toggleSyncIcon')
+    return updateAVObject('AllList', list.id, attributes).then(val => {
       commit('updateList', {list, attributes})
+      commit('toggleSyncIcon')
       return val
     }).catch(error => console.log(error))
   },

@@ -7,9 +7,9 @@
     <ul v-if="subTasks.length">
       <!-- done -->
       <!-- 没有实现拖动功能 -->
+        <!--draggable="true" -->
       <li 
         tabindex="0" 
-        draggable="true" 
         class="section-item subtask" 
         v-for="(item, index) in subTasks"
         :class="{done: item.isCompleted}" 

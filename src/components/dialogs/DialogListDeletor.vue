@@ -1,6 +1,6 @@
 <template>
   <div class="dialog">
-    <h3 class="header">删除清单</h3>
+    <h3 class="header">{{ header }}</h3>
     <p class="body">"<span class="bold">{{ title }}</span>" 将被永久删除, 你确定执行此操作吗?</p>
     <div class="clos">
         <div class="col-40"> </div>
@@ -17,7 +17,7 @@
 <script>
   export default {
     name: 'DialogListDeletor',
-    props: [ 'title' ],
+    props: [ 'title', 'header' ],
     data () {
       return {}
     },

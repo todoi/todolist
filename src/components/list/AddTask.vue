@@ -107,7 +107,6 @@ export default {
     createTaskTemplate(){
       return {
         title: '',
-        selected: false,
         starred: false,
         deadline: 0,
         isCompleted: false,

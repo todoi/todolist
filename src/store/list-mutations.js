@@ -26,14 +26,18 @@ export default {
     Vue.set(allTask, id, [])
   },
 
-  deleteItem (state, {id, collectionName, index}) {
-    if (index) {
-      state[collectionName].splice(index, 1)
-    } else {
-      delete state[collectionName].id
-    }
+  deleteList ({allList, allTask}, {listId, listIndex}) {
+    allList.splice(listIndex, 1)
+    delete allTask[listId]
   },
-  toggleSyncIcon ({hideSyncIcon}) {
-    hideSyncIcon = !hideSyncIcon
+
+  deleteTaskChildren ({allSubTask, allComment, allFileMeta}, taskId) {
+    delete allSubTask[taskId]
+    delete allComment[taskId]
+    delete allFileMeta[taskId]
+  },
+
+  toggleSyncIcon (state) {
+    state.hideSyncIcon = !state.hideSyncIcon
   }
 }

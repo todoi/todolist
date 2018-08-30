@@ -1,8 +1,9 @@
 <template>
   <ol class="tasks">
+    <!--没有实现拖动功能-->
+    <!--draggable="true"--> 
     <li 
       tabindex="0" 
-      draggable="true"
       class="taskItem" 
       v-for="(item, index) in items" 
       :class="{selected: item.selected, done: isDoneItem}" 

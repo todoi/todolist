@@ -25,7 +25,7 @@ export default {
     window.location.href = '/'
   },
   // 新建一个 ACL 实例
-  createObject (className, attributes) {
+  createAVObject (className, attributes) {
     let TodoFolder = AV.Object.extend(className)
     let todoFolder = new TodoFolder(), promise
     for (let key in attributes) {
@@ -43,7 +43,7 @@ export default {
     }
     return promise
   },
-  deleteAll (className, ids) {
+  deleteAVAll (className, ids) {
     let objects, promise
     if (ids instanceof Array && ids.length === 0) {
       return Promise.resolve('传过来的 ObjectIds 数组是空的')
@@ -57,7 +57,7 @@ export default {
     }
     return promise
   },
-  deleteObject (className, id) {
+  deleteAVObject (className, id) {
     let object, promise
     object = AV.Object.createWithoutData(className, id);
     try {
@@ -68,7 +68,7 @@ export default {
     }
     return promise
   },
-  updateObject (className, id, attributes) {
+  updateAVObject (className, id, attributes) {
     var obj = AV.Object.createWithoutData(className, id)
     for (let key in attributes) {
       if (attributes.hasOwnProperty(key)) {

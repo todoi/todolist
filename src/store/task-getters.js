@@ -86,15 +86,18 @@ export default {
     let listId = currentTask.belongTo.id
     return allTask[listId].find(task => task.id === taskId)
   },
+
+  // 得到正在编辑中的 subtasks
   getEditorSubTasks ({currentTask, allSubTask}) {
     return allSubTask[currentTask.id]
   },
+
   getCurrentTaskAllId (state) {
     let {currentTask: {id}, allSubTask, allComment, allFileMeta} = state
     let subTaskIds = [], commentIds = [], fileMetaIds = []
     allSubTask[id].forEach(subTask =>  subTaskIds.push(subTask.id))
     allComment[id].forEach(comment =>  commentIds.push(comment.id))
-    allFileMeta[id].forEach(fileMeta =>  fileMetas.push(fileMeta.id))
+    allFileMeta[id].forEach(fileMeta =>  fileMetaIds.push(fileMeta.id))
     return {subTaskIds, commentIds, fileMetaIds}
   }
 }
