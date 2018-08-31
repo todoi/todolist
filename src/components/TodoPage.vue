@@ -113,6 +113,10 @@ export default {
   created () {
     this.$store.commit('setUser', leancloud.getAVUser())
     utils.goHomePage()
+    console.log(leancloud.getAVUser().id)
+    if (leancloud.getAVUser().id) {
+      this.$store.dispatch('fetchTodo')
+    }
   },
   data (){
     return {

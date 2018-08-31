@@ -1,5 +1,5 @@
 <template>
-  <ol class="tasks">
+  <ol class="tasks" v-if="items">
     <!--没有实现拖动功能-->
     <!--draggable="true"--> 
     <li 
@@ -41,7 +41,7 @@
           tabindex="-1"
           title="此任务已有评论" 
           class="conversations-wrapper" 
-          :class="{hidden: !$store.getters.getCurrentComments(item.id).length}" 
+          :class="{hidden: !$store.getters.getCurrentComments(item.id)}" 
         >
           <svg class="conversations-small rtl-flip" width="20px" height="20px">
             <use xlink:href="#icon-conversations-small"></use>
@@ -52,7 +52,7 @@
           tabindex="-1"
           title="此任务带有附件" 
           class="attachment-wrapper" 
-          :class="{hidden: !$store.getters.getCurrentFileMetas(item.id).length}" 
+          :class="{hidden: !$store.getters.getCurrentFileMetas(item.id)}" 
         >
           <svg class="attachment" width="20px" height="20px">
             <use xlink:href="#icon-attachment"></use>
@@ -98,7 +98,7 @@
         <div class="taskItem-progress">
           <span 
             class="taskItem-progress-bar"
-            :style="$store.getters.getCurrentSubTasks(item.id).length && `width: ${$store.getters.getCompletedSubTasks(item.id).length/$store.getters.getCurrentSubTasks(item.id).length*100}%`"
+            :style="$store.getters.getCurrentSubTasks(item.id) && `width: ${$store.getters.getCompletedSubTasks(item.id).length/$store.getters.getCurrentSubTasks(item.id).length*100}%`"
             >
           </span>
         </div>

@@ -1,5 +1,14 @@
 import Vue from 'vue'
 export default {
+  initTodo (state, obj) {
+    Vue.set(state, 'allList', obj.allList)
+    Vue.set(state, 'allTask', obj.allTask)
+    Vue.set(state, 'allSubTask', obj.allSubTask)
+    Vue.set(state, 'allComment', obj.allComment)
+    Vue.set(state, 'allFileMeta', obj.allFileMeta)
+    console.log(state.allTask)
+  },
+
   switchList ({filterCollection, allList, currentList}, {index, listArea}) {
     // 选中侧边栏中的 List 
     filterCollection.forEach(item => item.active = false)
@@ -23,7 +32,7 @@ export default {
   initList ({allList, allTask}, { id, title, active }) {
     //allTask[id] = []
     allList.push({ id, title, active: true })
-    Vue.set(allTask, id, [])
+    //Vue.set(allTask, id, [])
   },
 
   deleteList ({allList, allTask}, {listId, listIndex}) {

@@ -2,7 +2,7 @@
   <div 
     class="section section-files" 
     tabindex="0" 
-    :class="{hasFiles: fileList.length}"
+    :class="{hasFiles: fileList}"
     >
     <div class="audio-recorder hidden">
       <div class="audio-recorder-container">

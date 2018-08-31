@@ -6,7 +6,7 @@
       <div class="error hidden">很抱歉，我们无法载入评论，请重试。</div>
     </div>
 
-    <ul class="comments-list">
+    <ul class="comments-list" v-if="comments">
       <li 
         tabindex="0" 
         class="section-item section-item-comment active-user" 

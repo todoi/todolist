@@ -2,9 +2,9 @@
   <div 
     tabindex="0"
     class="section subtasks" 
-    :class="{hasSubtasks: subTasks.length}" 
+    :class="{hasSubtasks: subTasks}" 
   >
-    <ul v-if="subTasks.length">
+    <ul v-if="subTasks">
       <!-- done -->
       <!-- 没有实现拖动功能 -->
         <!--draggable="true" -->
@@ -108,8 +108,8 @@ export default {
   computed: {
     subTasks () {
       let subTasks = this.$store.getters.getEditorSubTasks
-      let length = subTasks.length
-      if (length !== this.displayViewArr.length) {
+      let length = (subTasks instanceof Array) && subTasks.length
+      if (length !== false && length !== this.displayViewArr.length) {
         this.displayViewArr = []
         for (var i = 0; i < length; i++) {
           this.displayViewArr[i] = true

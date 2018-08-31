@@ -1,6 +1,15 @@
 import leancloud from '../lib/leancloud'
+import fetchAll from './fetchTodo'
+
 let { AV, createAVObject, deleteAVAll, deleteAVObject, updateAVObject } = leancloud
 export default {
+  fetchTodo ({commit}) {
+    fetchAll.then(allObj => {
+      console.log(allObj)
+      commit('initTodo', allObj)
+    })
+  },
+
   createList ({ commit, state: {allList} }, title) {
     commit('toggleSyncIcon')
     let length = allList.length

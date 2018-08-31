@@ -1,7 +1,6 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
 
-import newState from './state'
 
 import listGetters from './list-getters.js'
 import listMutations from './list-mutations.js'
@@ -13,7 +12,10 @@ import taskActions from './task-actions.js'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+let allList=[], allTask={}, allSubTask={}, allComment={}, allFileMeta={}
+
+
+let store = new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   state: {
     user: {
@@ -68,7 +70,7 @@ export default new Vuex.Store({
         active: false,
       }
     ],
-    ...newState
+    allList, allTask, allComment, allSubTask, allFileMeta
   },
   getters: {
     ...listGetters,
@@ -87,3 +89,4 @@ export default new Vuex.Store({
   }
 })
 
+export default store

@@ -2,14 +2,12 @@ import Vue from 'vue'
 export default {
   // 添加新的 Task
   addTask ({allTask, allSubTask, allComment, allFileMeta}, newTask) {
-    // allTask[newTask.belongTo.id].unshift(newTask)
-    //allSubTask[newTask.id] = []
-    //allComment[newTask.id] = []
-    //allFileMeta[newTask.id] = []
-    allTask[newTask.belongTo.id] = [newTask].concat(allTask[newTask.belongTo.id])
-    Vue.set(allSubTask, newTask.id, [])
-    Vue.set(allComment, newTask.id, [])
-    Vue.set(allFileMeta, newTask.id, [])
+    let listId = newTask.belongTo.id
+    if (!allTask[listId]) allTask[listId] = []
+    allTask[listId] = [newTask].concat(allTask[newTask.belongTo.id])
+    //Vue.set(allSubTask, newTask.id, [])
+    //Vue.set(allComment, newTask.id, [])
+    //Vue.set(allFileMeta, newTask.id, [])
   },
 
   // 点击在 list 列表的 的某个任务
@@ -42,16 +40,20 @@ export default {
 
   addSubTask ({allSubTask}, newSubTask) {
     let taskId = newSubTask.belongTo.id
+    if (!allSubTask[taskId]) allSubTask[taskId] = []
     allSubTask[taskId].push(newSubTask)
   },
 
   addComment ({allComment}, newComment) {
     let taskId = newComment.belongTo.id
+    if (!allComment[taskId]) allComment[taskId] = []
     allComment[taskId].push(newComment)
   },
 
   addFileMeta ({allFileMeta}, newFileMeta) {
-    allFileMeta[newFileMeta.belongTo.id].unshift(newFileMeta)
+    let taskId = newFileMeta.belongTo.id
+    if (!allFileMeta[taskId]) allFileMeta[taskId] = []
+    allFileMeta[taskId].unshift(newFileMeta)
   },
 
   deleteSubTask ({allSubTask}, {subTask, index}) {
