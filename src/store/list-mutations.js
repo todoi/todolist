@@ -6,7 +6,6 @@ export default {
     Vue.set(state, 'allSubTask', obj.allSubTask)
     Vue.set(state, 'allComment', obj.allComment)
     Vue.set(state, 'allFileMeta', obj.allFileMeta)
-    console.log(state.allTask)
   },
 
   switchList ({filterCollection, allList, currentList}, {index, listArea}) {

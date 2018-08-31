@@ -9,7 +9,6 @@ export default {
   },
   getAllTasks ({allTask}) {
     let arr = []
-    console.log(allTask)
     for (var key in allTask) {
       if (allTask.hasOwnProperty(key)) {
         arr = arr.concat(allTask[key])
@@ -19,7 +18,6 @@ export default {
   },
   // 不包含已完成的任务 侧边栏 '全部' tab 
   getAll (state, { getAllTasks }) {
-    console.log(getAllTasks)
     let arr = getAllTasks.filter(task => !task.isCompleted)
     return arr
   },

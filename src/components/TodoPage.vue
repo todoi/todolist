@@ -1,5 +1,5 @@
 <template>
-  <div id="todo-page">
+  <div id="todo-page" v-if="user.id">
     <div id="main-interface">
       <div class="dialog-wrapper" v-if="currentDialog">
         <DialogListEditor
@@ -110,13 +110,24 @@ import icon from '../assets/icons.js'
 export default {
   name: 'TodoPage',
   components: {DialogListEditor, DialogListDeletor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, TaskList, ListToolbar, AddTask, NotFound, TaskDetail, UserPopover, ActivityPopover, ConversationPopover},
-  created () {
-    this.$store.commit('setUser', leancloud.getAVUser())
-    utils.goHomePage()
-    console.log(leancloud.getAVUser().id)
+  beforeCreate () {
     if (leancloud.getAVUser().id) {
-      this.$store.dispatch('fetchTodo')
+      // this.$store.dispatch('fetchTodo')
+      this.$store.commit('setUser', leancloud.getAVUser())
+    } else {
+      this.$store.commit('resetUser')
+      utils.goHomePage()
     }
+  },
+  created () {
+    window.addEventListener('beforeunload', () => {
+      console.log(0)
+      if (!this.$store.state.autoLogin) {
+        leancloud.logOut()
+        this.$store.commit('resetUser')
+        this.$store.commit('setAutoLogin', false)
+      }
+    })
   },
   data (){
     return {
@@ -128,6 +139,7 @@ export default {
     }
   },
   mounted () {
+    console.log(this.$store.state.autoLogin)
     window.addEventListener('offline', () => {
       this.hideOfflineIcon = false
     })
@@ -136,6 +148,9 @@ export default {
     })
   },
   computed: {
+    user () {
+      return this.$store.state.user
+    },
     currentList () {
       return this.$store.state.currentList
     },

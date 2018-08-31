@@ -4,8 +4,7 @@ import fetchAll from './fetchTodo'
 let { AV, createAVObject, deleteAVAll, deleteAVObject, updateAVObject } = leancloud
 export default {
   fetchTodo ({commit}) {
-    fetchAll.then(allObj => {
-      console.log(allObj)
+    fetchAll().then(allObj => {
       commit('initTodo', allObj)
     })
   },

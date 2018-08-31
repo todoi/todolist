@@ -1,6 +1,7 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
 
+import newState from './state'
 
 import listGetters from './list-getters.js'
 import listMutations from './list-mutations.js'
@@ -23,6 +24,7 @@ let store = new Vuex.Store({
       username: '',
       email: ''
     },
+    autoLogin: false,
     hideSyncIcon: true,
     // 侧边栏选中的list
     currentList: {
@@ -70,15 +72,25 @@ let store = new Vuex.Store({
         active: false,
       }
     ],
-    allList, allTask, allComment, allSubTask, allFileMeta
+    allList, allTask, allComment, allSubTask, allFileMeta,
+    ...newState
   },
   getters: {
     ...listGetters,
     ...taskGetters,
   },
   mutations: {
-    setUser (state, user) {
-      state.user = user
+    setUser (state, newUser) {
+      state.user = newUser
+    },
+    resetUser ({user}) {
+      user.username = ''
+      user.id = ''
+      user.email = ''
+    },
+    setAutoLogin (state, isAuto) {
+      Vue.set(state, 'autoLogin', isAuto)
+      console.log(state.autoLogin)
     },
     ...listMutations,
     ...taskMutations,

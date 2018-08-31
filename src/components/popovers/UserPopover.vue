@@ -25,7 +25,9 @@ export default {
   },
   methods: {
     logOut () {
+      this.$store.commit('setAutoLogin', false)
       leancloud.logOut()
+      this.$store.commit('resetUser')
     }
   }
 }

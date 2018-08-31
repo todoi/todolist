@@ -1,23 +1,31 @@
 <template>
   <div class="login sign-type">
     <a href="/" class="back-home">返回主页</a>
-    <h3>log in</h3>
-    <p class="signtype-tip">Need a TodoList account?<a class="span-underline" href="/signup">Create an account</a></p>
+    <!--log in-->
+    <h3>登录</h3>
+
+    <!--Need a TodoList account?-->
+    <!--Create an account-->
+    <p class="signtype-tip">
+      想要一个TodoList账号?<a class="span-underline" href="/signup">去创建账号</a>
+    </p>
+
     <p 
       class="clearfix" 
       :class="loginError ? 'login-incorrect-visible' : 'login-incorrect-hidden'"
-    >
-      {{ errorMessage }}
-      <span 
-        class="btn-close-error" 
-        @click="close">
-        <svg aria-hidden="true" class="octicon octicon-x" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48z"></path></svg>
+    >{{ errorMessage }}
+
+      <span class="btn-close-error" @click="close"> 
+        <svg  class="octicon octicon-x" width="12" height="16">
+          <use xlink:href="#icon-octicon"></use>
+        </svg>
       </span>
     </p>
 
     <form @submit.prevent="signIn()">
       <div class="field-username">
-        <label class="block-tag label-name" for="login-username">username</label>
+        <!--username-->
+        <label class="block-tag label-name" for="login-username">用户名</label>
         <input 
           type="text" 
           name="login-username" 
@@ -30,8 +38,9 @@
 
       <div class="field-password">
         <div class="clearfix">
-          <label class="label-name float-left inline-block-tag" for="login-password">password</label>
-          <div class="float-right">
+          <!--password-->
+          <label class="label-name float-left inline-block-tag" for="login-password">密码</label>
+          <div class="float-right eye-icon">
             <input 
               type="checkbox" 
               class="hide show-password" 
@@ -43,11 +52,11 @@
               title="Show Password" 
               class="password-icon relative cursor-pointer" 
               :class="hidePassword ? 'show-password-icon' : 'hide-password-icon'"
-            >
-              {{ hidePassword ? 'show' : 'hide'}}
-            </label>
+            > {{ hidePassword ? '显示' : '隐藏'}} </label>
+           <!--{{ hidePassword ? 'show' : 'hide'}}-->
           </div>
         </div>
+
         <input 
           name="login-password" 
           id="login-password" 
@@ -61,12 +70,12 @@
           type="submit" 
           class="btn-login block-tag" 
           :class="submitClass" 
-        >
-          {{ btnContent }}
-        </button>
+        > {{ btnContent }} </button>
 
         <div class="field-password-footer">
-          <a class="span-underline" href="/p/reset">Can't remember your password?</a>
+          <AutoLogin />
+          <!--forget your password?-->
+          <a class="span-underline" href="/p/reset">忘记密码?&gt;</a>
         </div>
       </div>
     </form>
@@ -76,9 +85,12 @@
 <script>
   import leancloud from '../lib/leancloud.js'
   import utils from '../lib/utils'
+  import getErrorMessages from '../lib/getErrorMessages'
+  import AutoLogin from './AutoLogin'
 
   export default {
     name: 'SignIn',
+    components: {AutoLogin},
     created () {
       utils.goTodoPage()
     },
@@ -88,7 +100,7 @@
         username: 'todoi',
         password: '',
         submitClass: '',
-        btnContent: 'Log In',
+        btnContent: '登 录', //Log In
         loginError: false,
         errorMessage: '',
       }
@@ -100,16 +112,16 @@
       switchSubmitStatus (type) { //改变按钮为等待状态
         if (type === 'loading') {
           this.submitClass = 'btn-loading'
-          this.btnContent = 'Please Wait ...'
+          this.btnContent = '努力加载...' //Please Wait ...
         } else if (type === 'successful') {
           this.submitClass = ''
-          this.btnContent = 'successful'
+          this.btnContent = '登陆成功' //successful
         } else if (type === 'again') {
           this.submitClass = ''
-          this.btnContent = 'Try Again'
+          this.btnContent = '再试一次' // Try Again
         } else {
           submitClass = '',
-          btnContent = 'Log In'
+          btnContent = '登录'
         }
       },
       signIn () {
@@ -118,7 +130,7 @@
           this.switchSubmitStatus('successful')
           window.location.href = '/todopage'
         }, (error) => {
-          this.errorMessage = error.rawMessage 
+          this.errorMessage = getErrorMessages({code: error.code}) 
           // 'Incorrect username or password.'
           this.loginError = true
           this.switchSubmitStatus('again')
@@ -258,6 +270,10 @@ h3 {
   user-select: none;
 }
 
+.eye-icon {
+  margin-top: .3em;
+}
+
 .show-password-icon:before {
   content: '\e054';
 }
@@ -314,13 +330,15 @@ input::-webkit-input-placeholder {
 
 .field-password-footer {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .field-password-footer .span-underline {
   margin: 0;
-  height: 18px;
+  line-height: 0;
 }
+/*height: 18px;*/
 
 .login-incorrect-visible {
   position: relative;
