@@ -83,36 +83,34 @@
 
 <script>
 import obj from '../../lib/actionBarList'
+
 export default {
   name: 'ListToolbar',
   data () {
     return {
       actionBarHeight: '0px',
       actionBarActive: '',
+      actionBarSort: obj.actionBarSort,
+      actionBarMore: obj.actionBarMore
     }
   },
   computed: {
     currentList () {
       return this.$store.state.currentList
     },
-    actionBarMore () {
-      return obj.actionBarMore 
-    },
-    actionBarSort () {
-      return obj.actionBarSort
-    },
-    deadlineSortClass(){
+
     // 用于更新排序下拉框中 到期日排序的 选项是否可以用
-      let result = 0
-      for(let item of this.taskItems){
-        if(item.deadline){
-          // 如果有一个task 有设置deadline 那么就可以使用 到期日 排序
-          result = 1
-          break
-        }
-      }
-      return result ? '' : 'disabled'
-    },
+    //deadlineSortClass(){
+    //  let result = 0
+    //  for(let item of this.taskItems){
+    //    // 如果有一个task 有设置deadline 那么就可以使用 到期日 排序
+    //    if(item.deadline){
+    //      result = 1
+    //      break
+    //    }
+    //  }
+    //  return result ? '' : 'disabled'
+    //},
   },
   methods: {
     showShareActions () {
@@ -135,40 +133,30 @@ export default {
     },
     sortFn (fnName){
       // 输入根据什么东西排序，然后调用这个方法
-      // this[fnName].call(this)
+      this[fnName].call(this)
+      this.hideActionBar()
     },
     moreFn (fnName) {
     },
+
+    // 根据创建时间排序
     sortByCreation(){
-      // 根据创建时间排序
-      this.taskItems.sort((a, b)=>{ return a.createDate - b.createDate})
+      this.$store.commit('sortTaskByCreation')
     },
+
+    // 根据字母排序
     sortByLetter(){
-      // 根据字母排序
-      this.taskItems.sort((a, b)=>{
-        if(a.title === b.title) return 0
-        if(a.title > b.title) return 1
-        if(a.title < b.title) return -1
-      })
+      this.$store.commit('sortTaskByLetter')
     },
+
+    // 根据星星排序
     sortByPriority(){
-      // 根据星星排序
-      this.taskItems.sort((a, b) => {
-        // starred 是个布尔值
-        // 加星星的优先级比较高，所以在前面加个 符号
-        return -(Number(a.starred) - Number(b.starred))
-      })
+      this.$store.commit('sortTaskByPriority')
     },
+
+    // 根据到期日排序
     sortByDeadline(){
-      // 根据到期日排序
-      this.taskItems.sort((a, b) => {
-        // a，b 都没设置到期日
-        if(!a.deadline && !b.deadline) return 0
-        // a没设置 b有设置
-        if(!a.deadline) return 1
-        if(!b.deadline) return -1
-        return a.deadline - b.deadline
-      })
+      this.$store.commit('sortTaskByDeadline')
     },
     deleteTask(item){
       if(item.isCompleted){
@@ -184,7 +172,7 @@ export default {
 
 <style scoped>
 .list-toolbar{position: relative; height: 45px; min-height: 45px; display: flex; align-items: center; background: #0e91c5;}
-.list-toolbar h1{flex:1; font-size: 20px; color: #fff; padding: 10px 14px; font-weight: 200; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;}
+.list-toolbar h1{flex:1; font-size: 20px; color: #fff; padding: 10px 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;}
 .action-bar{position: relative; opacity: 1; filter: none; transition: opacity 200ms ease-in;}
 
 .action-bar-bottom{text-align: center; font-size: 0; height: 45px;}

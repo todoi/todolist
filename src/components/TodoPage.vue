@@ -112,9 +112,7 @@ export default {
   components: {DialogListEditor, DialogListDeletor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, TaskList, ListToolbar, AddTask, NotFound, TaskDetail, UserPopover, ActivityPopover, ConversationPopover},
   beforeCreate () {
     let isAutoLogin = window.localStorage.getItem('isAutoLogin') && window.JSON.parse(window.localStorage.getItem('isAutoLogin'))
-    console.log(typeof isAutoLogin)
     if (!isAutoLogin) {
-      console.log('remove done')
       leancloud.removeStorageItem()
     }
   },
