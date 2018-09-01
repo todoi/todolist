@@ -25,6 +25,9 @@ var classObject = {
 }
 export default {
   name: 'Xyz',
+  beforeCreate () {
+    window.localStorage.setItem('isAutoLogin', false)
+  },
   data () {
     return {
       checked: false,
@@ -52,8 +55,7 @@ export default {
     },
     click () {
       this.checked = !this.checked
-      console.log(0)
-      this.$store.commit('setAutoLogin', this.checked)
+      window.localStorage.setItem('isAutoLogin', this.checked)
       this.checkboxClass = this.checked ? classObject.checkedFocus : classObject.focus
     },
   }

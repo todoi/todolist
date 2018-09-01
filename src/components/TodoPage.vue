@@ -111,23 +111,12 @@ export default {
   name: 'TodoPage',
   components: {DialogListEditor, DialogListDeletor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, TaskList, ListToolbar, AddTask, NotFound, TaskDetail, UserPopover, ActivityPopover, ConversationPopover},
   beforeCreate () {
-    if (leancloud.getAVUser().id) {
-      // this.$store.dispatch('fetchTodo')
-      this.$store.commit('setUser', leancloud.getAVUser())
-    } else {
-      this.$store.commit('resetUser')
-      utils.goHomePage()
+    let isAutoLogin = window.localStorage.getItem('isAutoLogin') && window.JSON.parse(window.localStorage.getItem('isAutoLogin'))
+    console.log(typeof isAutoLogin)
+    if (!isAutoLogin) {
+      console.log('remove done')
+      leancloud.removeStorageItem()
     }
-  },
-  created () {
-    window.addEventListener('beforeunload', () => {
-      console.log(0)
-      if (!this.$store.state.autoLogin) {
-        leancloud.logOut()
-        this.$store.commit('resetUser')
-        this.$store.commit('setAutoLogin', false)
-      }
-    })
   },
   data (){
     return {
@@ -138,8 +127,16 @@ export default {
       hideOfflineIcon: true,
     }
   },
+  created () {
+    if (leancloud.getAVUser().id) {
+      // this.$store.dispatch('fetchTodo')
+      this.$store.commit('setUser', leancloud.getAVUser())
+    } else {
+      this.$store.commit('resetUser')
+      utils.goHomePage()
+    }
+  },
   mounted () {
-    console.log(this.$store.state.autoLogin)
     window.addEventListener('offline', () => {
       this.hideOfflineIcon = false
     })

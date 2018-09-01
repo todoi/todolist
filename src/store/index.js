@@ -24,7 +24,6 @@ let store = new Vuex.Store({
       username: '',
       email: ''
     },
-    autoLogin: false,
     hideSyncIcon: true,
     // 侧边栏选中的list
     currentList: {
@@ -87,10 +86,6 @@ let store = new Vuex.Store({
       user.username = ''
       user.id = ''
       user.email = ''
-    },
-    setAutoLogin (state, isAuto) {
-      Vue.set(state, 'autoLogin', isAuto)
-      console.log(state.autoLogin)
     },
     ...listMutations,
     ...taskMutations,

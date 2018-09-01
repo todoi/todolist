@@ -1,4 +1,5 @@
-import AV from 'leancloud-storage'
+//import AV from 'leancloud-storage'
+import AV from '../../node_modules/leancloud-storage/dist/av.js'
 
 const appId = 'C5ARew2cYBVtyWVuTE6qvB3d-gzGzoHsz';
 const appKey = 'o4cIMdW77Jou2pmkQGQRHOn5';
@@ -76,5 +77,13 @@ export default {
       }
     }
     return obj.save()
+  },
+  removeStorageItem () {
+    let userKey = AV._getAVPath(AV.User._CURRENT_USER_KEY)
+    let subscriptKey = userKey.replace(/currentUser/g, 'subscriptionId')
+    let serverKey = userKey.replace(/currentUser/g, 'serverURLs')
+    window.localStorage.removeItem(userKey)
+    window.localStorage.removeItem(subscriptKey)
+    window.localStorage.removeItem(serverKey)
   }
 }
