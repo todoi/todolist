@@ -25,11 +25,11 @@ export default {
 
   actionBarMore: [
     // 更多的功能被我砍掉了
-    {
-      svgClassName: 'duplicate-list',
-      text: '复制清单',
-      fnName: 'duplicateList',
-    },
+    //{
+      //svgClassName: 'duplicate-list',
+      //text: '复制清单',
+      //fnName: 'duplicateList',
+    //},
     {
       svgClassName: 'copy-item',
       text: '复制所选任务',
@@ -40,21 +40,21 @@ export default {
       text: '粘贴',
       fnName: 'paste',
     },
-    {
-      svgClassName: 'email',
-      text: '以电子邮件发送清单',
-      fnName: 'sendEmail',
-    },
-    {
-      svgClassName: 'print',
-      text: '打印清单',
-      fnName: 'printList',
-    },
-    {
-      svgClassName: 'print',
-      text: '打印所选任务',
-      fnName: 'printTask',
-    },
+    //{
+      //svgClassName: 'email',
+      //text: '以电子邮件发送清单',
+      //fnName: 'sendEmail',
+    //},
+    //{
+      //svgClassName: 'print',
+      //text: '打印清单',
+      //fnName: 'printList',
+    //},
+    //{
+      //svgClassName: 'print',
+      //text: '打印所选任务',
+      //fnName: 'printTask',
+    //},
     {
       svgClassName: 'trash',
       text: '删除所选任务',

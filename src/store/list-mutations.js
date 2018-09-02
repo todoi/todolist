@@ -10,10 +10,19 @@ export default {
   },
 
   // 切换侧边栏上的 tab 
-  switchList ({filterCollection, allList, currentList}, {index, listArea}) {
-    // 选中侧边栏中的 List 
+  switchList (state, {index, listArea}) {
+    let {filterCollection, allList, allTask, currentList, currentTask} = state
+
+    // 重置 task 的状态
+    let listId = currentTask.belongTo.id 
+    allTask[listId] && allTask[listId].forEach(task => task.selected = false)
+    state.currentTask = {belongTo: {}}
+
+    // 充值所有 list 的状态
     filterCollection.forEach(item => item.active = false)
     allList.forEach(item => item.active = false)
+
+    // 选中侧边栏中的 List 
     if(listArea === 'filters'){
       filterCollection[index]['active'] = 'true'
       Object.assign(currentList, filterCollection[index], {index, isFilter: true})
@@ -54,46 +63,6 @@ export default {
   // 切换 loading 图标
   toggleSyncIcon (state) {
     state.hideSyncIcon = !state.hideSyncIcon
-  },
+  }
 
-  // 任务按 创建日期 排序
-  sortTaskByCreation ({allList, allTask}) {
-    allList.forEach(list => {
-      allTask[list.id].sort((a, b) => b.createdAt - a.createdAt )
-    })
-  },
-
-  // 任务按 字母顺序 排序
-  sortTaskByLetter ({allList, allTask}) {
-    allList.forEach(list => {
-      allTask[list.id].sort((a, b) => {
-        if(a.title === b.title) return 0
-        if(a.title > b.title) return 1
-        if(a.title < b.title) return -1
-      })
-    })
-  },
-
-  // 任务按 优先级 排序
-  sortTaskByPriority ({allList, allTask}) {
-    // starred 是个布尔值
-    // 加星星的优先级比较高
-    allList.forEach(list => {
-      allTask[list.id].sort((a, b) => Number(b.starred) - Number(a.starred))
-    })
-  },
-
-  // 任务按 到期日 排序
-  sortTaskByDeadline ({allList, allTask}) {
-    allList.forEach(list => {
-      allTask[list.id].sort((a, b) => {
-        // a，b 都没设置到期日
-        if(!a.deadline && !b.deadline) return 0
-        // a没设置 b有设置
-        if(!a.deadline) return 1
-        if(!b.deadline) return -1
-        return a.deadline - b.deadline
-      })
-    })
-  },
 }

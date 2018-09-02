@@ -43,6 +43,7 @@ let store = new Vuex.Store({
       isCompleted: false,
       note: '',
     },
+    duplicateTask: {},
     filterCollection: [
       {
         id: 'all',

@@ -34,6 +34,7 @@
           <li 
             tabindex="0" 
             v-for="item in actionBarMore"
+            :class="{disabled: (item.fnName === 'paste' && (!duplicateTask.id || isInFilter)) || (item.fnName !== 'paste' && !currentTask.id)}"
             @click="moreFn(item.fnName)"
           >
             <a>
@@ -91,13 +92,27 @@ export default {
       actionBarHeight: '0px',
       actionBarActive: '',
       actionBarSort: obj.actionBarSort,
-      actionBarMore: obj.actionBarMore
+      actionBarMore: obj.actionBarMore,
+      filterListIds: ['all', 'starred', 'today', 'week', 'completed']
     }
   },
   computed: {
     currentList () {
       return this.$store.state.currentList
     },
+
+    currentTask () {
+      return this.$store.state.currentTask
+    },
+
+    duplicateTask () {
+      return this.$store.state.duplicateTask
+    },
+
+    isInFilter () {
+      let result = this.filterListIds.indexOf(this.currentList.id)
+      return result >= 0
+    }
 
     // 用于更新排序下拉框中 到期日排序的 选项是否可以用
     //deadlineSortClass(){
@@ -116,27 +131,32 @@ export default {
     showShareActions () {
       this.actionBarHeight = `0px`
     },
+
+    // 显示 更多 下拉框
     showActionBar (type) {
-      // 显示 更多 下拉框
+      // 如果下拉框已经显示，再次点击就隐藏下拉框
       if (this.actionBarActive === type) {
-        // 如果下拉框已经显示，再次点击就隐藏下拉框
         this.hideActionBar()
         return
       }
       this.actionBarActive = type 
       this.actionBarHeight = `${this['actionBar'+type.slice(0,1).toUpperCase()+type.slice(1)].length * 38}px`
     },
+
+    // 隐藏 排序 更多 下拉框
     hideActionBar () {
-      // 隐藏 排序 更多 下拉框
       this.actionBarHeight = '0px'
       this.actionBarActive = ''
     },
+
+    // 输入根据什么东西排序，然后调用这个方法
     sortFn (fnName){
-      // 输入根据什么东西排序，然后调用这个方法
       this[fnName].call(this)
       this.hideActionBar()
     },
     moreFn (fnName) {
+      this[fnName].call(this)
+      this.hideActionBar()
     },
 
     // 根据创建时间排序
@@ -158,6 +178,24 @@ export default {
     sortByDeadline(){
       this.$store.commit('sortTaskByDeadline')
     },
+
+    // 复制所选任务
+    copyTask () {
+      this.$store.commit('setDuplication')
+    },
+
+    // 粘贴
+    paste () {
+      let newTask = Object({}, this.currentTask)
+      newTask.belongTo = {id: currentList.id}
+      delete newTask.id
+      delete newTask.createdAt
+      delete newTask.selected
+      this.$store.dispatch('crateTask', newTask).then(val => {
+      })
+    },
+
+    // 删除任务
     deleteTask(item){
       if(item.isCompleted){
         this.doneTaskItems.splice(this.doneTaskItems.indexOf(item), 1)
@@ -166,6 +204,7 @@ export default {
       }
       this.showDetail = false
     },
+
   }
 }
 </script>
