@@ -18,11 +18,12 @@ export default {
     allTask[listId] && allTask[listId].forEach(task => task.selected = false)
     state.currentTask = {belongTo: {}}
 
-    // 充值所有 list 的状态
+    // 重置所有 list 的状态
     filterCollection.forEach(item => item.active = false)
     allList.forEach(item => item.active = false)
 
     // 选中侧边栏中的 List 
+    // currentList 写入 index 和 isFilter 两个属性
     if(listArea === 'filters'){
       filterCollection[index]['active'] = 'true'
       Object.assign(currentList, filterCollection[index], {index, isFilter: true})
@@ -48,8 +49,18 @@ export default {
   },
 
   // 删除一个 list
-  deleteList ({allList, allTask}, {listId, listIndex}) {
+  deleteList ({allList, allTask, currentList}, {listId, listIndex}) {
     allList.splice(listIndex, 1)
+    // 判断在删除请求的期间 是否用户点击了其他tab 或者 创建一个新的tab
+    if (listId === currentList.id && allList.length > 0) {
+      if (listIndex === 0) {
+        Object.assign(currentList, allList[0], {index: 0, active: true})
+        Vue.set(allList[0], 'active', true)
+      } else {
+        Object.assign(currentList, allList[listIndex - 1], {index: listIndex - 1, active: true})
+        Vue.set(allList[listIndex - 1], 'active', true)
+      }
+    }
     delete allTask[listId]
   },
 

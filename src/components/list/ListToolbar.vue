@@ -1,6 +1,6 @@
 <template>
   <div class="list-toolbar">
-    <h1 class="title">{{ currentList.title }}</h1>
+    <h1 class="title">{{ searchText || currentList.title }}</h1>
     <div class="action-bar expanded" @mouseleave="hideActionBar">
 
       <div 
@@ -87,6 +87,7 @@ import obj from '../../lib/actionBarList'
 
 export default {
   name: 'ListToolbar',
+  props: ['searchText'],
   data () {
     return {
       actionBarHeight: '0px',

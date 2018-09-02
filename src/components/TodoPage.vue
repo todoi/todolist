@@ -39,7 +39,10 @@
       </div>
       <div id="lists-nav" :class="{'collapsed': isCollapsed}">
         <div class="lists-inner" tabindex="0">
-          <SideSearchToolbar @collapse="isCollapsed = !isCollapsed" />
+          <SideSearchToolbar 
+          v-model="searchText"
+          @collapse="isCollapsed = !isCollapsed" 
+          @sendSearchResult="setSearchResult" />
 
           <SideUserToolbar 
             :hideOfflineIcon="hideOfflineIcon"
@@ -50,6 +53,7 @@
             ref="sideListsScroll"
             @collapse="isCollapsed = !isCollapsed" 
             @closeTaskEditor="showTaskEditor = false"
+            @clearSearch="searchText = ''"
             @openDialogListChanger="currentDialog = 'changer'"/>
 
           <SidebarActions @openDialogListCreator="currentDialog = 'creator'"/>
@@ -57,11 +61,19 @@
       </div>
       <div id="tasks">
         <div class="tasks-main">
-          <ListToolbar @closeTaskEditor="showTaskEditor = false"/>
+          <ListToolbar 
+            :searchText="searchText"
+            @closeTaskEditor="showTaskEditor = false"/>
+
           <div class="tasks-scroll">
-            <AddTask v-if="!currentList.isFilter"/>
-            <TaskList :currentList="currentList" @openTaskEditor="showTaskEditor = true"/>
-            <NotFound class="hidden" />
+            <SearchResult 
+              v-if="searchText"
+              :searchResult="searchResult" />
+
+            <div v-else>
+              <AddTask v-if="!currentList.isFilter"/>
+              <TaskList :currentList="currentList" @openTaskEditor="showTaskEditor = true"/>
+            </div>
           </div>
         </div>
       </div>
@@ -92,7 +104,8 @@ import SidebarActions from './sidebar/SidebarActions'
 import TaskList from './list/TaskList'
 import ListToolbar from './list/ListToolbar'
 import AddTask from './list/AddTask'
-import NotFound from './list/NotFound'
+import SearchResult from './list/SearchResult'
+
 
 import TaskDetail from './taskEditor/TaskDetail'
 
@@ -110,7 +123,7 @@ import icon from '../assets/icons.js'
 
 export default {
   name: 'TodoPage',
-  components: {DialogListEditor, DialogListDeletor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, TaskList, ListToolbar, AddTask, NotFound, TaskDetail, UserPopover, ActivityPopover, ConversationPopover},
+  components: {DialogListEditor, DialogListDeletor, SideSearchToolbar, SideUserToolbar, SideListsScroll, SidebarActions, TaskList, ListToolbar, AddTask, SearchResult, TaskDetail, UserPopover, ActivityPopover, ConversationPopover},
   beforeCreate () {
     let isAutoLogin = window.localStorage.getItem('isAutoLogin') && window.JSON.parse(window.localStorage.getItem('isAutoLogin'))
     if (!isAutoLogin) {
@@ -124,6 +137,8 @@ export default {
       currentDialog: '',
       showTaskEditor: false, // 打开任务编辑区域
       hideOfflineIcon: true,
+      searchText: '',
+      searchResult: []
     }
   },
   created () {
@@ -160,12 +175,17 @@ export default {
   methods: {
     closeDialog () {
       this.currentDialog = ''
+      this.showTaskEditor = false
+      this.searchText = ''
     },
     openPopover (type) {
       this.currentPopover = type
       this.$nextTick().then(() => {
         this.$refs.popover.focus()
       })
+    },
+    setSearchResult (searchResult) {
+      this.searchResult = searchResult
     },
     changeListTitle (newTitle) {
       let obj = Object.assign({}, this.currentList )

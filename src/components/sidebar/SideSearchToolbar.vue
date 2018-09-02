@@ -16,7 +16,8 @@
         class="search-input chromeless" 
         type="text" 
         ref="search" 
-        v-model="searchText" 
+        :value="value" 
+        @input="searchTask($event)"
         @click="changeSearchIcon($event)" >
     </div>
 
@@ -51,12 +52,13 @@
 </template>
 
 <script>
+import utils from '../../lib/utils'
 export default {
   name: 'SideSearchToolbar',
+  props: ['value'],
   data () {
     return {
       searchIcon: 'search',
-      searchText: '',
     }
   },
   watch: {
@@ -64,17 +66,29 @@ export default {
       if (this.searchIcon === 'stopSearch'){
         this.$refs.search.focus()
       }else{
-        this.searchText = ''
+        this.$emit('input', '')
       }
     },
   },
+  computed: {
+    getAll () {
+      return this.$store.getters.getAll
+    }
+  },
   methods: {
-    changeSearchIcon: function($event){
+    changeSearchIcon ($event) {
       this.searchIcon = 'stopSearch'
     },
     collapse () {
       this.$emit('collapse')
     },
+    searchTask (event) {
+      let value = event.target.value
+      let result = []
+      this.$emit('input', value)
+      this.getAll.forEach(task => task.title.indexOf(value) >= 0 && result.push(task))
+      this.$emit('sendSearchResult', utils.sortFilterTasks(result))
+    }
   }
 }
 </script>

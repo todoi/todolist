@@ -3,10 +3,12 @@ import fetchAll from './fetchTodo'
 
 let { AV, createAVObject, deleteAVAll, deleteAVObject, updateAVObject } = leancloud
 export default {
-  fetchTodo ({commit}) {
-    fetchAll().then(allObj => {
-      commit('initTodo', allObj)
-    }).catch(error => console.log(error))
+  fetchTodo ({commit, state}) {
+    if (!state.allList.length) {
+      fetchAll().then(allObj => {
+        commit('initTodo', allObj)
+      }).catch(error => console.log(error))
+    }
   },
 
   createList ({ commit, state: {allList} }, title) {

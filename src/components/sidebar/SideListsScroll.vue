@@ -43,6 +43,7 @@ export default {
     },
     selectItem ({index, listArea}) {
       this.$emit('closeTaskEditor')
+      this.$emit('clearSearch')
       this.$store.commit('switchList', {index, listArea})
     },
   }
