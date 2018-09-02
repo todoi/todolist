@@ -98,9 +98,12 @@ export default {
     }
   },
   computed: {
-    hiddenAllAddTaskMeta (){
+    hiddenAllAddTaskMeta () {
       return !this.focusAddTask
     },
+    currentList () {
+      return this.$store.state.currentList
+    }
   },
   methods: {
     // 返回一个 任务模板
@@ -137,8 +140,7 @@ export default {
     addTask (){
       if(this.newTask.title){
         let item = JSON.parse(JSON.stringify(this.newTask))
-        // 写入创建时间 
-        this.$store.dispatch('createTask', item).then(val => {})
+        this.$store.dispatch('createTask', {newTask: item, listId: this.currentList.id}).then(val => {})
         // 重置 newTask
         this.newTask = this.createTaskTemplate()
         // 去掉 星星 的 starred 类名

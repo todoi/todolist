@@ -186,23 +186,46 @@ export default {
 
     // 粘贴
     paste () {
-      let newTask = Object({}, this.currentTask)
-      newTask.belongTo = {id: currentList.id}
-      delete newTask.id
-      delete newTask.createdAt
-      delete newTask.selected
-      this.$store.dispatch('crateTask', newTask).then(val => {
+      let {cloneObject, currentList, duplicateTask, $store, createTaskChildren} = this
+      let subTasks = $store.state.allSubTask[duplicateTask.id]
+      let comments = $store.state.allComment[duplicateTask.id]
+      let fileMetas = $store.state.allFileMeta[duplicateTask.id]
+      let newTask = cloneObject(duplicateTask, ['id', 'createdAt', 'selected', 'belongTo'])
+      $store.dispatch('createTask', {listId: currentList.id, newTask}).then(val => {
+        createTaskChildren(subTasks, 'subTask', 'createSubTask', val.id)
+        createTaskChildren(comments, 'comment', 'createComment', val.id)
+        createTaskChildren(fileMetas, 'fileMeta', 'createFileMeta', val.id)
+      }).catch(error => console.log(error))
+    },
+
+    // 克隆出一个不同的 对象 浅拷贝
+    // origin 要克隆的原对象
+    // discardedAttributes 删除克隆对象中不需要的属性
+    cloneObject (origin, discardedAttributes) {
+      let newTask = Object.assign({}, origin)
+      discardedAttributes.forEach(attribute => delete newTask[attribute] )
+      return newTask
+    },
+
+    // 粘贴 创建新的 subtasks, comments, filemetas
+    // arr 信息数组
+    // newItemName dispatch 的新对象的名称
+    // dispatchFn dispatch 函数名称
+    createTaskChildren (arr, newItemName, dispatchFn, taskId) {
+      let {$store, cloneObject} = this
+      arr.forEach(item => {
+        let args = {}
+        args.taskId = taskId
+        args[newItemName] = cloneObject(item, ['belongTo', 'createdAt', 'id']) 
+        $store.dispatch(dispatchFn, args)
       })
     },
 
     // 删除任务
-    deleteTask(item){
-      if(item.isCompleted){
-        this.doneTaskItems.splice(this.doneTaskItems.indexOf(item), 1)
-      }else{
-        this.taskItems.splice(this.taskItems.indexOf(item), 1)
-      }
-      this.showDetail = false
+    deleteTask(){
+      this.$emit('closeTaskEditor')
+      console.log(this.currentTask)
+      this.$store.dispatch('deleteTask', this.currentTask)
     },
 
   }

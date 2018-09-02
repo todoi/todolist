@@ -144,7 +144,7 @@ export default {
     saveAFileMeta (item) {
       let { fileExtension, fileName, uploadAt, fileSrc, owner } = item
       let fileMeta = { fileExtension, fileName, uploadAt, fileSrc, owner }
-      return this.$store.dispatch('createFileMeta', {task: this.taskItem, fileMeta})
+      return this.$store.dispatch('createFileMeta', {taskId: this.taskItem.id, fileMeta})
     },
 
     // 设置next,error,complete对应的操作，分别处理相应的进度信息，错误信息，以及完成后的操作

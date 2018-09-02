@@ -2,8 +2,9 @@ import Vue from 'vue'
 export default {
   // 添加新的 Task
   addTask ({allTask, allSubTask, allComment, allFileMeta}, newTask) {
+    newTask.selected = true
     let listId = newTask.belongTo.id
-    if (!allTask[listId]) allTask[listId] = []
+    if (!allTask[listId]) Vue.set(allTask, listId, [])
     allTask[listId] = [newTask].concat(allTask[newTask.belongTo.id])
     //Vue.set(allSubTask, newTask.id, [])
     //Vue.set(allComment, newTask.id, [])
@@ -41,21 +42,21 @@ export default {
   // 添加一个子任务
   addSubTask ({allSubTask}, newSubTask) {
     let taskId = newSubTask.belongTo.id
-    if (!allSubTask[taskId]) allSubTask[taskId] = []
+    if (!allSubTask[taskId]) Vue.set(allSubTask, taskId, [])
     allSubTask[taskId].push(newSubTask)
   },
 
   // 添加一个评论
   addComment ({allComment}, newComment) {
     let taskId = newComment.belongTo.id
-    if (!allComment[taskId]) allComment[taskId] = []
+    if (!allComment[taskId]) Vue.set(allComment, taskId, [])
     allComment[taskId].push(newComment)
   },
 
   // 添加 一个 filemeta
   addFileMeta ({allFileMeta}, newFileMeta) {
     let taskId = newFileMeta.belongTo.id
-    if (!allFileMeta[taskId]) allFileMeta[taskId] = []
+    if (!allFileMeta[taskId]) Vue.set(allFileMeta, taskId, [])
     allFileMeta[taskId].unshift(newFileMeta)
   },
 

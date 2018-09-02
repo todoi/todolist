@@ -61,20 +61,23 @@ export default {
     let nowTimeStamp = new Date().getTime()
     return getWeek.filter(task => task.deadline < nowTimeStamp)
   },
+  // 显示侧边栏list 过期个数
   getListOverdue ({allTask}) {
     return (id) => {
       let nowTimeStamp = new Date().getTime()
+      // 如果
+      if (!allTask[id]) return []
       return allTask[id].filter(task => task.deadline && task.deadline < nowTimeStamp)
     }
   },
   getCurrentListAllId (state) {
     let {currentList: {id}, allTask, allSubTask, allComment, allFileMeta} = state
     let taskIds, subTaskIds = [], commentIds = [], fileMetaIds = []
-    taskIds = allTask[id].map(task => task.id)
+    taskIds = allTask[id] ? allTask[id].map(task => task.id) : []
     taskIds.forEach(id => {
-      allSubTask[id].forEach(subTask =>  subTaskIds.push(subTask.id))
-      allComment[id].forEach(comment =>  commentIds.push(comment.id))
-      allFileMeta[id].forEach(fileMeta =>  fileMetaIds.push(fileMeta.id))
+      allSubTask[id] && allSubTask[id].forEach(subTask =>  subTaskIds.push(subTask.id))
+      allComment[id] && allComment[id].forEach(comment =>  commentIds.push(comment.id))
+      allFileMeta[id] && allFileMeta[id].forEach(fileMeta =>  fileMetaIds.push(fileMeta.id))
     })
     return {taskIds, subTaskIds, commentIds, fileMetaIds}
   }

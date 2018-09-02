@@ -80,7 +80,7 @@ export default {
           content: this.comment,
           username: this.username
         }
-        this.$store.dispatch('createComment', {task: this.taskItem, comment})
+        this.$store.dispatch('createComment', {taskId: this.taskItem.id, comment})
           .then(val => {
             // 重置 comment
             this.comment = ''

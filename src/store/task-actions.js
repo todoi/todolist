@@ -14,8 +14,8 @@ export default {
   },
 
   // 将 Task 上传到 leancloud
-  createTask ({ commit, dispatch, state: {currentList} }, newTask) {
-    let listAVObject = AV.Object.createWithoutData('AllList', currentList.id)
+  createTask ({ commit, dispatch, state: {currentList} }, {listId, newTask}) {
+    let listAVObject = AV.Object.createWithoutData('AllList', listId)
     return dispatch('createItem' ,{
       className: 'AllTask',
       attributes: Object.assign({}, newTask, {belongTo: listAVObject,}),
@@ -27,18 +27,18 @@ export default {
     })
   },
 
-  createSubTask ({ commit, dispatch, state: {currentTask} }, newSubTask) {
-    let taskAVObject = AV.Object.createWithoutData('AllTask', currentTask.id)
+  createSubTask ({ commit, dispatch }, {taskId, subTask}) {
+    let taskAVObject = AV.Object.createWithoutData('AllTask', taskId)
     return dispatch('createItem' ,{
       className: 'AllSubTask',
-      attributes: Object.assign({}, newSubTask, {belongTo: taskAVObject,}),
+      attributes: Object.assign({}, subTask, {belongTo: taskAVObject,}),
       commitFn: 'addSubTask',
       needCreatedAt: false
     })
   },
 
-  createFileMeta ({commit, dispatch}, {task, fileMeta}) {
-    let taskAVObject = AV.Object.createWithoutData('AllTask', task.id)
+  createFileMeta ({commit, dispatch}, {taskId, fileMeta}) {
+    let taskAVObject = AV.Object.createWithoutData('AllTask', taskId)
     return dispatch('createItem' ,{
       className: 'AllFileMeta',
       attributes: Object.assign({}, fileMeta, {belongTo: taskAVObject}),
@@ -47,8 +47,8 @@ export default {
     })
   },
 
-  createComment ({commit, dispatch}, {task, comment}) {
-    let taskAVObject = AV.Object.createWithoutData('AllTask', task.id)
+  createComment ({commit, dispatch}, {taskId, comment}) {
+    let taskAVObject = AV.Object.createWithoutData('AllTask', taskId)
     return dispatch('createItem' ,{
       className: 'AllComment',
       attributes: Object.assign({}, comment, {belongTo: taskAVObject}),

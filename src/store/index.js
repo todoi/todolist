@@ -73,7 +73,7 @@ let store = new Vuex.Store({
       }
     ],
     allList, allTask, allComment, allSubTask, allFileMeta,
-    ...newState
+    //...newState
   },
   getters: {
     ...listGetters,

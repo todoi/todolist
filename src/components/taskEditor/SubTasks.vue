@@ -117,6 +117,9 @@ export default {
       }
       return subTasks
     },
+    currentTask () {
+      return this.$store.state.currentTask
+    }
   },
   methods: {
     toggleSubTaskBox(item, index){
@@ -126,6 +129,7 @@ export default {
         attributes:{isCompleted: !item.isCompleted},
       })
     },
+
     // 编辑子任务
     editSubTask(item, index){
       // this.displayViewArr[index] = false
@@ -134,20 +138,25 @@ export default {
       // 触发 setter 更新 
       this.$set(this.displayViewArr, index, false)
     },
+
     // 删除子任务
     deleteSubTask(item, index){
       this.$store.dispatch('deleteSubTask', {subTask: item, index})
     },
+
     createSubTaskTemplate(){
       return {title:'', isCompleted: false}
     },
+
     // 添加子任务
     addSubTask(){
-      if(this.newSubTask.title){
-        this.$store.dispatch('createSubTask', this.newSubTask).then(val => { })
+      let {newSubTask, $store, currentTask} = this
+      if(newSubTask.title){
+        $store.dispatch('createSubTask', {taskId: currentTask.id, subTask: newSubTask}).then(val => { })
         this.newSubTask = this.createSubTaskTemplate()
       }
     },
+
     changeSubTaskTitle (item, index) {
       if (!this.newTitle || this.newTitle === item.title) {
         this.$set(this.displayViewArr, index, true)

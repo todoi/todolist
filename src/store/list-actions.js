@@ -6,7 +6,7 @@ export default {
   fetchTodo ({commit}) {
     fetchAll().then(allObj => {
       commit('initTodo', allObj)
-    })
+    }).catch(error => console.log(error))
   },
 
   createList ({ commit, state: {allList} }, title) {

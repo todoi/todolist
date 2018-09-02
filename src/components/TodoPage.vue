@@ -49,6 +49,7 @@
           <SideListsScroll 
             ref="sideListsScroll"
             @collapse="isCollapsed = !isCollapsed" 
+            @closeTaskEditor="showTaskEditor = false"
             @openDialogListChanger="currentDialog = 'changer'"/>
 
           <SidebarActions @openDialogListCreator="currentDialog = 'creator'"/>
@@ -56,7 +57,7 @@
       </div>
       <div id="tasks">
         <div class="tasks-main">
-          <ListToolbar />
+          <ListToolbar @closeTaskEditor="showTaskEditor = false"/>
           <div class="tasks-scroll">
             <AddTask v-if="!currentList.isFilter"/>
             <TaskList :currentList="currentList" @openTaskEditor="showTaskEditor = true"/>
@@ -127,7 +128,7 @@ export default {
   },
   created () {
     if (leancloud.getAVUser().id) {
-      // this.$store.dispatch('fetchTodo')
+      this.$store.dispatch('fetchTodo')
       this.$store.commit('setUser', leancloud.getAVUser())
     } else {
       this.$store.commit('resetUser')
@@ -186,8 +187,8 @@ export default {
     },
     // 打开任务编辑的区域
     deleteTask () {
-      this.$store.dispatch('deleteTask', this.taskItem)
       this.showTaskEditor = false
+      this.$store.dispatch('deleteTask', this.taskItem)
       this.closeDialog()
     }
   }

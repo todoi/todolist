@@ -41,7 +41,8 @@ export default {
     collapse () {
       this.$emit('collapse')
     },
-    selectItem: function({index, listArea}){
+    selectItem ({index, listArea}) {
+      this.$emit('closeTaskEditor')
       this.$store.commit('switchList', {index, listArea})
     },
   }

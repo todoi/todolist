@@ -6,7 +6,7 @@ export default {
     if (currentList.isFilter) {
       arr = getters[`get${utils.toCapitalize(currentList.id)}`]
     } else {
-      arr = allTask[currentList.id]
+      arr = allTask[currentList.id] || []
     }
     return arr
   },
@@ -95,9 +95,9 @@ export default {
   getCurrentTaskAllId (state) {
     let {currentTask: {id}, allSubTask, allComment, allFileMeta} = state
     let subTaskIds = [], commentIds = [], fileMetaIds = []
-    allSubTask[id].forEach(subTask =>  subTaskIds.push(subTask.id))
-    allComment[id].forEach(comment =>  commentIds.push(comment.id))
-    allFileMeta[id].forEach(fileMeta =>  fileMetaIds.push(fileMeta.id))
+    allSubTask[id] && allSubTask[id].forEach(subTask =>  subTaskIds.push(subTask.id))
+    allComment[id] && allComment[id].forEach(comment =>  commentIds.push(comment.id))
+    allFileMeta[id] && allFileMeta[id].forEach(fileMeta =>  fileMetaIds.push(fileMeta.id))
     return {subTaskIds, commentIds, fileMetaIds}
   }
 }
