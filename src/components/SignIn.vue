@@ -1,13 +1,13 @@
 <template>
   <div class="login sign-type">
-    <a href="/" class="back-home">返回主页</a>
+    <VLink href="/dist/" class="back-home">返回主页</VLink>
     <!--log in-->
     <h3>登录</h3>
 
     <!--Need a TodoList account?-->
     <!--Create an account-->
     <p class="signtype-tip">
-      想要一个TodoList账号?<a class="span-underline" href="/signup">去创建账号</a>
+      想要一个TodoList账号?<VLink class="span-underline" href="/dist/signup">去创建账号</VLink>
     </p>
 
     <p 
@@ -75,7 +75,7 @@
         <div class="field-password-footer">
           <AutoLogin />
           <!--forget your password?-->
-          <a class="span-underline" href="/p/reset">忘记密码?&gt;</a>
+          <VLink class="span-underline" href="/dist/p/reset">忘记密码?&gt;</VLink>
         </div>
       </div>
     </form>
@@ -87,12 +87,13 @@
   import utils from '../lib/utils'
   import getErrorMessages from '../lib/getErrorMessages'
   import AutoLogin from './AutoLogin'
+  import VLink from './VLink'
 
   export default {
     name: 'SignIn',
-    components: {AutoLogin},
+    components: {AutoLogin, VLink},
     created () {
-      utils.goTodoPage()
+      utils.goTodoPage(this.$root)
     },
     data () {
       return {
@@ -128,7 +129,7 @@
         this.switchSubmitStatus('loading')
         leancloud.AV.User.logIn(this.username, this.password).then((loginedUser) => {
           this.switchSubmitStatus('successful')
-          window.location.href = '/todopage'
+          utils.goTodoPage(this.$root)
         }, (error) => {
           this.errorMessage = getErrorMessages({code: error.code}) 
           // 'Incorrect username or password.'

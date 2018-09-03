@@ -1,10 +1,10 @@
 <template>
   <div class="signup sign-type">
-    <a href="/" class="back-home">返回主页</a>
+    <VLink href="/dist/" class="back-home">返回主页</VLink>
     <!--sign up-->
     <h3>注册</h3>
     <!--<p class="signtype-tip">Already have a TodoList account?<a class="span-underline" href="/login">Log in here</a></p>-->
-    <p class="signtype-tip">已经有 TodoList 账号<a class="span-underline" href="/login">点击这里登录</a></p>
+    <p class="signtype-tip">已经有 TodoList 账号<VLink class="span-underline" href="/dist/login">点击这里登录</VLink></p>
 
     <form @submit.prevent="signUp()" >
       <div class="field-username relative">
@@ -114,13 +114,15 @@
   import leancloud from '../lib/leancloud'
   import utils from '../lib/utils'
   import getErrorMessages from '../lib/getErrorMessages'
+  import VLink from './VLink'
 
   // inputStatus = ['successful', 'error', 'loading', 'initial'] 
 
   export default {
     name: 'Aba',
+    components: {VLink},
     created () {
-      utils.goTodoPage()
+      utils.goTodoPage(this.$root)
     },
     props: ['showPage'],
     data () {
@@ -258,16 +260,12 @@
           user.signUp().then((loginedUser) => {
             // console.log(loginedUser);
             this.updateUserAndEmailStore(loginedUser.attributes)
-              .then(val => {
-                this.switchSubmitStatus('successful')
-                alert('注册成功')
-                window.location.href = '/todopage'
-              })
               .catch(error => {
                 console.log(error)
+              })
+              .finally(() => {
                 this.switchSubmitStatus('successful')
-                alert('注册成功')
-                window.location.href = '/todopage'
+                window.setTimeout(() => utils.goTodoPage(this.$root), 1000)
               })
           }, (error) => {
             this.switchSubmitStatus('again')

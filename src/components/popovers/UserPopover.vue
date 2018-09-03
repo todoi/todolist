@@ -27,7 +27,7 @@ export default {
     logOut () {
       window.localStorage.setItem('isAutoLogin', false)
       this.$store.commit('resetUser')
-      leancloud.logOut()
+      leancloud.logOut(this.$root)
     }
   }
 }

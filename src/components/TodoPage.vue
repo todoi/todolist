@@ -147,7 +147,7 @@ export default {
       this.$store.commit('setUser', leancloud.getAVUser())
     } else {
       this.$store.commit('resetUser')
-      utils.goHomePage()
+      utils.goHomePage(this.$root)
     }
   },
   mounted () {

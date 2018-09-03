@@ -1,6 +1,6 @@
 <template>
   <div class="login sign-type">
-    <a href="/" class="back-home">返回主页</a>
+    <VLink href="/dist/" class="back-home">返回主页</VLink>
     <div class="reset-successful" v-if="isSuccess">
       <!--<h3>Check your email</h3>-->
       <h3>Check your email</h3>
@@ -52,7 +52,7 @@
 
     <div class="field-password-footer">
       <!--Back to login-->
-      <a class="span-underline" href="/login">返回登录页</a>
+      <VLink class="span-underline" href="/dist/login">返回登录页</VLink>
     </div>
   </div>
 </template>
@@ -60,8 +60,10 @@
 <script>
   import leancloud from '../lib/leancloud.js'
   import getErrorMessages from '../lib/getErrorMessages'
+  import VLink from './VLink'
   export default {
     name: 'SignIn',
+    components: {VLink},
     data () {
       return {
         isSuccess: false,

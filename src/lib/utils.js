@@ -92,18 +92,20 @@ export default {
   },
 
   // 如果已经登录 直接到 todoPage 页面
-  goTodoPage () {
+  goTodoPage (vm) {
     let currentUser = getAVUser()
     if (currentUser.id) {
-      window.location.href = '/todopage'
+      vm.currentRoute = '/dist/todopage'
+      window.history.pushState(null, 'TodoPage', '/dist/todopage')
     }
   },
 
   // 如果没有登录 那么 转到homepage 
-  goHomePage () {
+  goHomePage (vm) {
     let currentUser = getAVUser()
     if (!currentUser.id) {
-      window.location.href = '/'
+      vm.currentRoute = '/dist/'
+      window.history.pushState(null, 'HomePage', '/dist/')
     }
   },
 

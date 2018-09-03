@@ -4,10 +4,10 @@
       <div class="topbar clearfix">
         <span class="logo-title"><i class="light-yellow">to</i><i class="light-green">to</i><i class="light-blue">do</i></span>
         <label class="topbar-label">
-          <a class="btn-link topbar-login" href="login"><input type="radio" name="sign-type" value="login">登录</a>
+          <VLink class="btn-link topbar-login" href="/dist/login"><input type="radio" name="sign-type" value="login">登录</VLink>
         </label>
         <label class="topbar-label">
-          <a class="btn-link topbar-signup" href="signup"><input type="radio" name="sign-type" value="signup">注册</a>
+          <VLink class="btn-link topbar-signup" href="/dist/signup"><input type="radio" name="sign-type" value="signup">注册</VLink>
         </label>
       </div>
     </div>
@@ -28,10 +28,12 @@
 </template>
 <script>
 import utils from '../lib/utils'
+import VLink from './VLink'
 export default {
   name: 'HomePage',
+  components: {VLink},
   created () {
-    utils.goTodoPage()
+    utils.goTodoPage(this.$root)
   }
 }
 

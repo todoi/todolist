@@ -21,9 +21,10 @@ export default {
     let {id, attributes: { username, email }} = user || AV.User.current() || { attributes: {} }
     return {id, username, email}
   },
-  logOut () {
+  logOut (vm) {
     AV.User.logOut()
-    window.location.href = '/'
+    vm.currentRoute = '/dist/'
+    window.history.pushState(null, 'HomePage', '/dist/')
   },
   // 新建一个 ACL 实例
   createAVObject (className, attributes) {
