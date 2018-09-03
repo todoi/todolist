@@ -39,6 +39,8 @@ export default {
     let errorCode = 0
     if(content.length > 16) {
       errorCode = 704
+    } else if (!(/^[a-zA-Z].*/.test(content))) {
+      errorCode = 701
     } else if (!(/^[a-zA-Z0-9_]{0,16}$/.test(content))) {
       errorCode = 702
     }
@@ -48,20 +50,20 @@ export default {
   // 检验邮箱是否存在语法错误
   validateEmail (content) { 
     let errorCode = 0
-    if(!(/^[\w]+[\w-.]*@[\w-]+(\.[\w-]+)+$/.test(content))) errorCode = 802
+    if(!(/^[\w]+[\w-.]*@[\w-]+(\.[\w-]+)+$/.test(content))) errorCode = 125
     return errorCode
   },
 
   // 检验 密码
   validatePassword (content) { //判断是否存在语法错误
     let errorCode = 0
-    if (content.length < 7) {
+    if (content.length < 6) {
       errorCode = 901
-    } else if (!(/^(?![A-Z_\W]+$).{7,}$/).test(content)) {
+    } else if (!(/^(?![A-Z_\W]+$).{6,}$/).test(content)) {
       errorCode = 902
-    } else if (!(/^(?![a-zA-Z\W]+$).{7,}$/.test(content))) {
+    } else if (!(/^(?![a-zA-Z\W]+$).{6,}$/.test(content))) {
       errorCode = 904
-    } else if (!(/^(?![\dA-Z_\W]+$).{7,}$/).test(content)) {
+    } else if (!(/^(?![\dA-Z_\W]+$).{6,}$/).test(content)) {
       errorCode = 905
     }
     return errorCode
@@ -81,9 +83,9 @@ export default {
     }
     if (results.length) {
       if (inputName === 'username'){
-        errorCode = 701
+        errorCode = 202
       } else if (inputName === 'email') {
-        errorCode = 801
+        errorCode = 203
       }
     }
     return errorCode

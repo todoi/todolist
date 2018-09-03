@@ -41,7 +41,8 @@ i{font-style: normal;}
 #home-page {height: 100vh; display: flex; flex-direction: column;}
 .topbar-wrapper {position: relative; box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.066); z-index:1;}
 .topbar {height: 60px; max-width: 1200px; margin: 0 auto; padding: 0 30px 0 10px; }
-.logo-title{float: left; font-size: 40px; line-height: 60px; font-family: Wicked, Helvetica, Arial, sans-serif;}
+.logo-title{float: left; font-size: 40px; line-height: 60px;}
+.logo-title > i {font-family: Wicked, Helvetica, Arial, sans-serif; }
 .light-blue{color: #B1E1E5;}
 .light-green{color: #79B913;}
 .light-yellow{color: #B7B53E;}

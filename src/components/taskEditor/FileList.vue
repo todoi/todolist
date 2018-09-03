@@ -3,6 +3,7 @@
     <li 
       class="section-item section-item-file image" 
       v-for="(item, index) in items"
+      @click="openFileLink(item)"
     >
       <div class="section-icon"></div>
       <div class="section-content section-content-file" tabindex="0">
@@ -81,6 +82,13 @@ export default {
     formatDate (timeStamp) {
       return utils.showDuration(timeStamp) + ' 之前'
     },
+    openFileLink (item) {
+      if (this.isUploadList) {
+        return 
+      } else {
+        window.open(item.fileSrc, '_blank')
+      }
+    }
   }
 }
 </script>

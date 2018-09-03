@@ -1,21 +1,26 @@
 <template>
   <div class="signup sign-type">
     <a href="/" class="back-home">返回主页</a>
-    <h3>sign up</h3>
-    <p class="signtype-tip">Already have a TodoList account?<a class="span-underline" href="/login">Log in here</a></p>
+    <!--sign up-->
+    <h3>注册</h3>
+    <!--<p class="signtype-tip">Already have a TodoList account?<a class="span-underline" href="/login">Log in here</a></p>-->
+    <p class="signtype-tip">已经有 TodoList 账号<a class="span-underline" href="/login">点击这里登录</a></p>
 
     <form @submit.prevent="signUp()" >
       <div class="field-username relative">
+        <!--Username-->
         <label 
           class="label-name block-tag" 
           for="signup-username" 
           :class="{'label-signup-error': username.inputStatus === 'error'}"
-        >Username</label>
+        >用户名</label>
+
+        <!--placeholder="Pick a username" -->
         <input 
           name="signup-username" 
           id="signup-username" 
           type="text" 
-          placeholder="Pick a username" 
+          placeholder="填写用户名"
           class="page-sign-input input-focus " 
           :class="classUsernameAutocheck" 
           v-model="username.content" 
@@ -29,11 +34,12 @@
       </div>
 
       <div class="field-email relative">
+        <!--Email-->
         <label 
           for="signup-email" 
           class="label-name block-tag" 
           :class="{'label-signup-error': email.inputStatus === 'error'}"
-        >Email</label>
+        >邮箱</label>
         <input 
           name="signup-email" 
           id="signup-email" 
@@ -53,12 +59,13 @@
 
       <div class="field-password relative">
         <div class="clearfix">
+          <!--password-->
           <label 
             for="signup-password" 
             class="label-name float-left inline-block-tag" 
             :class="{'label-signup-error': password.inputStatus === 'error'}"
-          >password</label>
-          <div class="float-right">
+          >密码</label>
+          <div class="float-right show-password-wrapper">
             <input 
               type="checkbox" 
               class="hide show-password" 
@@ -70,13 +77,15 @@
               title="Show Password" 
               class="password-icon relative cursor-pointer" 
               :class="hidePassword ? 'show-password-icon' : 'hide-password-icon'" 
-            >{{ hidePassword ? 'show' : 'hide' }}</label>
+            >{{ hidePassword ? '显示' : '隐藏' }}</label>
+            <!--hidePassword ? 'show' : 'hide'-->
           </div>
         </div>
+        <!--placeholder="Create a password" -->
         <input 
           name="signup-password" 
           id="signup-password" 
-          placeholder="Create a password" 
+          placeholder="创建密码"
           class="page-sign-input input-focus" 
           :class="classPasswordAutocheck" 
           :type="hidePassword ? 'password' : 'text'" 
@@ -85,7 +94,8 @@
           required
         >
         <!--@focusout="blankCheck('password')" -->
-        <p class="signup-tip">Use at least one letter, one numeral, and seven characters.</p>
+        <!--<p class="signup-tip">Use at least one letter, one numeral, and seven characters.</p>-->
+        <p class="signup-tip">至少6个字符，区分大小写, 要求有数字和字母</p>
         <span 
           class="signup-error-message password-error-message" 
           v-show="password.inputStatus === 'error'">{{ getPasswordErrorMs }}</span>
@@ -132,7 +142,7 @@
           errorCode: 0
         },
         submitClass: '',
-        btnContent: 'Sign up for TodoList'
+        btnContent: '立即注册' //Sign up for TodoList
       }
     },
     computed: {
@@ -222,16 +232,16 @@
       switchSubmitStatus (type) { //改变按钮为等待状态
         if (type === 'loading') {
           this.submitClass = 'btn-loading'
-          this.btnContent = 'Please Wait ...'
+          this.btnContent = '努力加载...' //Please Wait ...
         } else if (type === 'successful') {
           this.submitClass = ''
-          this.btnContent = 'successful'
+          this.btnContent = '注册成功' //successful
         } else if (type === 'again') {
           this.submitClass = ''
-          this.btnContent = 'Try Again'
+          this.btnContent = '再试一次' // Try Again
         } else {
           submitClass = '',
-          btnContent = 'Sign up for TodoList'
+          btnContent = '立即注册' //Sign up for TodoList
         }
       },
       signUp () {
@@ -247,13 +257,21 @@
           user.setEmail(this.email.content);
           user.signUp().then((loginedUser) => {
             // console.log(loginedUser);
-            alert('注册成功')
-            this.switchSubmitStatus('successful')
             this.updateUserAndEmailStore(loginedUser.attributes)
-            window.location.href = '/login'
+              .then(val => {
+                this.switchSubmitStatus('successful')
+                alert('注册成功')
+                window.location.href = '/todopage'
+              })
+              .catch(error => {
+                console.log(error)
+                this.switchSubmitStatus('successful')
+                alert('注册成功')
+                window.location.href = '/todopage'
+              })
           }, (error) => {
-            alert(getErrorMessages(error.code))
-            switchSubmitStatus('again')
+            this.switchSubmitStatus('again')
+            alert(getErrorMessages({code: error.code}))
           });
         }, 500)
       },
@@ -262,11 +280,7 @@
         var store = new Store();
         store.set('username', username);
         store.set('email', email);
-        store.save().then((results) => {
-          // console.log(results)
-        }, function(error) {
-          console.dir(error)
-        });
+        return store.save()
       },
       alertMessage () {
         let message = ''
@@ -411,6 +425,8 @@ h3 {
   -webkit-user-select: none;
   user-select: none;
 }
+
+.show-password-wrapper {margin-top: .3em;}
 
 .show-password-icon:before {
   content: '\e054';

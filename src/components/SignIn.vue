@@ -115,7 +115,7 @@
           this.btnContent = '努力加载...' //Please Wait ...
         } else if (type === 'successful') {
           this.submitClass = ''
-          this.btnContent = '登陆成功' //successful
+          this.btnContent = '登录成功' //successful
         } else if (type === 'again') {
           this.submitClass = ''
           this.btnContent = '再试一次' // Try Again

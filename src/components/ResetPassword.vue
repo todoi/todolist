@@ -2,21 +2,24 @@
   <div class="login sign-type">
     <a href="/" class="back-home">返回主页</a>
     <div class="reset-successful" v-if="isSuccess">
+      <!--<h3>Check your email</h3>-->
       <h3>Check your email</h3>
       <svg width="65" height="64" viewBox="0 0 31 31" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="none" fill-rule="evenodd"><path d="M12.902 21.79l-4.965-4.926c-.355-.35-.357-.925-.006-1.28.353-.355.926-.357 1.282-.005l3.702 3.672 8.394-8.182c.36-.35.93-.342 1.28.016.348.358.34.932-.017 1.28l-9.668 9.425" fill="#80bb35"></path><path d="M29.826 15.663c0 7.823-6.34 14.163-14.163 14.163-7.822 0-14.163-6.34-14.163-14.163C1.5 7.843 7.84 1.5 15.663 1.5c3.804 0 7.258 1.5 9.802 3.94 2.687 2.578 4.36 6.205 4.36 10.223z" stroke="#80bb35"></path></g></svg>
-      <p class="reset-successful-message">you will receive a password recovery link at your email address in a few minutes.</p>
+
+      <p class="reset-successful-message">我们已向你的邮箱发送一封包含重置密码的特殊链接的电子邮件, 请点击链接重置密码, 链接在 48小时内有效!</p>
+      <!--<p class="reset-successful-message">you will receive a password recovery link at your email address in a few minutes.</p>-->
     </div>
     <div v-else>
-      <h3>reset password</h3>
+      <!--<h3>reset password</h3>-->
+      <h3>重置密码</h3>
       <p 
         class="clearfix" 
         :class="emailError ? 'login-incorrect-visible' : 'login-incorrect-hidden'"
-        >
-        {{ errorMessage }}
-        <span 
-          class="btn-close-error" 
-          @click="close()">
-          <svg aria-hidden="true" class="octicon octicon-x" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48z"></path></svg>
+        > {{ errorMessage }}
+        <span class="btn-close-error" @click="close()" >
+          <svg class="octicon octicon-x" height="16" width="12">
+            <use xlink:href="#icon-octicon"></use>
+          </svg>
         </span>
       </p>
 
@@ -25,36 +28,38 @@
           <label 
             for="signup-email" 
             class="label-name block-tag" 
-            >Email address</label>
+          >请输入邮箱帐号</label>
+          <!--Email address-->
+
           <input 
-          name="signup-email" 
-          id="signup-email" 
-          type="text" 
-          placeholder="you@example.com" 
-          class="page-sign-input input-focus" 
-          v-model="content" 
-          @input="emailError = false"
-          required >
+            name="signup-email" 
+            id="signup-email" 
+            type="text" 
+            placeholder="you@example.com" 
+            class="page-sign-input input-focus" 
+            v-model="content" 
+            @input="emailError = false"
+            required >
         </div>
 
         <button 
           type="submit" 
           class="btn-login block-tag" 
           :class="submitClass" 
-          >
-          {{ btnContent }}
-        </button>
+        > {{ btnContent }} </button>
       </form>
     </div>
 
     <div class="field-password-footer">
-      <a class="span-underline" href="/login">Back to login</a>
+      <!--Back to login-->
+      <a class="span-underline" href="/login">返回登录页</a>
     </div>
   </div>
 </template>
 
 <script>
   import leancloud from '../lib/leancloud.js'
+  import getErrorMessages from '../lib/getErrorMessages'
   export default {
     name: 'SignIn',
     data () {
@@ -62,7 +67,7 @@
         isSuccess: false,
         content: '',
         submitClass: '',
-        btnContent: 'SEND RESET LINK',
+        btnContent: '发送重置密码邮件', //SEND RESET LINK
         errorMessage: '',
         emailError: false
       }
@@ -71,16 +76,16 @@
       switchSubmitStatus (type) { //改变按钮为等待状态
         if (type === 'loading') {
           this.submitClass = 'btn-loading'
-          this.btnContent = 'Please Wait ...'
+          this.btnContent = '努力加载...' //Please Wait ...
         } else if (type === 'successful') {
           this.submitClass = ''
-          this.btnContent = 'successful'
+          this.btnContent = '已发送' //successful
         } else if (type === 'again') {
           this.submitClass = ''
-          this.btnContent = 'Try Again'
+          this.btnContent = '再试一次' // Try Again
         } else {
           submitClass = '',
-          btnContent = 'SEND RESET LINK'
+          btnContent = '确定' //SEND RESET LINK
         }
       },
       sendEmail () {
@@ -91,7 +96,7 @@
             this.isSuccess = true
           }, (error) => {
             this.emailError = true
-            this.errorMessage = error.rawMessage
+            this.errorMessage = getErrorMessages({code: error.code})
             this.switchSubmitStatus('again')
           });
       },
@@ -204,6 +209,7 @@ h3 {
   line-height: 1.6em;
   letter-spacing: -0.029em;
   text-transform: capitalize;
+  opacity: 0.8;
 }
 
 .label-name {

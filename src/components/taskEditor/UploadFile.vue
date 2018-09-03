@@ -42,7 +42,7 @@
       </div>
 
       <!-- 录音功能暂不实现 -->
-      <div class="section-attachments">
+      <div class="section-attachments hidden">
         <span class="add-sound" tabindex="0" title="添加录音">
           <svg class="speech" width="20px" height="20px">
             <use xlink:href="#icon-speech"></use>
