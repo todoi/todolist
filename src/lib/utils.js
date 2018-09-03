@@ -95,8 +95,8 @@ export default {
   goTodoPage (vm) {
     let currentUser = getAVUser()
     if (currentUser.id) {
-      vm.currentRoute = '/dist/todopage'
-      window.history.pushState(null, 'TodoPage', '/dist/todopage')
+      vm.currentRoute = '/todolist/dist/todopage'
+      window.history.pushState(null, 'TodoPage', '/todolist/dist/todopage')
     }
   },
 
@@ -104,8 +104,8 @@ export default {
   goHomePage (vm) {
     let currentUser = getAVUser()
     if (!currentUser.id) {
-      vm.currentRoute = '/dist/'
-      window.history.pushState(null, 'HomePage', '/dist/')
+      vm.currentRoute = '/todolist/dist/'
+      window.history.pushState(null, 'HomePage', '/todolist/dist/')
     }
   },
 

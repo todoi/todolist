@@ -1,7 +1,7 @@
 export default {
-  '/dist/': 'HomePage',
-  '/dist/signup': 'SignUp',
-  '/dist/login': 'SignIn',
-  '/dist/todopage': 'TodoPage',
-  '/dist/p/reset': 'ResetPassword'
+  '/todolist/dist/': 'HomePage',
+  '/todolist/dist/signup': 'SignUp',
+  '/todolist/dist/login': 'SignIn',
+  '/todolist/dist/todopage': 'TodoPage',
+  '/todolist/dist/p/reset': 'ResetPassword'
 }

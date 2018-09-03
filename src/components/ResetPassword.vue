@@ -1,6 +1,6 @@
 <template>
   <div class="login sign-type">
-    <VLink href="/dist/" class="back-home">返回主页</VLink>
+    <VLink href="/todolist/dist/" class="back-home">返回主页</VLink>
     <div class="reset-successful" v-if="isSuccess">
       <!--<h3>Check your email</h3>-->
       <h3>Check your email</h3>
@@ -52,7 +52,7 @@
 
     <div class="field-password-footer">
       <!--Back to login-->
-      <VLink class="span-underline" href="/dist/login">返回登录页</VLink>
+      <VLink class="span-underline" href="/todolist/dist/login">返回登录页</VLink>
     </div>
   </div>
 </template>

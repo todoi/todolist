@@ -4,10 +4,10 @@
       <div class="topbar clearfix">
         <span class="logo-title"><i class="light-yellow">to</i><i class="light-green">to</i><i class="light-blue">do</i></span>
         <label class="topbar-label">
-          <VLink class="btn-link topbar-login" href="/dist/login"><input type="radio" name="sign-type" value="login">登录</VLink>
+          <VLink class="btn-link topbar-login" href="/todolist/dist/login"><input type="radio" name="sign-type" value="login">登录</VLink>
         </label>
         <label class="topbar-label">
-          <VLink class="btn-link topbar-signup" href="/dist/signup"><input type="radio" name="sign-type" value="signup">注册</VLink>
+          <VLink class="btn-link topbar-signup" href="/todolist/dist/signup"><input type="radio" name="sign-type" value="signup">注册</VLink>
         </label>
       </div>
     </div>
