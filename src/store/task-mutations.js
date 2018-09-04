@@ -12,19 +12,21 @@ export default {
   },
 
   // 点击在 list 列表的 的某个任务
-  selectListTask ({ allTask, currentTask }, {taskId, listId, item}) {
+  selectListTask (state, {taskId, listId, item}) {
+    let { allTask, currentTask } = state
     allTask[listId].forEach(task => task.id === taskId 
-      ? (task.selected=true, Object.assign(currentTask, task))
+      ? (task.selected=true, state.currentTask = Object.assign({}, task))
       : task.selected=false )
   },
 
   // 点击在 filter 列表的 的某个任务
   // 比如点击在 '已加星标' 的某个任务上
-  selectFilterTask ({ allTask, currentTask }, {taskId, listId, task, items}) {
+  selectFilterTask (state, {taskId, listId, task, items}) {
+    let { allTask, currentTask } = state
     items.forEach(item => {
       if (item.listId === listId) {
         allTask[item.listId].forEach(task => task.id === taskId 
-          ? (task.selected=true, Object.assign(currentTask, task))
+          ? (task.selected=true, state.currentTask = Object.assign({}, task))
           : task.selected=false)
       } else {
         allTask[item.listId].forEach(task => task.selected=false)

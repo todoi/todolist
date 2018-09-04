@@ -81,11 +81,11 @@ export default {
     }
   },
   // 从 allTask 中 得到当前要被编辑的 task
-  getCurrentTask ({currentTask, allTask}) {
-    let taskId = currentTask.id
-    let listId = currentTask.belongTo.id
-    return allTask[listId].find(task => task.id === taskId)
-  },
+  //getCurrentTask ({currentTask, allTask}) {
+    //let taskId = currentTask.id
+    //let listId = currentTask.belongTo.id
+    //return allTask[listId].find(task => task.id === taskId)
+  //},
 
   // 得到正在编辑中的 subtasks
   getEditorSubTasks ({currentTask, allSubTask}) {

@@ -166,7 +166,8 @@ export default {
       return this.$store.state.currentList
     },
     taskItem () {
-      return this.$store.getters.getCurrentTask  
+      //return this.$store.getters.getCurrentTask  
+      return this.$store.state.currentTask
     },
     hideSyncIcon () {
       return this.$store.state.hideSyncIcon
