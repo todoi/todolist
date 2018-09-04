@@ -23,7 +23,7 @@
         @triggerCheckEvent="checkTask"
         @toggleTaskStar="toggleTaskStar" />
       <h2 tabindex="0" class="heading normal" :class="{hidden: !doneTaskItems.length}">
-        <a class="group-header" @click.stop="toggleDoneTaskItems">显示已完成任务</a>
+        <a class="group-header" @click.stop="toggleDoneTaskItems">{{isShowDoneItems ? '隐藏已完成任务 ' : '显示已完成任务'}}</a>
       </h2>
       <Tasks
         v-if="this.isShowDoneItems" 
@@ -48,7 +48,7 @@ export default {
   props: ['currentList'],
   data(){
     return {
-      isShowDoneItems: true,  // 显示已经完成任务列表
+      isShowDoneItems: false,  // 显示已经完成任务列表
     }
   },
   computed:{

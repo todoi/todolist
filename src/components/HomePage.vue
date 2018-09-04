@@ -63,7 +63,8 @@ i{font-style: normal;}
 .main-title{ font-family: Trench, Helvetica, Arial, sans-serif; line-height: 100px; font-size: 100px; font-weight: 300; margin-left: -30px; text-transform: uppercase; }
 /*.icon-pen{display: inline-block; width: 70px; height: 70px; vertical-align: middle;  background:url("../assets/images/pen.png") no-repeat 0 0; background-size: 100% 100%; -webkit-background-size: 100% 100%;}*/
 .main-intro{margin-top: 30px; font-size: 20px; letter-spacing: 1px; color: #fefefe;}
-.main-intro li{ font-family: Shi, Helvetica, Arial, sans-serif;position: relative; margin: 20px 0; padding-left: 10px; line-height: 20px;}
+/*font-family: Shi, Helvetica, Arial, sans-serif;*/
+.main-intro li{position: relative; margin: 20px 0; padding-left: 10px; line-height: 20px; font-size: 18px;}
 .main-intro li:before{content: ''; position: absolute; width: 14px; height: 14px; left: -15px; top: 5px; border: 2px solid #fefefe; border-radius: 50%;}
 /*.widget-image{position: absolute; bottom:0; right:0; width: 400px; height: 300px; margin: 0 auto;  opacity: 0.8; background: url('../assets/images/homeBg.gif') center/cover no-repeat;}*/
 </style>
