@@ -33,22 +33,22 @@ div[tabindex]{outline: none;}
 .sign-page { background: #F8F8F8; height: 100vh; text-align: left; }
 .dialog { animation: dialogSlideIn 150ms;  }
 
-/* 在 task 组件中日期组件的样式 */ 
-.date-picker-input{background: transparent; border: 0; display:none;}
-.date-picker-icon{display: block; width: 20px; height: 20px;}
-.date-picker-calendar{right:0;}
-.date-picker-wrapper{position: absolute; z-index: 1; color: #000; user-select: none;}
-.vdp-datepicker__clear-button{position: absolute; top: -7px; right: -6px;  color: #423e3e; width: 12px; height: 12px; line-height: 12px; text-align: center; border-radius: 50%; background: #fbfaf9;}
+/* 在 AddTask 组件中日期组件的样式 */ 
+.addTask-meta-date .date-picker-input{background: transparent; border: 0; display:none;}
+.addTask-meta-date .date-picker-icon{display: block; width: 20px; height: 20px;}
+.addTask-meta-date .date-picker-calendar{right:0;}
+.addTask-meta-date .date-picker-wrapper{position: absolute; z-index: 1; color: #000; user-select: none;}
+.addTask-meta-date .vdp-datepicker__clear-button{position: absolute; top: -7px; right: -6px;  color: #423e3e; width: 12px; height: 12px; line-height: 12px; text-align: center; border-radius: 50%; background: #fbfaf9;}
 
 /* 在 taskdetail 组件中日期组件的样式 */ 
-.date-picker-input-taskdetail{background: transparent; border: 0; display:none;}
-.date-picker-icon-taskdetail{position: absolute; width: 100%; height: 100%; top: 0; left: 0;}
-.date-picker-calendar-taskdetail{width:18vw; top: 90%; left: 50%; transform: translate(-50%);}
-.date-picker-wrapper-taskdetail{position: absolute; color: #000; user-select: none; top: 0; right: 40px; width: 100%; height: 100%; 
+.section-item .date-picker-input-taskdetail{background: transparent; border: 0; display:none;}
+.section-item .date-picker-icon-taskdetail{position: absolute; width: 100%; height: 100%; top: 0; left: 0;}
+.section-item .date-picker-calendar-taskdetail{width:18vw; top: 90%; left: 50%; transform: translate(-50%);}
+.section-item .date-picker-wrapper-taskdetail{position: absolute; color: #000; user-select: none; top: 0; right: 40px; width: 100%; height: 100%; 
   border-radius: 8px; }
-.calender-trigon{position: absolute; z-index: 99; width: 0; height: 0; top: 19px; left:50%; transform: translateX(-50%); border: 12px solid transparent; }
-.calender-trigon.trigon1{ border-bottom-color: #ccc; -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));}
-.calender-trigon.trigon2{ border-bottom-color: #fff ; z-index: 101; top: 20px;}
+.section-item .calender-trigon{position: absolute; z-index: 99; width: 0; height: 0; top: 19px; left:50%; transform: translateX(-50%); border: 12px solid transparent; }
+.section-item .calender-trigon.trigon1{ border-bottom-color: #ccc; -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));}
+.section-item .calender-trigon.trigon2{ border-bottom-color: #fff ; z-index: 101; top: 20px;}
 
 @keyframes rotate{
   0%{
