@@ -35,10 +35,12 @@ export default {
   },
 
   // 更新 task
-  updateTask ({allTask}, {task, attributes}) {
+  updateTask (state, {task, attributes}) {
     let taskId = task.id
     let listId = task.belongTo.id
-    Object.assign(allTask[listId].find(task => task.id === taskId), attributes)
+    let t = state.allTask[listId].find(task => task.id === taskId)
+    Object.assign(t, attributes)
+    state.currentTask = Object.assign({}, t)
   },
 
   // 添加一个子任务
