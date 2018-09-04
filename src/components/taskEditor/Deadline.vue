@@ -95,6 +95,7 @@ export default {
     },
     clearDeadline () {
       this.$refs['date-picker'].clearDate()
+      this.showCalenderTrigon = false
     }
   }
 }
