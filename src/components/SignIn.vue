@@ -98,7 +98,7 @@
     data () {
       return {
         hidePassword: true,
-        username: 'todoi',
+        username: '',
         password: '',
         submitClass: '',
         btnContent: '登 录', //Log In
