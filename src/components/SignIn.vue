@@ -1,13 +1,13 @@
 <template>
   <div class="login sign-type">
-    <VLink href="/todolist/dist/" class="back-home">返回主页</VLink>
+    <VLink href="/" class="back-home">返回主页</VLink>
     <!--log in-->
     <h3>登录</h3>
 
     <!--Need a TodoList account?-->
     <!--Create an account-->
     <p class="signtype-tip">
-      想要一个TodoList账号?<VLink class="span-underline" href="/todolist/dist/signup">去创建账号</VLink>
+      想要一个TodoList账号?<VLink class="span-underline" href="/signup">去创建账号</VLink>
     </p>
 
     <p 
@@ -75,7 +75,7 @@
         <div class="field-password-footer">
           <AutoLogin />
           <!--forget your password?-->
-          <VLink class="span-underline" href="/todolist/dist/p/reset">忘记密码?&gt;</VLink>
+          <VLink class="span-underline" href="/p/reset">忘记密码?&gt;</VLink>
         </div>
       </div>
     </form>
@@ -98,7 +98,7 @@
     data () {
       return {
         hidePassword: true,
-        username: 'todoi',
+        username: '',
         password: '',
         submitClass: '',
         btnContent: '登 录', //Log In

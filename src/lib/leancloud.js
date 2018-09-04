@@ -23,8 +23,8 @@ export default {
   },
   logOut (vm) {
     AV.User.logOut()
-    vm.currentRoute = '/todolist/dist/'
-    window.history.pushState(null, 'HomePage', '/todolist/dist/')
+    vm.currentRoute = '/'
+    window.history.pushState(null, 'HomePage', '/')
   },
   // 新建一个 ACL 实例
   createAVObject (className, attributes) {

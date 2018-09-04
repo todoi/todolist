@@ -1,10 +1,10 @@
 <template>
   <div class="signup sign-type">
-    <VLink href="/todolist/dist/" class="back-home">返回主页</VLink>
+    <VLink href="/" class="back-home">返回主页</VLink>
     <!--sign up-->
     <h3>注册</h3>
     <!--<p class="signtype-tip">Already have a TodoList account?<a class="span-underline" href="/login">Log in here</a></p>-->
-    <p class="signtype-tip">已经有 TodoList 账号<VLink class="span-underline" href="/todolist/dist/login">点击这里登录</VLink></p>
+    <p class="signtype-tip">已经有 TodoList 账号<VLink class="span-underline" href="/login">点击这里登录</VLink></p>
 
     <form @submit.prevent="signUp()" >
       <div class="field-username relative">
