@@ -49,8 +49,12 @@ export default {
   },
 
   // 删除一个 list
-  deleteList ({allList, allTask, currentList}, {listId, listIndex}) {
+  deleteList (state, {listId, listIndex}) {
+    let {allList, allTask, currentList} = state
     allList.splice(listIndex, 1)
+    // 删除这个list下的所有任务
+    Vue.set(allTask, listId, [])
+    state.duplicateTask = {}
     // 判断在删除请求的期间 是否用户点击了其他tab 或者 创建一个新的tab
     if (listId === currentList.id && allList.length > 0) {
       if (listIndex === 0) {
@@ -61,7 +65,6 @@ export default {
         Vue.set(allList[listIndex - 1], 'active', true)
       }
     }
-    delete allTask[listId]
   },
 
   // 删除 一个task 下面 所有的 comment, filemeta, subtask

@@ -209,12 +209,12 @@ export default {
     },
 
     // 粘贴 创建新的 subtasks, comments, filemetas
-    // arr 信息数组
+    // arr 信息数组 有可能为 undefined
     // newItemName dispatch 的新对象的名称
     // dispatchFn dispatch 函数名称
     createTaskChildren (arr, newItemName, dispatchFn, taskId) {
       let {$store, cloneObject} = this
-      arr.forEach(item => {
+      arr instanceof Array && arr.forEach(item => {
         let args = {}
         args.taskId = taskId
         args[newItemName] = cloneObject(item, ['belongTo', 'createdAt', 'id']) 
@@ -225,7 +225,6 @@ export default {
     // 删除任务
     deleteTask(){
       this.$emit('closeTaskEditor')
-      console.log(this.currentTask)
       this.$store.dispatch('deleteTask', this.currentTask)
     },
 
