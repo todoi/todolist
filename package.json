@@ -11,7 +11,7 @@
     "dev-file": "webpack --config build/webpack.dev.conf.js"
   },
   "dependencies": {
-    "ajv": "^6.0.0",
+    "ajv": "^6.12.3",
     "leancloud-storage": "^3.6.0",
     "qiniu-js": "^2.3.0",
     "vue": "^2.5.2",
